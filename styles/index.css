@@ -47,35 +47,45 @@ body {
   height: 100%;
 }
 
-.main-menu__item_git {
-  background-image: url(../assets/git.png);
-}
-
-.main-menu__item_html {
-  background-image: url(../assets/html.png);
-}
-
-.main-menu__item_css {
-  background-image: url(../assets/css.png);
-}
-
-.main-menu__item_js {
-  background-image: url(../assets/js.png);
-}
-
-.main-menu__item_angular {
-  background-image: url(../assets/angular.png);
-  background-size: 90%;
-}
-
-.main-menu__item_rxjs {
-  background-image: url(../assets/rxjs.png);
-}
-
 .main-menu__item_lifecycle {
   background-image: url(../assets/lifecycle.png);
 }
 
 .main-menu__item_engx {
-  background-image: url(../assets/engx.png);
+  background-image: url(../assets/engx.svg);
+  background-size: 120%;
+}
+
+.main-menu__item_git {
+  background-image: url(../assets/git.svg);
+}
+
+.main-menu__item_html {
+  background-image: url(../assets/html.svg);
+}
+
+.main-menu__item_css {
+  background-image: url(../assets/css.svg);
+}
+
+.main-menu__item_js {
+  background-image: url(../assets/js.svg);
+}
+
+.main-menu__item_angular {
+  background-image: url(../assets/angular.svg);
+  background-size: 90%;
+}
+
+.main-menu__item_rxjs {
+  background-image: url(../assets/rxjs.svg);
+}
+
+.main-menu__item_ts {
+  background-image: url(../assets/ts.svg);
+}
+
+.main-menu__item_ngrx {
+  background-size: 85%;
+  background-image: url(../assets/ngrx.svg);
 }
