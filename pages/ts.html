@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RxJS</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Typescript<a href="../index.html">back ></a></h1>
+
+      <h2>Типы данных в TypeScript</h2>
+      <p>
+        TypeScript добавляет дополнительные типы данных в JavaScript. Типы
+        данных используются для добавления статических ограничений на
+        программные элементы, такие как функции, переменные и свойства. Это
+        позволяет компилятору и средствам разработки осуществлять более
+        тщательную проверку и поддержку в процессе разработки.
+      </p>
+      <p>
+        Анализ типов в TypeScript осуществляется только во время компиляции и не
+        добавляет никаких задержек во время выполнения готовой программы.
+      </p>
+      <h3>Any</h3>
+      <p>
+        Тип Any используется когда мы не знаем какой тип должна иметь та или
+        иная переменная.
+      </p>
+      <pre>
+        let someVar: any = 4; 
+        someVar= "потом может стать строкой"; 
+        someVar= false; // или boolean
+      </pre>
+      <p>
+        Рекомендуется <b>всегда</b> явно указывать тип там, где это возможно во
+        избежание ошибок.
+      </p>
+      <p>
+        Тип Any может прийти на помощь также, если вам известна только часть
+        типа.
+      </p>
+      <pre>
+        let arr: any[] = [1, true, "some string", ... ];
+        arr[1] = "another string"; // OK  
+      </pre>
+      <h3>Примитивные типы</h3>
+      <h3>Number</h3>
+      <pre>
+        let x: number; // Явное указание типа
+        let y = 0; // Тоже, что и y: number = 0
+        let z = 123.456; // Тоже, что и z: number = 123.456 
+        let s = z.toFixed(2); // Свойство интерфейса Number
+      </pre>
+      <h3>Boolean</h3>
+      <pre>
+        var logical: boolean = false;
+        var checked = true; // Тоже, что и var checked: boolean = true;
+      </pre>
+      <h3>String</h3>
+      <pre>
+        var s: string = "some string";
+        var empty = "";
+        var another = 'another string';
+        var c = another.charAt(2); // Свойство интерфейса 'String'
+      </pre>
+      <h3>Void</h3>
+      <p>
+        Можно сказать, что тип Void является противоположностью типу Any. Этот
+        тип означает отсутствие какого-либо типа. Обычно используется для
+        указания того, что функция не возвращает никакого значения.
+      </p>
+      <pre>
+        function someFunction(): void {
+          alert("message");
+        }
+      </pre>
+      <p>
+        Тип Void является подтипом типа Any, и супертипом для типов Null и
+        Undefined. В тоже время тип Void не зависит от всех остальных типов.
+      </p>
+      <h3>Null и Undefined</h3>
+      <p>
+        Данные типы являются подтипами для всех остальных типов по умолчанию.
+      </p>
+      <pre>
+        let n: number = null; // Примитивные типы могут быть null
+        let m: number = undefined; // Примитивные типы могут быть undefined
+        let x = null; // тоже самое, что и x: any = null 
+        let y = undefined; // тоже самое, что и y: any = undefined
+        let e: Null; // Ошибка
+        let r: Undefined; //Ошибка
+      </pre>
+      <h3>Array</h3>
+      <pre>
+        var arr: number[] = [1, 2, 3];
+        var otherArr: any[] = [1, true, "string"];
+      </pre>
+      <h3>Tuple</h3>
+      <p>
+        Тип Tuple или кортеж представляет собой массив JavaScript, каждому из
+        элементов которого можно указать свой тип.
+      </p>
+      <pre>
+        let tuple: [string, number];
+        tuple = ["some", 10]; // Правильно
+        tuple = [10, "some"]; // Неверно! Типы не совпадают
+        console.log(tuple[0]); // "some"
+        console.log(tuple[1]); // 10
+      </pre>
+      <h3>Never</h3>
+      <p>
+        Тип never представляет тип, значение которого никогда не наступает.
+        Например, never является типом, который возвращает функция, которая
+        всегда бросает исключения или выход из которой никогда не происходит
+        (например бесконечный цикл). Переменные также могут иметь данный тип
+        например для того, чтобы никогда не принимать значение true.
+      </p>
+      <pre>
+        function error(message: string): never {
+          throw new Error(message);
+        }
+        // Выведенным типом fail() будет never
+        function fail() {
+          return error("Something failed");
+        }
+        // нет выхода из этой функции
+        function infiniteLoop(): never {
+          while (true) {
+        }
+      </pre>
+      <h3>Symbol</h3>
+      <p>
+        Тип Symbol является примитивным и соответствует одноименному типу в
+        языке JavaScript. Данный тип предоставляет уникальные идентификаторы,
+        которые могут быть использованы как ключи для свойств объекта.
+      </p>
+      <h3>Приведение типов</h3>
+      <p>
+        Существует две формы приведения типов. Первый — синтаксис с
+        использованием угловых скобок (&lt;&gt;):
+      </p>
+      <pre>
+        let someValue: any = “this is a string”; 
+        let strLength: number = (&lt;string&gt;someValue).length;
+      </pre>
+      <p>Второй — as-синтаксис:</p>
+      <pre>
+        let someValue: any = “this is a string”; 
+        let strLength: number = (someValue as string).length;
+      </pre>
+      <p>
+        Два приведенных примера полностью аналогичны. Использовать один или
+        другой — по большому счету это выбор предпочтений; однако, когда
+        TypeScript используется совместно с JSX, допускаются только приведение
+        типов через as-синтаксис.
+      </p>
+      <hr />
+
+      <h2>Интерфейсы в TypeScript</h2>
+      <p>
+        Интерфейс – это объявление, схожее с классом, но не имеющее реализации
+        методов. С его помощью вы можете описывать свойства и методы объектов.
+      </p>
+      <p>
+        При этом интерфейс не имеет реализации функций и не имеет самого кода –
+        он нужен только для того, чтобы компилятор оценил ваши реализации
+        объекта (напомню, что класс тоже объект).
+      </p>
+      <p>
+        Грубо говоря, интерфейс – это описательная структура. В отличие от
+        классов интерфейсы некомпилируемы и живут лишь в рантайме TypeScript.
+      </p>
+      <p>
+        Объявление интерфейса начинается с ключевого слова
+        <code>interface</code>. Затем идёт имя интерфейса, которые принято
+        начинать с заглавной буквы <code>I</code>.
+        <b>Это не обязательное условие</b>
+      </p>
+      <p>
+        Вы можете писать интерфейсы где угодно: рядом с кодом, в начале файла
+        или даже в отдельном файле. Я рекомендую держать объявление интерфейса
+        там, где это нужно, например, если интерфейс используется только в
+        рамках одного модуля (файла), то его можно смело держать там. Если
+        интерфейс используется во многих модулях проекта, то целесообразнее
+        будет создать директорию types и разложить интерфейсы по логике там.
+      </p>
+      <pre>
+        interface IServer {
+          hostname: string;
+          location: string;
+          active: boolean;
+          public_address: string;
+        }
+      </pre>
+      <p>
+        Теперь, когда мы определили интерфейс, мы можем использовать его в
+        переменной. В случае неверной реализации (нет хотя бы одного свойства),
+        он будет бросать в нас ошибками каждый раз, когда мы делаем что-то не
+        так.
+      </p>
+      <pre>
+        const server: IServer = {
+          hostname: 'Pikachu',
+          location: 'RM1',
+          active: true,
+          public_address: 'Pikachu Str';
+        }
+      </pre>
+      <p>
+        В TypeScript можно использовать один интерфейс как тип для свойства
+        другого интерфейса.
+      </p>
+      <pre>
+        interface IPublicAddress {
+          netmask: string;
+          gateway: string;
+          address: string;
+        }
+        
+        interface IServer {
+          hostname: string;
+          location: string;
+          active: boolean;
+          public_address: IPublicAddress;
+        }
+      </pre>
+      <p>
+        Помимо примитивный типов и других интерфейсов, в интерфесах можно
+        описывать функции. Делается это с помощью стрелочных функций, например,
+        так:
+      </p>
+      <pre>
+        interface ICalculator {
+          sum: (a: number, b: number) => number;
+        }
+      </pre>
+      <h3>Расширение интерфейсов</h3>
+      <p>
+        В TypeScript вы можете лишь расширять интерфейсы, но не наследовать их.
+      </p>
+      <pre>
+        interface IResponse {
+          status: number;
+        }
+        
+        interface ISlackResponse extends IResponse {
+          ok: boolean;
+        }
+      </pre>
+      <h3>Индексируемые типы</h3>
+      <p>
+        Иногда может понадобиться разрешить хранить в объекте не только заранее
+        известное количество свойств, но и переменное, например, когда вы
+        реализуете интерфейс какого-нибудь кэша. В этом случае вы не знаете
+        название свойства, но знаете его тип.
+      </p>
+      <pre>
+        interface ICache {
+          size: number;
+          first: ICacheItem;
+          last: ICacheitem;
+          items: {
+            [item: string]: ICacheItem;
+          };
+        }
+      </pre>
+      <p>
+        Теперь вы сможете записывать любое значение в объект <code>items</code>,
+        которые имеет ключ типа строка и значение типа <code>ICacheItem</code>.
+      </p>
+      <h3></h3>
+      <p>
+        В случае с объектом вы просто присваиваете переменной через двоеточие
+        нужный вам интерфейс в качестве типа и реализуете его. С классами
+        несколько иначе – классы должны имплементировать интерфейсы. Если вы
+        забудете написать реализацию хотя бы одного метода, то компилятор выдаст
+        ошибку.
+      </p>
+      <pre>
+        interface IFileCache {
+          set: (key: string, value: ICacheItem) => void;
+          get: (key: string) => ICacheItem;
+        }
+        
+        class FileCache implements IFileCache {
+          store = new Map();
+        
+          set(key: string, value: ICacheItem): void {
+            this.store.set(key, value);
+          }
+        
+          get(key: string): ICacheItem {
+            return this.store.get(key);
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>Generics в TypeScript</h2>
+      <p>
+        Обобщения (англ. generics) или дженерики - это инструмент, который
+        позволяет писать на TypeScript компоненты, способные работать с
+        различными типами данных. В то же время они позволяют сохранить
+        строгость кода и работоспособность проверки типов.
+      </p>
+      <pre>
+        function echo&lt;T&gt;(arg:T): T {
+          return arg;
+        }
+      </pre>
+      <p>
+        Здесь в угловых скобках мы указываем имя типовой переменной, которую в
+        дальнейшем мы будем использовать для указания типа наших данных. Далее
+        мы указываем, что наша функция должна принимать параметры типа
+        <code>T</code> и возвращать должна тоже данные типа <code>T</code>.
+        Теперь вызываем нашу функцию:
+      </p>
+      <h3>Тип для обобщенной функции</h3>
+      <pre>
+        let myEcho: &lt;T&gt;(arg: T) => T = function &lt;E&gt;(arg: E): E {
+          return arg;
+        }
+      </pre>
+      <h3>Обобщенные интерфейсы</h3>
+      <pre>
+        interface IEcho {
+          &lt;T&gt;(arg: T):T 
+        }
+        
+        let myEcho: IEcho = function &lt;E&gt;(arg: E): E {
+          return arg;
+        }
+      </pre>
+      <h3></h3>
+      <pre>
+        class User &lt;T&gt; {
+          _id: T;
+          constructor(id: T) {
+              this._id = id;            
+          }
+          get id(): T{
+              return this._id;
+          } 
+        }
+      </pre>
+      <p>
+        Теперь воспользуемся этим обобщенным классом, создав новых
+        пользователей:
+      </p>
+      <pre>
+        let pavel = new User&lt;number&gt;(13);
+      </pre>
+      <h3>Ограничения обобщений</h3>
+      <p>
+        Иногда нужно в качестве типового параметра принимать какие-то
+        определенные типы. Можно задать ограничение для обобщения. Предположим,
+        нам нужна функция, которая умела бы работать с объектами, способными
+        летать и плавать. Создадим два интерфейса, которые описывают возможность
+        объектов летать и плавать. А нашу требуемую функцию run обобщим по типу,
+        наследующему эти интерфейсы &lt;T extends Flyable & Swimmable&gt;:
+      </p>
+      <pre>
+        interface Flyable {
+          fly (): void
+        } 
+        
+        interface Swimmable {
+          swim (): void
+        } 
+        
+        function run  &lt;T extends Flyable & Swimmable&gt;(arg: T) {
+          arg.fly();
+          arg.swim();
+          arg.go(); // Ошибка: 'go' does not exist on type 'T'
+        }
+      </pre>
+      <hr />
+
+      <h2>Enum в TypeScript</h2>
+      <p>
+        Полезным добавлением к набору типов данных JavaScript является тип Enum
+        (перечисление). Как и языке C#, enum — это способ указать более
+        привычные имена набору числовых значений.
+      </p>
+
+      <pre>
+        enum Color {Red, Green, Blue}; 
+        let c: Color = Color.Green;
+      </pre>
+      <p>
+        По умолчанию у перечислений нумерация начинается с нуля. Но можно
+        поменять это вручную установкой значения например для одного из значений
+        перечисления.
+      </p>
+      <pre>
+        enum Color {Red = 1, Green, Blue}; // нумерация начинается с 1
+        let c: Color = Color.Green;
+      </pre>
+      <p>Или можно для каждого значения назначить свое значение</p>
+      <pre>
+        enum Color {Red = 1, Green = 2, Blue = 4}; 
+        let c: Color = Color.Green;
+      </pre>
+      <p>Для получения имени по числовому значению, необходимо</p>
+      <pre>
+        console.log(Color[4]); // выведет в консоли Blue
+      </pre>
+      <hr />
+    </main>
+
+    <script src="../js/index.js"></script>
+  </body>
+</html>

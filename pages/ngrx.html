@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RxJS</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>NgRx<a href="../index.html">back ></a></h1>
+
+      <h2>Store NgRx</h2>
+      <p>
+        <img
+          src="https://ngrx.io/generated/images/guide/store/state-management-lifecycle.png"
+        />
+      </p>
+      <p>
+        NgRx Store (или просто хранилище) хранит в себе глобальное состояние
+        Angular приложения в виде одного большого объекта.
+      </p>
+      <p>
+        Хранилище в NgRx представлено сервисом Store и выполняет следующие
+        функции:
+      </p>
+      <ul>
+        <li>хранение глобального состояния приложения;</li>
+        <li>
+          обновляет состояние в ответ на действие, принимаемое через метод
+          <code>dispatch()</code>;
+        </li>
+        <li>предоставление доступа к состоянию.</li>
+      </ul>
+      <hr />
+
+      <h2>Actions NgRx</h2>
+      <p>
+        <code>Actions</code> - один из основных строительных блоков в NgRx.
+        <code>Actions</code> выражают уникальные события, происходящие в
+        приложении. Взаимодействие пользователя со страницей, внешнее
+        взаимодействие через сетевые запросы и прямое взаимодействие с
+        API-интерфейсами устройства - эти и другие события описываются
+        <code>Actions</code>.
+      </p>
+      <h3>Introduction</h3>
+      <p>
+        <code>Actions</code> используются во многих областях NgRx.
+        <code>Actions</code> - это входы и выходы многих систем в NgRx.
+        <code>Actions</code> помогают понять, как события обрабатываются в
+        приложении.
+      </p>
+      <h3>The Action interface</h3>
+      <p><code>Action</code> в NgRx состоит из простого интерфейса:</p>
+      <pre>
+        interface Action {
+          type: string;
+        }
+      </pre>
+      <p>
+        Интерфейс имеет единственное свойство, тип, представленный в виде
+        строки. Свойство <code>type</code> предназначено для описания
+        <code>Action</code>, которое будет отправлено в приложении. Значение
+        типа приходит в форме <code>[Source] Event</code> и используется для
+        предоставления контекста того, к какой категории действия оно относится
+        и откуда было отправлено действие. Вы добавляете свойства к
+        <code>Action</code>, чтобы предоставить дополнительный контекст или
+        метаданные для <code>Action</code>.
+      </p>
+      <pre>
+        {
+          type: '[Auth API] Login Success'
+        }
+      </pre>
+      <p>
+        Этот <code>Action</code> описывает событие, вызванное успешной
+        аутентификацией после взаимодействия с внутренним API.
+      </p>
+      <pre>
+        {
+          type: '[Login Page] Login',
+          username: string;
+          password: string;
+        }
+      </pre>
+      <p>
+        Этот <code>Action</code> описывает событие, вызванное нажатием
+        пользователем кнопки Login на странице Login Page, чтобы попытаться
+        аутентифицировать пользователя. Имя пользователя и пароль определяются
+        как дополнительные метаданные, предоставляемые со страницы Login Page.
+      </p>
+      <h3>Writing actions</h3>
+      <p>
+        Есть несколько правил написания хороших <code>Action</code> в
+        приложении.
+      </p>
+      <ol>
+        <li>
+          Предварительно - напишите <code>Action</code> перед разработкой
+          функций, чтобы понять и получить общие знания о реализуемой функции.
+        </li>
+        <li>
+          Разделить - классифицировать <code>actions</code> на основе источника
+          события.
+        </li>
+        <li>
+          Многие - <code>actions</code> недороги в написании, поэтому чем больше
+          <code>actions</code> вы пишете, тем лучше вы выражаете потоки в своем
+          приложении.
+        </li>
+        <li>
+          Управляемый событиями - фиксируйте события, а не команды, поскольку вы
+          разделяете описание события и обработку этого события.
+        </li>
+        <li>
+          Описательный - предоставьте контекст, предназначенный для уникального
+          события, с более подробной информацией, которую вы можете использовать
+          для облегчения отладки с помощью инструментов разработчика.
+        </li>
+      </ol>
+      <h4>login-page.actions.ts</h4>
+      <pre>
+        import { createAction, props } from '@ngrx/store';
+
+        export const login = createAction(
+          '[Login Page] Login',
+          props&lt;{ username: string; password: string }&gt;()
+        );
+      </pre>
+      <p>
+        Функция createAction возвращает функцию, которая при вызове возвращает
+        объект в форме интерфейса Action. Метод props используется для
+        определения любых дополнительных метаданных, необходимых для обработки
+        действия. Action creators предоставляют согласованный, типобезопасный
+        способ создания отправляемого Action.
+      </p>
+      <h4>login-page.component.ts</h4>
+      <pre>
+        onSubmit(username: string, password: string) {
+          store.dispatch(login({ username: username, password: password }));
+        }
+      </pre>
+      <p>
+        <code>login</code> action creator получает объект с именем пользователя
+        и паролем и возвращает простой объект JavaScript со свойством
+        <code>type</code> <code>[Login Page] Login</code> с
+        <code>username</code> и <code>password</code> в качестве дополнительных
+        свойств.
+      </p>
+      <p>
+        Возвращаемый action имеет очень специфический контекст о том, откуда
+        произошло действие и какое событие произошло.
+      </p>
+      <ul>
+        <li>Категория действия заключена в квадратные скобки []</li>
+        <li>
+          Категория используется для группировки действий для определенной
+          области, будь то страница компонента, серверный API или API браузера.
+        </li>
+        <li>
+          Текст <code>Login</code> после категории представляет собой описание
+          того, какое событие произошло в результате этого действия. В этом
+          случае пользователь щелкнул кнопку входа на странице входа, чтобы
+          попытаться пройти аутентификацию с помощью имени пользователя и
+          пароля.
+        </li>
+      </ul>
+      <hr />
+
+      <h2>Reducer NgRx</h2>
+      <p>
+        <code>Reducers</code> в NgRx отвечают за обработку переходов из одного
+        состояния в другое в приложении. Функции-Reducers обрабатывают эти
+        переходы, определяя, какие <code>Actions</code> следует обрабатывать в
+        зависимости от типа <code>Action</code>.
+      </p>
+      <p>
+        <code>Reducers</code> — это чистые функции в том смысле, что они
+        производят один и тот же результат для заданного ввода. Они не имеют
+        побочных эффектов и синхронно обрабатывают каждое изменение состояния.
+        Каждая функция <code>reducer</code> принимает последнее отправленное
+        <code>Action</code>, текущее состояние и определяет, следует ли
+        возвращать только что измененное состояние или исходное состояние.
+      </p>
+      <h3>The reducer function</h3>
+      <p>Есть несколько составных частей управления состоянием редьюсером.</p>
+      <ol>
+        <li>Интерфейс или тип, определяющий форму состояния.</li>
+        <li>
+          Аргументы, включая начальное состояние или текущее состояние и текущее
+          действие.
+        </li>
+        <li>
+          Функции, которые обрабатывают изменения состояния для связанных с ними
+          действий.
+        </li>
+      </ol>
+      <p>
+        Во-первых, определите некоторые действия для взаимодействия с частью
+        состояния.
+      </p>
+      <h4>scoreboard-page.actions.ts</h4>
+      <pre>
+        import { createAction, props } from '@ngrx/store';
+
+        export const homeScore = createAction('[Scoreboard Page] Home Score');
+        export const awayScore = createAction('[Scoreboard Page] Away Score');
+        export const resetScore = createAction('[Scoreboard Page] Score Reset');
+        export const setScores = createAction('[Scoreboard Page] Set Scores', props&lt;{game: Game}&gt;());
+      </pre>
+      <p>
+        Затем создайте файл <code>reducer'a</code>, который импортирует действия
+        и определите форму для части состояния.
+      </p>
+      <h3>Defining the state shape</h3>
+      <p>
+        Каждая <code>функция-reducer</code> является прослушивателем действий.
+        Действия выше, описывают возможные переходы, обрабатываемые
+        <code>reducer'ом</code>. Импортируйте несколько действий для обработки
+        дополнительных переходов состояний в <code>reducer'е</code>.
+      </p>
+      <h4>scoreboard.reducer.ts</h4>
+      <pre>
+        import { Action, createReducer, on } from '@ngrx/store';
+        import * as ScoreboardPageActions from '../actions/scoreboard-page.actions';
+
+        export interface State {
+          home: number;
+          away: number;
+        }
+      </pre>
+      <h4>Установка начального состояния</h4>
+      <p>
+        Создайте и экспортируйте переменную, чтобы зафиксировать начальное
+        состояние с одним или несколькими значениями по умолчанию.
+      </p>
+      <pre>
+        export const initialState: State = {
+          home: 0,
+          away: 0,
+        };
+      </pre>
+      <h3>Создание функции Reducer</h3>
+      <p>
+        Функция <code>Reducer</code> отвечает за неизменную обработку переходов
+        между состояниями. Создайте <code>Reducer</code> с помощью функции
+        <code>createReducer</code>.
+      </p>
+      <pre>
+        export const scoreboardReducer = createReducer(
+          initialState,
+          on(ScoreboardPageActions.homeScore, state => ({ ...state, home: state.home + 1 })),
+          on(ScoreboardPageActions.awayScore, state => ({ ...state, away: state.away + 1 })),
+          on(ScoreboardPageActions.resetScore, state => ({ home: 0, away: 0 })),
+          on(ScoreboardPageActions.setScores, (state, { game }) => ({ home: game.home, away: game.away }))
+        );
+      </pre>
+      <p>
+        В приведенном выше примере редюсер обрабатывает 4 действия:
+        <code>[Scoreboard Page] Home Score</code>,
+        <code>[Scoreboard Page] Away Score</code>,
+        <code>[Scoreboard Page] Score Reset</code> and
+        <code>[Scoreboard Page] Set Scores</code>. Каждое действие строго
+        типизировано. Каждое действие неизменно обрабатывает переход состояния.
+      </p>
+      <p>
+        Это означает, что переходы между состояниями не изменяют исходное
+        состояние, а <b>возвращают новый объект состояния</b> с помощью spread
+        оператора. Spread cинтаксис копирует свойства из текущего состояния в
+        объект, создавая новую ссылку. Это гарантирует, что
+        <b>новое состояние создается при каждом изменении</b>, сохраняя чистоту
+        изменения. Это также способствует ссылочной целостности, гарантируя, что
+        <b>старая ссылка будет удалена</b> при изменении состояния.
+      </p>
+      <p>
+        Когда действие отправляется, все зарегистрированные
+        <code>Reducer</code> получают это действие. Обрабатывают ли они
+        действие, определяется функциями <code>on</code>, которые связывают одно
+        или несколько действий с данным изменением состояния.
+      </p>
+      <h3>Registering root state</h3>
+      <p>
+        Состояние приложения определяется как один большой объект. Регистрация
+        <code>Reducer</code> для управления частями состояния только определяет
+        ключи со связанными значениями в объекте. Чтобы зарегистрировать
+        глобальное хранилище в приложении, используйте метод
+        <code>StoreModule.forRoot()</code> с картой пар ключ/значение, которые
+        определяют состояние. <code>StoreModule.forRoot()</code> регистрирует
+        глобальных поставщиков для приложения, включая службу Store, которую вы
+        внедряете в компоненты и службы для отправки действий и выбора частей
+        состояния.
+      </p>
+      <h4>app.module.ts</h4>
+      <pre>
+        import { NgModule } from '@angular/core';
+        import { StoreModule } from '@ngrx/store';
+        import { scoreboardReducer } from './reducers/scoreboard.reducer';
+
+        @NgModule({
+          imports: [
+            StoreModule.forRoot({ game: scoreboardReducer })
+          ],
+        })
+        export class AppModule {}
+      </pre>
+      <p>
+        Регистрация состояний с помощью
+        <code>StoreModule.forRoot()</code> гарантирует, что состояния будут
+        определены при запуске приложения. Вы регистрируете корневые состояния,
+        которые всегда должны быть немедленно доступны для всех областей
+        приложения.
+      </p>
+      <h3>Register feature state</h3>
+      <p>
+        Состояния функций ведут себя так же, как корневые состояния, но
+        позволяют вам определять их с помощью определенных областей функций в
+        вашем приложении. Ваше состояние — это один большой объект, а состояния
+        функций регистрируют дополнительные ключи и значения в этом объекте.
+      </p>
+      <h4>app.module.ts</h4>
+      <pre>
+        import { NgModule } from '@angular/core';
+        import { StoreModule } from '@ngrx/store';
+        import { ScoreboardModule } from './scoreboard/scoreboard.module';
+
+        @NgModule({
+          imports: [
+            StoreModule.forRoot({}),
+            ScoreboardModule
+          ],
+        })
+        export class AppModule {}
+      </pre>
+      <h4>scoreboard.reducer.ts</h4>
+      <pre>
+        export const scoreboardFeatureKey = 'game';
+      </pre>
+      <h4>scoreboard.module.ts</h4>
+      <pre>
+        import { NgModule } from '@angular/core';
+        import { StoreModule } from '@ngrx/store';
+        import { scoreboardFeatureKey, scoreboardReducer } from './reducers/scoreboard.reducer';
+          
+        @NgModule({
+          imports: [
+            StoreModule.forFeature(scoreboardFeatureKey, scoreboardReducer)
+          ],
+        })
+        export class ScoreboardModule {}
+      </pre>
+      <p>
+        После загрузки <code>ScoreboardModule</code> игровой ключ
+        <code>game</code> становится свойством объекта и теперь управляется в
+        состоянии.
+      </p>
+      <pre>
+        {
+          game: { home: 0, away: 0 }
+        }
+      </pre>
+      <hr />
+
+      <h2>Selector NgRx</h2>
+      <p>
+        В NgRx селекторы представляют собой чистые функции и используются для
+        получения определенных частей глобального состояния. Отличительные
+        особенности селекторов:
+      </p>
+      <ol>
+        <li>Мобильность</li>
+        <li>Мемоизация</li>
+        <li>Возможность построения композиции селекторов;</li>
+        <li>Легкость тестирования.</li>
+      </ol>
+      <h3>createSelector()</h3>
+      <p>
+        Селекторы создаются с помощью функции NgRx
+        <code>createSelector()</code>, которая может принимать неограниченное
+        количество функций, каждая из которых возвращает определенную часть
+        состояния. При этом самой последней функции, которая и возвращает
+        конечный результат, в качестве аргументов передаются результаты первых
+        функций.
+      </p>
+      <pre>
+        const selectUsers = (state: State) => state.users;
+
+        export const selectUsersList = createSelector(
+          selectUsers,
+          (state: UsersState) => state.list
+        );
+      </pre>
+      <h3>select()</h3>
+      <p>
+        Для использования селектор необходимо передать функции NgRx
+        <code>select()</code>, которая вызывается в методе
+        <code>pipe()</code> хранилища (экземпляра объекта Store).
+      </p>
+      <pre>
+        this.store
+          .pipe(select(selectCountSum))
+          .subscribe((vl) => console.log(vl));
+      </pre>
+      <hr />
+
+      <h2>Effect NgRx</h2>
+      <p>
+        NgRx Effects реализуют побочные эффекты, работающие на основе библиотеки
+        RxJS, применительно к хранилищу. Отслеживая поток действий, отправляемых
+        в Store, они могут генерировать новые действия, например, на основе
+        результатов выполнения HTTP-запросов или сообщений, полученных через Web
+        Sockets.
+      </p>
+      <p>Цели и функции NgRx Effects:</p>
+      <ol>
+        <li>
+          снять нагрузку с компонента по управлению состоянием и выполнению
+          побочных эффектов и свести его работу к получению состояний и
+          генерации действий;
+        </li>
+        <li>
+          отслеживание и фильтрация потока действий для выполнения побочного
+          эффекта при возникновении определенного действия;
+        </li>
+        <li>выполнение синхронных и асинхронных побочных эффектов.</li>
+      </ol>
+      <h3>Writing Effects</h3>
+      <p>
+        Чтобы изолировать побочные эффекты от вашего компонента, вы должны
+        создать класс Effects для прослушивания событий и выполнения задач.
+      </p>
+      <p>Эффекты — это внедряемые сервисы состоящие из следующих частей:</p>
+      <ol>
+        <li>
+          Внедряемый сервис <code>Actions</code>, который обеспечивает
+          наблюдаемый поток всех действий, отправленных после того, как
+          последнее состояние было уменьшено.
+        </li>
+        <li>
+          Метаданные присоединяются к наблюдаемым потокам с помощью функции
+          createEffect. Метаданные используются для регистрации потоков,
+          подписанных на хранилище. Любое действие, возвращенное из потока
+          эффектов, затем отправляется обратно в Store.
+        </li>
+        <li>
+          Действия фильтруются с помощью оператора ofType. Оператор ofType
+          принимает один или несколько типов действий в качестве аргументов для
+          фильтрации <code>Actions</code>, на которые следует воздействовать.
+        </li>
+        <li>Эффекты подписаны на наблюдаемый объект Store.</li>
+        <li>
+          Сервисы внедряются в эффекты для взаимодействия с внешними API и
+          обработки потоков.
+        </li>
+      </ol>
+      <pre>
+        import { Injectable } from '@angular/core';
+        import { Actions, createEffect, ofType } from '@ngrx/effects';
+        import { EMPTY } from 'rxjs';
+        import { map, mergeMap, catchError } from 'rxjs/operators';
+        import { MoviesService } from './movies.service';
+        
+        @Injectable()
+        export class MovieEffects {
+        
+          loadMovies$ = createEffect(() => this.actions$.pipe(
+            ofType('[Movies Page] Load Movies'),
+            mergeMap(() => this.moviesService.getAll()
+              .pipe(
+                map(movies => ({ type: '[Movies API] Movies Loaded Success', payload: movies })),
+                catchError(() => EMPTY)
+              ))
+            )
+          );
+        
+          constructor(
+            private actions$: Actions,
+            private moviesService: MoviesService
+          ) {}
+        }
+      </pre>
+      <p>
+        Эффект <code>loadMovies$</code> прослушивает все отправленные действия
+        через поток <code>Actions</code>, он ищет action
+        <code>[Movies Page] Load Movies</code> с помощью оператора
+        <code>ofType</code>.
+        <code>Метод MoviesService#getAll()</code> возвращает observable, который
+        сопоставляет фильмы с новым action в случае успеха, и возвращает пустой
+        observable, если возникает ошибка. Action отправляется в хранилище, где
+        оно может быть обработан редьюсерами, когда требуется изменение
+        состояния. Также важно обрабатывать ошибки при работе с наблюдаемыми
+        потоками, чтобы эффекты продолжали работать.
+      </p>
+      <h3>Registering root effects</h3>
+      <h4>app.module.ts</h4>
+      <pre>
+        import { EffectsModule } from '@ngrx/effects';
+        import { MovieEffects } from './effects/movie.effects';
+
+        @NgModule({
+          imports: [
+            EffectsModule.forRoot([MovieEffects])
+          ],
+        })
+        export class AppModule {}
+      </pre>
+      <h3>Registering feature effects</h3>
+      <h4>admin.module.ts</h4>
+      <pre>
+        import { EffectsModule } from '@ngrx/effects';
+        import { MovieEffects } from './effects/movie.effects';
+
+        @NgModule({
+          imports: [
+            EffectsModule.forFeature([MovieEffects])
+          ],
+        })
+        export class MovieModule {}
+      </pre>
+      <hr />
+
+      <h2>Facade NgRx</h2>
+      <p>
+        Фасады — это шаблон программирования, в котором предоставляется более
+        простой общедоступный интерфейс для маскировки набора внутренних, более
+        сложных компонентов.
+      </p>
+      <p>
+        При написании большого количества кода NgRx — разработчики быстро
+        накапливают большие наборы классов действий и селекторов. Эти классы
+        используются для отправки запросов в хранилище NgRx и запросов из него.
+      </p>
+      <p>
+        <img
+          src="https://miro.medium.com/max/1346/1*fjwlk2CVF4Y0MS_sADwqmA.jpeg"
+        />
+      </p>
+      <p>
+        Использование фасада — для обертывания и сокрытия NgRx — упрощает доступ
+        и изменение состояния NgRx, маскируя все внутренние взаимодействия с
+        хранилищем, действиями, редьюсерами, селекторами и эффектами.
+      </p>
+      <p>
+        <img
+          src="https://miro.medium.com/max/1354/1*-vkURnukSMKCErX2iktn1w.jpeg"
+        />
+      </p>
+      <p>Фасады побуждают разработчиков мыслить двумя (2) способами:</p>
+      <ol>
+        <li>
+          Разработчикам рекомендуется подумать о явных API-интерфейсах
+          общедоступного фасада.
+        </li>
+        <li>
+          Разработчики начинают думать о представлениях как о презентационных
+          компонентах, которые просто отображают данные, полученные от
+          наблюдаемых объектов Facade.
+        </li>
+      </ol>
+      <h3>Implementing our NgRx Facade</h3>
+      <pre>
+        @Injectable()
+        export class CarsFacade {
+          loaded$ = this.store.select(carsQuery.getIsLoaded);
+          allCars$ = this.store.select(carsQuery.getAllCars);
+          selectedCar$ = this.store.select(carsQuery.getSelectedCar);
+
+          constructor(private store: Store&gt;CarsState&lt;) {}
+
+          loadAllCars() {
+            this.store.dispatch(new LoadCar());
+          }
+          
+          selectCar(carId: string) {
+            this.store.dispatch(new SelectCar(carId));
+          }
+        }
+      </pre>
+      <p>CarListComponent with Facades</p>
+      <pre>
+        import { CarsFacade } from '../+state';
+
+        @Component({
+          template: `
+            &lt;ul&gt;
+            &lt;li *ngFor="let car of (allCars$ | async)"
+                  (click)="carsFacade.selectCar(car.id)"&gt;
+                {{car.name}}
+            &lt;/li&gt;
+            &lt;/ul&gt;
+          `
+        })
+        export class CarListComponent {
+          allCars$ = this.carsFacade.allCars$;
+          selectedCar$ = this.carsFacade.selectedCar$;
+
+          constructor(public carsFacade: CarsFacade) {
+            this.carsFacade.loadAllCars();
+          }
+        } 
+      </pre>
+      <hr />
+    </main>
+
+    <script src="../js/index.js"></script>
+  </body>
+</html>
