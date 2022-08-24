@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Related Questions</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>HTML Related Questions <a href="./index.html">back ></a></h1>
+
+      <h2>1. Как расшифровывается HTML и для чего он нужен</h2>
+      <p>
+        HTML (Hypertext Markup Language) - это код, который используется для
+        структурирования и отображения веб-страницы и её контента.
+      </p>
+      <p>
+        HTML не является языком программирования; это язык разметки, и
+        используется, чтобы сообщать вашему браузеру, как отображать
+        веб-страницы. HTML состоит из элементов.
+      </p>
+      <p>Главными частями нашего элемента являются:</p>
+      <ol>
+        <li>Открывающий тег (Opening tag)</li>
+        <li>Закрывающий тег (Closing tag)</li>
+        <li>Контент (Content)</li>
+        <li>Элемент(Element)</li>
+      </ol>
+
+      <h2>2. Explain what DOM and CSSOM are.</h2>
+      <p>
+        The DOM (Document Object Model) Tree is an Object representation of the
+        fully parsed HTML page. Starting with the root element, html, nodes are
+        created for each element/text on the page.
+      </p>
+      <p>
+        The CSSOM (CSS Object Model) is an Object representation of the styles
+        associated with the DOM. It is represented in a similar way to the DOM,
+        but with the associated styles for each node, whether they explicitly
+        declared or implicitly inherited, included.
+      </p>
+
+      <h2>3. Самые основные теги</h2>
+      <p>
+        Тег <code>&lthtml&gt</code> определяет начало HTML-файла, внутри него
+        хранится заголовок (<code>&lthead&gt</code>) и тело документа
+        (<code>&ltbody&gt</code>).
+      </p>
+      <p>
+        Заголовок документа, как еще называют блок <code>&lthead&gt</code>,
+        может содержать текст и теги, но содержимое этого раздела не
+        показывается напрямую на странице, за исключением контейнера
+        <code>&lttitle&gt</code>.
+      </p>
+      <p>
+        Тело документа <code>&ltbody&gt</code> предназначено для размещения
+        тегов и содержательной части веб-страницы.
+      </p>
+
+      <h2>4. Доктайп для чего и что, если его не указать</h2>
+      <p>
+        Элемент <code>&lt!DOCTYPE\&gt</code> предназначен для указания типа
+        текущего документа — DTD (document type definition, описание типа
+        документа). Это необходимо, чтобы браузер понимал, как следует
+        интерпретировать текущую веб-страницу, ведь HTML существует в нескольких
+        версиях, кроме того, имеется XHTML.
+      </p>
+      <p>
+        Существует несколько видов <code>&lt!DOCTYPE\&gt</code>, они различаются
+        в зависимости от версии HTML, на которую ориентированы.
+      </p>
+      <ul>
+        <li>HTML 4.01</li>
+        <li>HTML 5</li>
+        <li>XHTML 1.0</li>
+        <li>XHTML 1.1</li>
+      </ul>
+
+      <h2>5. Что будет есть укажем тег с большой буквы</h2>
+      <p>Теги можно писать как прописными, так и строчными символами</p>
+      <p>
+        Любые теги, а также их атрибуты нечувствительны к регистру, поэтому вы
+        вольны выбирать сами, как писать. В любом случае рекомендуется
+        придерживаться выбранной формы записи на протяжении всех страниц сайта.
+        Заметим также, что текст, полностью набранный прописными символами,
+        читается хуже, чем текст со строчными символами или смешанный.
+      </p>
+
+      <h2>6. Для чего используются атрибуты</h2>
+      <p>
+        <img
+          src="https://mdn.mozillademos.org/files/9345/grumpy-cat-attribute-small.png"
+          alt="атр"
+        />
+      </p>
+      <p>
+        Атрибуты содержат дополнительную информацию об элементе, которую вы не
+        хотите показывать в фактическом контенте.
+      </p>
+      <p>
+        В данном случае, class это имя атрибута, а editor-note это значение
+        атрибута.
+      </p>
+
+      <h2>7. Как записываются атрибуты и что, если не поставим кавычки</h2>
+      <p>Атрибут всегда должен иметь:</p>
+      <ol>
+        <li>Пробел между aтрибутом и именем элемента</li>
+        <li>Имя атрибута, за которым следует знак равенства</li>
+        <li>Значение атрибута, заключённое с двух сторон в кавычки.</li>
+      </ol>
+      <p>
+        Все значения атрибутов тегов следует указывать в кавычках. Отсутствие
+        кавычек не приведет к ошибкам, за исключением текста, содержащего
+        пробелы.
+      </p>
+      <p>
+        Браузер в качестве возьмет только первое слово, а слово после пробела
+        будет воспринято как ошибочное значение.
+      </p>
+
+      <h2>8. Несколько тэгов для форматирования текста</h2>
+      <ul>
+        <li><code>&lt;strong&gt;</code> - важный фрагмент текста, жирный;</li>
+        <li><code>&lt;em&gt;</code> - акцентирование внимания, курсив;</li>
+        <li><code>&lt;mark&gt;</code> - подсвеченный участок текста;</li>
+        <li><code>&lt;b&gt;</code> - жирный шрифт;</li>
+        <li><code>&lt;i&gt;</code> - курсив, наклонный шрифт;</li>
+        <li><code>&lt;s&gt;</code> - зачеркнутый текст;</li>
+        <li><code>&lt;small&gt;</code> - текст меньшего размера;</li>
+        <li><code>&lt;sup&gt;</code> - верхний индекс;</li>
+        <li><code>&lt;sub&gt;</code> - нижний индекс;</li>
+        <li>
+          <code>&lt;pre&gt;</code> - предварительно отформатированный текст;
+        </li>
+        <li><code>&lt;dfn&gt;</code> - термин;</li>
+        <li><code>&lt;h1&gt; - &lt;h6&gt;</code> - заголовки;</li>
+        <li><code>&lt;q&gt;</code> - короткая внутристрочная цитата;</li>
+        <li><code>&lt;blockquote&gt;</code> - цитата;</li>
+        <li><code>&lt;cite&gt;</code> - сноска на название материала;</li>
+        <li><code>&lt;code&gt;</code> - программный код;</li>
+        <li>
+          <code>&lt;samp&gt;</code> - результат вывода компьютерной программы;
+        </li>
+        <li><code>&lt;kbd&gt;</code> - клавиатурный ввод;</li>
+        <li><code>&lt;var&gt;</code> - переменная компьютерной программы.;</li>
+        <li><code>&lt;time&gt;</code> - дата и/или время.</li>
+      </ul>
+
+      <h2>9. Комменты как писать</h2>
+      <p>
+        Тег &lt;!-- --&gt; используется для написания комментария в коде HTML
+        документа.
+      </p>
+
+      <h2>10. Как вставить css</h2>
+      <h3>Связанные стили</h3>
+      <pre>
+        &lt;head&gt;
+          &lt;link rel="stylesheet" href="mysite.css"&gt;
+        &lt;/head&gt;
+      </pre>
+      <h3>Глобальные стили</h3>
+      <pre>
+        &lt;head&gt;
+          &lt;style&gt;
+            h1 { 
+              color: #333366; 
+            }
+          &lt;/style&gt;
+        &lt;/head&gt;
+      </pre>
+      <h3>Внутренние стили</h3>
+      <pre>
+        &lt;h1 style="font-size: 36px; color: red"&gt;Заголовок 1&lt;/h1&gt;
+      </pre>
+
+      <h2>11. Основные атрибуты img</h2>
+      <ul>
+        <li><code>src</code> Путь к графическому файлу.</li>
+        <li><code>alt</code> Альтернативный текст для изображения.</li>
+        <li>
+          <code>loading</code> Указывает на то, как браузер должен загрузить
+          изображение (eager, lazy)
+        </li>
+        <li><code>height</code> Высота изображения.</li>
+        <li><code>width</code> Ширина изображения.</li>
+        <li><a href="http://htmlbook.ru/html/img">other img attributes</a></li>
+      </ul>
+
+      <h2>12. Как сделать ссылку в виде картинки</h2>
+      <p>
+        Кроме текста, в качестве ссылок можно использовать и рисунки.
+        Изображение в этом случае надо поместить между тегами &lt;a&gt; и
+        &lt;/a&gt;,
+      </p>
+
+      <h2>13. Виды списков (ол,ал, дескриптион лист)</h2>
+      <ol>
+        <li>Маркированный список (ul)</li>
+        <li>Нумерованный список (ol)</li>
+        <li>
+          Список определений (dl). Списки определений создаются с помощью
+          элемента &lt;dl&gt;. Для добавления термина применяется элемент
+          &lt;dt&gt;, а для вставки определения — элемент &lt;dd&gt;
+        </li>
+      </ol>
+
+      <h2>14. Перечислить блочные элементы</h2>
+      <p>
+        Блочные элементы занимают всю ширину своего родителя (контейнера),
+        формально создавая «блок» (отсюда и название).
+      </p>
+      <p>
+        <code>
+          &lt;address&gt; &lt;article&gt; &lt;aside&gt; &lt;blockquote&gt;
+          &lt;details&gt; &lt;dialog&gt; &lt;dd&gt; &lt;div&gt; &lt;dl&gt;
+          &lt;dt&gt; &lt;fieldset&gt; &lt;figcaption&gt; &lt;figure&gt;.
+          &lt;figure&gt; &lt;figcaption&gt; &lt;footer&gt; &lt;form&gt;
+          &lt;h1&gt; &lt;h2&gt; &lt;h3&gt; &lt;h4&gt; &lt;h5&gt; &lt;h6&gt;
+          &lt;header&gt; &lt;hgroup&gt; &lt;hr&gt; &lt;li&gt; &lt;main&gt;
+          &lt;nav&gt; &lt;ol&gt; &lt;p&gt; &lt;pre&gt; &lt;section&gt;
+          &lt;table&gt; &lt;ul&gt;
+        </code>
+      </p>
+
+      <h2>15. Перечислить строчные элементы</h2>
+      <p>
+        В HTML (Языке Гипертекстовой Разметки), строчные элементы это те,
+        которые занимают только то пространство, которое ограничено тегами,
+        определяющими строчный элемент (необходимое для отображения их
+        содержимого) и не нарушая потока содержимого (не требующее новой строки
+        после каждого элемента).
+      </p>
+      <ul>
+        <li>
+          <code>&lt;b&gt;</code> <code>&lt;big&gt;</code>
+          <code>&lt;i&gt;</code> <code>&lt;small&gt;</code>
+          <code>&lt;tt&gt;</code>
+        </li>
+        <li>
+          <code>&lt;abbr&gt;</code> <code>&lt;acronym&gt;</code>
+          <code>&lt;cite&gt;</code> <code>&lt;code&gt;</code>
+          <code>&lt;dfn&gt;</code> <code>&lt;em&gt;</code>
+          <code>&lt;kbd&gt;</code> <code>&lt;strong&gt;</code>
+          <code>&lt;samp&gt;</code> <code>&lt;time&gt;</code>
+          <code>&lt;var&gt;</code>
+        </li>
+        <li>
+          <code>&lt;a&gt;</code> <code>&lt;bdo&gt;</code>
+          <code>&lt;br&gt;</code> <code>&lt;img&gt;</code>
+          <code>&lt;map&gt;</code> <code>&lt;object&gt;</code>
+          <code>&lt;q&gt;</code> <code>&lt;script&gt;</code>
+          <code>&lt;span&gt;</code> <code>&lt;sub&gt;</code>
+          <code>&lt;sup&gt;</code>
+        </li>
+        <li>
+          <code>&lt;button&gt;</code> <code>&lt;input&gt;</code>
+          <code>&lt;label&gt;</code> <code>&lt;select&gt;</code>
+          <code>&lt;textarea&gt;</code>
+        </li>
+      </ul>
+
+      <h2>16. Что такое iframe</h2>
+      <p>
+        Разработчики в основном используют тег iframe для встраивания другого
+        HTML-документа в текущий.
+      </p>
+      <p>
+        Одна из веских причин использования iframe — обеспечить определенную
+        степень разделения между вашим приложением и содержимым iframe.
+      </p>
+
+      <h2>17. Тэги &lt;script&gt; и &lt;noscript&gt;</h2>
+      <p>
+        HTML Элемент <code>&lt;script&gt;</code> используется для встраивания
+        или подключения исполняемого JavaScript кода. Элемент
+        <code>&lt;script&gt;</code> также может использоваться с другими
+        языками, такими как GLSL от WebGL
+      </p>
+      <p>
+        Элемент HTML <code>&lt;noscript&gt;</code> определяет секцию html кода,
+        которая будет вставлена, если в браузере пользователя нет либо отключена
+        поддержка JavaScript.
+      </p>
+
+      <h2>
+        18. Describe how async/defer attributes works at the &lt;script&gt; tag.
+      </h2>
+      <h3>defer</h3>
+      <ul>
+        <li>Скрипты с defer никогда не блокируют страницу.</li>
+        <li>
+          Скрипты с defer всегда выполняются, когда дерево DOM готово, но до
+          события DOMContentLoaded.
+        </li>
+        <li>
+          Отложенные с помощью defer скрипты сохраняют порядок относительно друг
+          друга, как и обычные скрипты.
+        </li>
+      </ul>
+      <h3>async</h3>
+      <ul>
+        <li>
+          Содержимое страницы отображается сразу же : async его не блокирует.
+        </li>
+        <li>
+          DOMContentLoaded может произойти как до, так и после async, никаких
+          гарантий нет.
+        </li>
+        <li>
+          Асинхронные скрипты не ждут друг друга. То есть, скрипты выполняются в
+          порядке загрузки.
+        </li>
+      </ul>
+      <table cellpadding="10">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Порядок</th>
+            <th><code>DOMContentLoaded</code></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>async</code></td>
+            <td>
+              <em>Порядок загрузки</em> (кто загрузится первым, тот и
+              сработает).
+            </td>
+            <td>
+              Не имеет значения. Может загрузиться и выполниться до того, как
+              страница полностью загрузится. Такое случается, если скрипты
+              маленькие или хранятся в кеше, а документ достаточно большой.
+            </td>
+          </tr>
+          <tr>
+            <td><code>defer</code></td>
+            <td><em>Порядок документа</em> (как расположены в документе).</td>
+            <td>
+              Выполняется после того, как документ загружен и обработан (ждёт),
+              непосредственно перед <code>DOMContentLoaded</code>.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>19. HTML5 semantic elements and can name them.</h2>
+      <p>
+        Cемантические элементы точно описывают назначение элемента и тип
+        содержимого, которое находится внутри них.
+      </p>
+      <p>
+        <code>&lt;article&gt;</code> <code>&lt;aside&gt;</code>
+        <code>&lt;details&gt;</code> <code>&lt;figcaption&gt;</code>
+        <code>&lt;figure&gt;</code> <code>&lt;footer&gt;</code>
+        <code>&lt;header&gt;</code> <code>&lt;main&gt;</code>
+        <code>&lt;mark&gt;</code> <code>&lt;nav&gt;</code>
+        <code>&lt;section&gt;</code> <code>&lt;summary&gt;</code>
+        <code>&lt;time&gt;</code>
+      </p>
+      <dl>
+        <dt><b>Benefits of semantic elements</b></dt>
+        <dd>Easier to read</dd>
+        <dd>Greater accessibility</dd>
+      </dl>
+
+      <h2>20. Типы инпута</h2>
+      <ul>
+        <li><code>button</code> – Кнопка с надписью.</li>
+        <li><code>checkbox</code> – Флажок.</li>
+        <li><code>color</code> – Виджет для выбора цвета.</li>
+        <li>
+          <code>date</code> – Поле для ввода календарной даты (год, месяц,
+          день).
+        </li>
+        <li><code>datetime</code> – Поле для ввода даты и времени.</li>
+        <li>
+          <code>datetime-local</code> – Поле для ввода даты и местного времени.
+        </li>
+        <li><code>email</code> – Поле для ввода адреса электронной почты.</li>
+        <li>
+          <code>file</code> – Поле для ввода имени файла, который пересылается
+          на сервер.
+        </li>
+        <li>
+          <code>hidden</code> – Скрытое поле (не отображается на Web-странице).
+        </li>
+        <li>
+          <code>image</code> – Графическая кнопка отправки данных формы на
+          сервер. Вместе с этим значением нужно использовать атрибут
+          <code>src</code>, чтобы определить адрес изображения и атрибут
+          <code>alt</code> для определения альтернативного текста. Можно также
+          задать атрибуты <code>width</code> и <code>height</code>, чтобы
+          определить размер изображения в пикселях.
+        </li>
+        <li><code>month</code> – Поле для ввода месяца и года.</li>
+        <li><code>number</code> – Поле для ввода чисел.</li>
+        <li><code>password</code> – Поле для ввода пароля.</li>
+        <li><code>radio</code> – Переключатели (радио-кнопки).</li>
+        <li>
+          <code>range</code> – Ползунок для ввода чисел в указанном диапазоне.
+        </li>
+        <li>
+          <code>reset</code> – Кнопка сброса данных формы в первоначальное
+          состояние.
+        </li>
+        <li><code>search</code> – Поле для ввода строки поиска.</li>
+        <li>
+          <code>submit</code> – Кнопка для отправки данных формы на сервер.
+        </li>
+        <li><code>tel</code> – Поле для ввода номера телефона.</li>
+        <li><code>text</code> – Текстовое поле.</li>
+        <li><code>time</code> – Поле для ввода времени.</li>
+        <li><code>url</code> – Поле для ввода Web-адреса.</li>
+        <li><code>week</code> – Поле для ввода номера недели и года.</li>
+      </ul>
+
+      <h2>21. Составляющие форм, атрибуты</h2>
+      <h3>
+        Элемент
+        <form></form>
+      </h3>
+      <p>
+        Основу любой формы составляет элемент
+        <code>&lt;form&gt;...&lt;/form&gt;</code>.
+      </p>
+      <dl>
+        <dt>
+          <h4>Атрибуты элемента <code>&lt;form&gt;</code></h4>
+        </dt>
+        <dd>
+          <code>accept-charset</code> - Значение атрибута разделенный пробелами
+          список кодировок символов, которые будут использоваться для отправки
+          формы, например
+        </dd>
+        <dd>
+          <code>action</code> - Обязательный атрибут, который указывает url
+          обработчика формы на сервере, которому передаются данные.
+        </dd>
+        <dd>
+          <code>autocomplete</code> - Отвечает за запоминание введенных в
+          текстовое поле значений и автоподстановку их при последующем вводе
+        </dd>
+        <dd>
+          <code>enctype</code> - Используется для указания MIME-типа данных,
+          отправляемых вместе с формой. Указывается только в случае
+          method="post"
+        </dd>
+        <dd>
+          <code>method</code> Задает способ передачи данных формы. Метод
+          <b>get</b> передает данные на сервер через адресную строку браузера.
+          Метод <b>post</b> применяется для пересылки данных больших объемов, а
+          также конфиденциальной информации и паролей.
+        </dd>
+        <dd>
+          <code>name</code> Задает имя формы для доступа к элементам формы
+        </dd>
+        <dd>
+          <code>novalidate</code> Отключает проверку в кнопке для отправки
+          формы.
+        </dd>
+        <dd>
+          <code>target</code> Указывает окно, в которое будет направлена
+          информация:
+        </dd>
+      </dl>
+      <h3>Группировка элементов формы</h3>
+      <p>
+        Элемент <code>&lt;fieldset&gt;...&lt;/fieldset&gt;</code> предназначен
+        для группировки элементов, связанных друг с другом, разделяя таким
+        образом форму на логические фрагменты.
+      </p>
+      <h3>Создание полей формы</h3>
+      <p>Элемент <code>&lt;input&gt;</code> создает большинство полей формы.</p>
+      <h3>Текстовые поля ввода</h3>
+      <p>
+        Элемент <code>&lt;textarea&gt;...&lt;/textarea&gt;</code> используется
+        вместо элемента <code>&lt;input type="text"&gt;</code>, когда нужно
+        создать большие текстовые поля. Текст, отображаемый как исходное
+        значение, помещается внутрь.
+      </p>
+      <h3>Раскрывающийся список</h3>
+      <p>
+        Списки дают возможность расположить большое количество пунктов
+        компактно. Раскрывающиеся списки создаются при помощи элемента
+        <code>&lt;select&gt;...&lt;/select&gt;</code>. Для добавления в список
+        пунктов используются элементы
+        <code>&lt;option&gt;...&lt;/option&gt;</code>, которые располагаются
+        внутри <code>&lt;select&gt;</code>.
+      </p>
+      <h3>Надписи к полям формы</h3>
+      <p>
+        Надписи к элементам формы создаются с помощью элемента
+        <code>&lt;label&gt;...&lt;/label&gt;</code>.
+      </p>
+      <p>
+        Существует два способа группировки надписи и поля. Если поле находится
+        внутри элемента <code>&lt;label&gt;</code>, то атрибут for указывать не
+        нужно.
+      </p>
+      <h3>Кнопки</h3>
+      <p>
+        Элемент <code>&lt;button&gt;...&lt;/button&gt;</code> создает
+        кликабельные кнопки. В отличие от кнопок, созданных
+        <code>&lt;input&gt;</code> внутрь элемента
+        <code>&lt;button&gt;</code> можно поместить контент — текст или
+        изображение.
+      </p>
+
+      <h2>22. Head элемент: для чего, какие тэги включает</h2>
+      <p>
+        Элемент <code>&lt;head&gt;</code> HTML-документа не отображается на
+        странице в веб-браузере. Он содержит такую информацию, как:
+      </p>
+      <ul>
+        <li>заголовок (title) страницы</li>
+        <li>
+          ссылки на файлы CSS (если вы хотите применить к вашему HTML стили CSS)
+        </li>
+        <li>ссылки на иконки</li>
+        <li>
+          другие метаданные (данные о HTML: автор и важные ключевые слова,
+          описывающие документ.)
+        </li>
+      </ul>
+
+      <h2>
+        23. Where EventTarget, Node, Element, HTMLElement, HTMLInputElement
+        classes can be used.
+      </h2>
+      <h3>EventTarget</h3>
+      <p>
+        это корневой «абстрактный» класс. Объекты этого класса никогда не
+        создаются. Он служит основой, благодаря которой все DOM-узлы
+        поддерживают так называемые «события»
+      </p>
+      <h3>Node</h3>
+      <p>
+        также является «абстрактным» классом, и служит основой для DOM-узлов. Он
+        обеспечивает базовую функциональность: parentNode, nextSibling,
+        childNodes и т.д. (это геттеры). Объекты класса Node никогда не
+        создаются. наследуют от него: Text – для текстовых узлов, Element – для
+        узлов-элементов и Comment – для узлов-комментариев.
+      </p>
+      <h3>Element</h3>
+      <p>
+        это базовый класс для DOM-элементов. Он обеспечивает навигацию на уровне
+        элементов: nextElementSibling, children и методы поиска:
+        getElementsByTagName, querySelector. Element базой для следующих
+        классов: SVGElement, XMLElement и HTMLElement.
+      </p>
+      <h3>HTMLElement</h3>
+      <p>
+        является базовым классом для всех остальных HTML-элементов. От него
+        наследуют конкретные элементы:
+      </p>
+      <ul>
+        <li>HTMLInputElement – класс для тега &lt;input&gt;,</li>
+        <li>HTMLBodyElement – класс для тега &lt;body&gt;,</li>
+        <li>HTMLAnchorElement – класс для тега &lt;a&gt;,</li>
+        <li>
+          …и т.д, каждому тегу соответствует свой класс, который предоставляет
+          определённые свойства и методы.
+        </li>
+      </ul>
+      <h3>Свойства узлов</h3>
+      <p>
+        Каждый DOM-узел принадлежит определённому классу. Классы формируют
+        иерархию. Весь набор свойств и методов является результатом
+        наследования.
+      </p>
+      <ul>
+        <li><code>nodeType</code> позволяет узнать тип DOM-узла.</li>
+        <li>
+          <code>nodeName/tagName</code> Для элементов это свойство возвращает
+          название тега
+        </li>
+        <li>
+          <code>innerHTML</code> Внутреннее HTML-содержимое узла-элемента. Можно
+          изменять.
+        </li>
+        <li><code>outerHTML</code> Полный HTML узла-элемента.</li>
+        <li>
+          <code>nodeValue/data</code> Содержимое узла-неэлемента (текст,
+          комментарий).
+        </li>
+        <li>
+          <code>textContent</code> Текст внутри элемента: HTML за вычетом всех
+          тегов
+        </li>
+        <li>
+          <code>hidden</code> Когда значение установлено в true, делает то же
+          самое, что и CSS
+        </li>
+      </ul>
+
+      <h2>
+        24. Explain the difference between element attributes and DOM
+        properties.
+      </h2>
+      <ol>
+        <li>
+          The Attributes are defined by HTML whereas the properties are defined
+          by the DOM.
+        </li>
+        <li>
+          The attribute’s main role is to initializes the DOM properties. So,
+          once the DOM initialization complete, the attributes job is done.
+        </li>
+        <li>
+          Property values can change, whereas the attribute values can never be
+          changed.
+        </li>
+      </ol>
+
+      <h2>25. I am aware of dataset element attribute.</h2>
+      <p>
+        data-* атрибуты позволяют хранить дополнительную информацию в
+        стандартных элементах HTML
+      </p>
+      <p>
+        Чтение data-атрибутов в JavaScript осуществляется также просто. Для
+        этого можно использовать метод <code>getAttribute()</code> с параметром,
+        равным полному имени атрибута. Но есть и более простой способ, используя
+        объект <code>dataset</code>
+      </p>
+      <pre>
+        <code>article.dataset.columns // "3"</code>
+      </pre>
+      <p>
+        Не храните данные, которые должны быть видимы и доступны в
+        data-атрибутах.
+      </p>
+
+      <h2>26. SVG vs CANVAS</h2>
+      <p>
+        SVG и canvas — это технологии, которые можно использовать для рисования
+        чего-либо на веб-страницах.
+      </p>
+      <ul>
+        <li>
+          Нужно нарисовать небольшую иконку? Это, безусловно, территория SVG.
+        </li>
+        <li>
+          Нужно создать интерактивную браузерную игру? Тут, определённо, нужна
+          технология canvas.
+        </li>
+      </ul>
+
+      <table cellpadding="5" width="100%">
+        <tbody>
+          <tr>
+            <th>Возможность</th>
+            <th>SVG</th>
+            <th>Canvas</th>
+          </tr>
+          <tr>
+            <td>Векторная графика</td>
+            <td>+</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Растровая графика</td>
+            <td>—</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Доступ в DOM</td>
+            <td>+</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Доступность</td>
+            <td>+</td>
+            <td>±</td>
+          </tr>
+          <tr>
+            <td>Вывод текста</td>
+            <td>+</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Вывод градиентов и паттернов</td>
+            <td>+</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Поддержка CSS-анимации</td>
+            <td>+</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Поддержка CSS-фильтров</td>
+            <td>+</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Поддержка SVG-фильтров</td>
+            <td>+</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Поддержка вывода файлов изображений и видеофайлов</td>
+            <td>—</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Экспорт содержимого элемента</td>
+            <td>—</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Управление отдельными пикселями</td>
+            <td>—</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Доступ из JavaScript</td>
+            <td>—</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>Производительность анимации</td>
+            <td>±</td>
+            <td>+</td>
+          </tr>
+          <tr>
+            <td>
+              Поддержка вычислений, выполняемых за пределами главного потока
+            </td>
+            <td>—</td>
+            <td>+</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RxJS</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>RxJS<a href="./index.html">back ></a></h1>
+
+      <h2>Store NgRx</h2>
+      <p>
+        <img
+          src="https://ngrx.io/generated/images/guide/store/state-management-lifecycle.png"
+        />
+      </p>
+      <p>
+        NgRx Store (или просто хранилище) хранит в себе глобальное состояние
+        Angular приложения в виде одного большого объекта.
+      </p>
+      <p>
+        Хранилище в NgRx представлено сервисом Store и выполняет следующие
+        функции:
+      </p>
+      <ul>
+        <li>хранение глобального состояния приложения;</li>
+        <li>
+          обновляет состояние в ответ на действие, принимаемое через метод
+          <code>dispatch()</code>;
+        </li>
+        <li>предоставление доступа к состоянию.</li>
+      </ul>
+      <hr />
+
+      <h2>Actions NgRx</h2>
+      <p>
+        <code>Actions</code> - один из основных строительных блоков в NgRx.
+        <code>Actions</code> выражают уникальные события, происходящие в
+        приложении. Взаимодействие пользователя со страницей, внешнее
+        взаимодействие через сетевые запросы и прямое взаимодействие с
+        API-интерфейсами устройства - эти и другие события описываются
+        <code>Actions</code>.
+      </p>
+      <h3>Introduction</h3>
+      <p>
+        <code>Actions</code> используются во многих областях NgRx.
+        <code>Actions</code> - это входы и выходы многих систем в NgRx.
+        <code>Actions</code> помогают понять, как события обрабатываются в
+        приложении.
+      </p>
+      <h3>The Action interface</h3>
+      <p><code>Action</code> в NgRx состоит из простого интерфейса:</p>
+      <pre>
+        interface Action {
+          type: string;
+        }
+      </pre>
+      <p>
+        Интерфейс имеет единственное свойство, тип, представленный в виде
+        строки. Свойство <code>type</code> предназначено для описания
+        <code>Action</code>, которое будет отправлено в приложении. Значение
+        типа приходит в форме <code>[Source] Event</code> и используется для
+        предоставления контекста того, к какой категории действия оно относится
+        и откуда было отправлено действие. Вы добавляете свойства к
+        <code>Action</code>, чтобы предоставить дополнительный контекст или
+        метаданные для <code>Action</code>.
+      </p>
+      <pre>
+        {
+          type: '[Auth API] Login Success'
+        }
+      </pre>
+      <p>
+        Этот <code>Action</code> описывает событие, вызванное успешной
+        аутентификацией после взаимодействия с внутренним API.
+      </p>
+      <pre>
+        {
+          type: '[Login Page] Login',
+          username: string;
+          password: string;
+        }
+      </pre>
+      <p>
+        Этот <code>Action</code> описывает событие, вызванное нажатием
+        пользователем кнопки Login на странице Login Page, чтобы попытаться
+        аутентифицировать пользователя. Имя пользователя и пароль определяются
+        как дополнительные метаданные, предоставляемые со страницы Login Page.
+      </p>
+      <h3>Writing actions</h3>
+      <p>
+        Есть несколько правил написания хороших <code>Action</code> в
+        приложении.
+      </p>
+      <ol>
+        <li>
+          Предварительно - напишите <code>Action</code> перед разработкой
+          функций, чтобы понять и получить общие знания о реализуемой функции.
+        </li>
+        <li>
+          Разделить - классифицировать <code>actions</code> на основе источника
+          события.
+        </li>
+        <li>
+          Многие - <code>actions</code> недороги в написании, поэтому чем больше
+          <code>actions</code> вы пишете, тем лучше вы выражаете потоки в своем
+          приложении.
+        </li>
+        <li>
+          Управляемый событиями - фиксируйте события, а не команды, поскольку вы
+          разделяете описание события и обработку этого события.
+        </li>
+        <li>
+          Описательный - предоставьте контекст, предназначенный для уникального
+          события, с более подробной информацией, которую вы можете использовать
+          для облегчения отладки с помощью инструментов разработчика.
+        </li>
+      </ol>
+      <h4>login-page.actions.ts</h4>
+      <pre>
+        import { createAction, props } from '@ngrx/store';
+
+        export const login = createAction(
+          '[Login Page] Login',
+          props&lt;{ username: string; password: string }&gt;()
+        );
+      </pre>
+      <p>
+        Функция createAction возвращает функцию, которая при вызове возвращает
+        объект в форме интерфейса Action. Метод props используется для
+        определения любых дополнительных метаданных, необходимых для обработки
+        действия. Action creators предоставляют согласованный, типобезопасный
+        способ создания отправляемого Action.
+      </p>
+      <h4>login-page.component.ts</h4>
+      <pre>
+        onSubmit(username: string, password: string) {
+          store.dispatch(login({ username: username, password: password }));
+        }
+      </pre>
+      <p>
+        <code>login</code> action creator получает объект с именем пользователя
+        и паролем и возвращает простой объект JavaScript со свойством
+        <code>type</code> <code>[Login Page] Login</code> с
+        <code>username</code> и <code>password</code> в качестве дополнительных
+        свойств.
+      </p>
+      <p>
+        Возвращаемый action имеет очень специфический контекст о том, откуда
+        произошло действие и какое событие произошло.
+      </p>
+      <ul>
+        <li>Категория действия заключена в квадратные скобки []</li>
+        <li>
+          Категория используется для группировки действий для определенной
+          области, будь то страница компонента, серверный API или API браузера.
+        </li>
+        <li>
+          Текст <code>Login</code> после категории представляет собой описание
+          того, какое событие произошло в результате этого действия. В этом
+          случае пользователь щелкнул кнопку входа на странице входа, чтобы
+          попытаться пройти аутентификацию с помощью имени пользователя и
+          пароля.
+        </li>
+      </ul>
+      <hr />
+
+      <h2>Reducer NgRx</h2>
+      <p>
+        <code>Reducers</code> в NgRx отвечают за обработку переходов из одного
+        состояния в другое в приложении. Функции-Reducers обрабатывают эти
+        переходы, определяя, какие <code>Actions</code> следует обрабатывать в
+        зависимости от типа <code>Action</code>.
+      </p>
+      <p>
+        <code>Reducers</code> — это чистые функции в том смысле, что они
+        производят один и тот же результат для заданного ввода. Они не имеют
+        побочных эффектов и синхронно обрабатывают каждое изменение состояния.
+        Каждая функция <code>reducer</code> принимает последнее отправленное
+        <code>Action</code>, текущее состояние и определяет, следует ли
+        возвращать только что измененное состояние или исходное состояние.
+      </p>
+      <h3>The reducer function</h3>
+      <p>Есть несколько составных частей управления состоянием редьюсером.</p>
+      <ol>
+        <li>Интерфейс или тип, определяющий форму состояния.</li>
+        <li>
+          Аргументы, включая начальное состояние или текущее состояние и текущее
+          действие.
+        </li>
+        <li>
+          Функции, которые обрабатывают изменения состояния для связанных с ними
+          действий.
+        </li>
+      </ol>
+      <p>
+        Во-первых, определите некоторые действия для взаимодействия с частью
+        состояния.
+      </p>
+      <h4>scoreboard-page.actions.ts</h4>
+      <pre>
+        import { createAction, props } from '@ngrx/store';
+
+        export const homeScore = createAction('[Scoreboard Page] Home Score');
+        export const awayScore = createAction('[Scoreboard Page] Away Score');
+        export const resetScore = createAction('[Scoreboard Page] Score Reset');
+        export const setScores = createAction('[Scoreboard Page] Set Scores', props&lt;{game: Game}&gt;());
+      </pre>
+      <p>
+        Затем создайте файл <code>reducer'a</code>, который импортирует действия
+        и определите форму для части состояния.
+      </p>
+      <h3>Defining the state shape</h3>
+      <p>
+        Каждая <code>функция-reducer</code> является прослушивателем действий.
+        Действия выше, описывают возможные переходы, обрабатываемые
+        <code>reducer'ом</code>. Импортируйте несколько действий для обработки
+        дополнительных переходов состояний в <code>reducer'е</code>.
+      </p>
+      <h4>scoreboard.reducer.ts</h4>
+      <pre>
+        import { Action, createReducer, on } from '@ngrx/store';
+        import * as ScoreboardPageActions from '../actions/scoreboard-page.actions';
+
+        export interface State {
+          home: number;
+          away: number;
+        }
+      </pre>
+      <h4>Установка начального состояния</h4>
+      <p>
+        Создайте и экспортируйте переменную, чтобы зафиксировать начальное
+        состояние с одним или несколькими значениями по умолчанию.
+      </p>
+      <pre>
+        export const initialState: State = {
+          home: 0,
+          away: 0,
+        };
+      </pre>
+      <h3>Создание функции Reducer</h3>
+      <p>
+        Функция <code>Reducer</code> отвечает за неизменную обработку переходов
+        между состояниями. Создайте <code>Reducer</code> с помощью функции
+        <code>createReducer</code>.
+      </p>
+      <pre>
+        export const scoreboardReducer = createReducer(
+          initialState,
+          on(ScoreboardPageActions.homeScore, state => ({ ...state, home: state.home + 1 })),
+          on(ScoreboardPageActions.awayScore, state => ({ ...state, away: state.away + 1 })),
+          on(ScoreboardPageActions.resetScore, state => ({ home: 0, away: 0 })),
+          on(ScoreboardPageActions.setScores, (state, { game }) => ({ home: game.home, away: game.away }))
+        );
+      </pre>
+      <p>
+        В приведенном выше примере редюсер обрабатывает 4 действия:
+        <code>[Scoreboard Page] Home Score</code>,
+        <code>[Scoreboard Page] Away Score</code>,
+        <code>[Scoreboard Page] Score Reset</code> and
+        <code>[Scoreboard Page] Set Scores</code>. Каждое действие строго
+        типизировано. Каждое действие неизменно обрабатывает переход состояния.
+      </p>
+      <p>
+        Это означает, что переходы между состояниями не изменяют исходное
+        состояние, а <b>возвращают новый объект состояния</b> с помощью spread
+        оператора. Spread cинтаксис копирует свойства из текущего состояния в
+        объект, создавая новую ссылку. Это гарантирует, что
+        <b>новое состояние создается при каждом изменении</b>, сохраняя чистоту
+        изменения. Это также способствует ссылочной целостности, гарантируя, что
+        <b>старая ссылка будет удалена</b> при изменении состояния.
+      </p>
+      <p>
+        Когда действие отправляется, все зарегистрированные
+        <code>Reducer</code> получают это действие. Обрабатывают ли они
+        действие, определяется функциями <code>on</code>, которые связывают одно
+        или несколько действий с данным изменением состояния.
+      </p>
+      <h3>Registering root state</h3>
+      <p>
+        Состояние приложения определяется как один большой объект. Регистрация
+        <code>Reducer</code> для управления частями состояния только определяет
+        ключи со связанными значениями в объекте. Чтобы зарегистрировать
+        глобальное хранилище в приложении, используйте метод
+        <code>StoreModule.forRoot()</code> с картой пар ключ/значение, которые
+        определяют состояние. <code>StoreModule.forRoot()</code> регистрирует
+        глобальных поставщиков для приложения, включая службу Store, которую вы
+        внедряете в компоненты и службы для отправки действий и выбора частей
+        состояния.
+      </p>
+      <h4>app.module.ts</h4>
+      <pre>
+        import { NgModule } from '@angular/core';
+        import { StoreModule } from '@ngrx/store';
+        import { scoreboardReducer } from './reducers/scoreboard.reducer';
+
+        @NgModule({
+          imports: [
+            StoreModule.forRoot({ game: scoreboardReducer })
+          ],
+        })
+        export class AppModule {}
+      </pre>
+      <p>
+        Регистрация состояний с помощью
+        <code>StoreModule.forRoot()</code> гарантирует, что состояния будут
+        определены при запуске приложения. Вы регистрируете корневые состояния,
+        которые всегда должны быть немедленно доступны для всех областей
+        приложения.
+      </p>
+      <h3>Register feature state</h3>
+      <p>
+        Состояния функций ведут себя так же, как корневые состояния, но
+        позволяют вам определять их с помощью определенных областей функций в
+        вашем приложении. Ваше состояние — это один большой объект, а состояния
+        функций регистрируют дополнительные ключи и значения в этом объекте.
+      </p>
+      <h4>app.module.ts</h4>
+      <pre>
+        import { NgModule } from '@angular/core';
+        import { StoreModule } from '@ngrx/store';
+        import { ScoreboardModule } from './scoreboard/scoreboard.module';
+
+        @NgModule({
+          imports: [
+            StoreModule.forRoot({}),
+            ScoreboardModule
+          ],
+        })
+        export class AppModule {}
+      </pre>
+      <h4>scoreboard.reducer.ts</h4>
+      <pre>
+        export const scoreboardFeatureKey = 'game';
+      </pre>
+      <h4>scoreboard.module.ts</h4>
+      <pre>
+        import { NgModule } from '@angular/core';
+        import { StoreModule } from '@ngrx/store';
+        import { scoreboardFeatureKey, scoreboardReducer } from './reducers/scoreboard.reducer';
+          
+        @NgModule({
+          imports: [
+            StoreModule.forFeature(scoreboardFeatureKey, scoreboardReducer)
+          ],
+        })
+        export class ScoreboardModule {}
+      </pre>
+      <p>
+        После загрузки <code>ScoreboardModule</code> игровой ключ
+        <code>game</code> становится свойством объекта и теперь управляется в
+        состоянии.
+      </p>
+      <pre>
+        {
+          game: { home: 0, away: 0 }
+        }
+      </pre>
+      <hr />
+
+      <h2>Selector NgRx</h2>
+      <p>
+        В NgRx селекторы представляют собой чистые функции и используются для
+        получения определенных частей глобального состояния. Отличительные
+        особенности селекторов:
+      </p>
+      <ol>
+        <li>Мобильность</li>
+        <li>Мемоизация</li>
+        <li>Возможность построения композиции селекторов;</li>
+        <li>Легкость тестирования.</li>
+      </ol>
+      <h3>createSelector()</h3>
+      <p>
+        Селекторы создаются с помощью функции NgRx
+        <code>createSelector()</code>, которая может принимать неограниченное
+        количество функций, каждая из которых возвращает определенную часть
+        состояния. При этом самой последней функции, которая и возвращает
+        конечный результат, в качестве аргументов передаются результаты первых
+        функций.
+      </p>
+      <pre>
+        const selectUsers = (state: State) => state.users;
+
+        export const selectUsersList = createSelector(
+          selectUsers,
+          (state: UsersState) => state.list
+        );
+      </pre>
+      <h3>select()</h3>
+      <p>
+        Для использования селектор необходимо передать функции NgRx
+        <code>select()</code>, которая вызывается в методе
+        <code>pipe()</code> хранилища (экземпляра объекта Store).
+      </p>
+      <pre>
+        this.store
+          .pipe(select(selectCountSum))
+          .subscribe((vl) => console.log(vl));
+      </pre>
+      <hr />
+
+      <h2>Effect NgRx</h2>
+      <p>
+        NgRx Effects реализуют побочные эффекты, работающие на основе библиотеки
+        RxJS, применительно к хранилищу. Отслеживая поток действий, отправляемых
+        в Store, они могут генерировать новые действия, например, на основе
+        результатов выполнения HTTP-запросов или сообщений, полученных через Web
+        Sockets.
+      </p>
+      <p>Цели и функции NgRx Effects:</p>
+      <ol>
+        <li>
+          снять нагрузку с компонента по управлению состоянием и выполнению
+          побочных эффектов и свести его работу к получению состояний и
+          генерации действий;
+        </li>
+        <li>
+          отслеживание и фильтрация потока действий для выполнения побочного
+          эффекта при возникновении определенного действия;
+        </li>
+        <li>выполнение синхронных и асинхронных побочных эффектов.</li>
+      </ol>
+      <h3>Writing Effects</h3>
+      <p>
+        Чтобы изолировать побочные эффекты от вашего компонента, вы должны
+        создать класс Effects для прослушивания событий и выполнения задач.
+      </p>
+      <p>Эффекты — это внедряемые сервисы состоящие из следующих частей:</p>
+      <ol>
+        <li>
+          Внедряемый сервис <code>Actions</code>, который обеспечивает
+          наблюдаемый поток всех действий, отправленных после того, как
+          последнее состояние было уменьшено.
+        </li>
+        <li>
+          Метаданные присоединяются к наблюдаемым потокам с помощью функции
+          createEffect. Метаданные используются для регистрации потоков,
+          подписанных на хранилище. Любое действие, возвращенное из потока
+          эффектов, затем отправляется обратно в Store.
+        </li>
+        <li>
+          Действия фильтруются с помощью оператора ofType. Оператор ofType
+          принимает один или несколько типов действий в качестве аргументов для
+          фильтрации <code>Actions</code>, на которые следует воздействовать.
+        </li>
+        <li>Эффекты подписаны на наблюдаемый объект Store.</li>
+        <li>
+          Сервисы внедряются в эффекты для взаимодействия с внешними API и
+          обработки потоков.
+        </li>
+      </ol>
+      <pre>
+        import { Injectable } from '@angular/core';
+        import { Actions, createEffect, ofType } from '@ngrx/effects';
+        import { EMPTY } from 'rxjs';
+        import { map, mergeMap, catchError } from 'rxjs/operators';
+        import { MoviesService } from './movies.service';
+        
+        @Injectable()
+        export class MovieEffects {
+        
+          loadMovies$ = createEffect(() => this.actions$.pipe(
+            ofType('[Movies Page] Load Movies'),
+            mergeMap(() => this.moviesService.getAll()
+              .pipe(
+                map(movies => ({ type: '[Movies API] Movies Loaded Success', payload: movies })),
+                catchError(() => EMPTY)
+              ))
+            )
+          );
+        
+          constructor(
+            private actions$: Actions,
+            private moviesService: MoviesService
+          ) {}
+        }
+      </pre>
+      <p>
+        Эффект <code>loadMovies$</code> прослушивает все отправленные действия
+        через поток <code>Actions</code>, он ищет action
+        <code>[Movies Page] Load Movies</code> с помощью оператора
+        <code>ofType</code>.
+        <code>Метод MoviesService#getAll()</code> возвращает observable, который
+        сопоставляет фильмы с новым action в случае успеха, и возвращает пустой
+        observable, если возникает ошибка. Action отправляется в хранилище, где
+        оно может быть обработан редьюсерами, когда требуется изменение
+        состояния. Также важно обрабатывать ошибки при работе с наблюдаемыми
+        потоками, чтобы эффекты продолжали работать.
+      </p>
+      <h3>Registering root effects</h3>
+      <h4>app.module.ts</h4>
+      <pre>
+        import { EffectsModule } from '@ngrx/effects';
+        import { MovieEffects } from './effects/movie.effects';
+
+        @NgModule({
+          imports: [
+            EffectsModule.forRoot([MovieEffects])
+          ],
+        })
+        export class AppModule {}
+      </pre>
+      <h3>Registering feature effects</h3>
+      <h4>admin.module.ts</h4>
+      <pre>
+        import { EffectsModule } from '@ngrx/effects';
+        import { MovieEffects } from './effects/movie.effects';
+
+        @NgModule({
+          imports: [
+            EffectsModule.forFeature([MovieEffects])
+          ],
+        })
+        export class MovieModule {}
+      </pre>
+      <hr />
+
+      <h2>Facade NgRx</h2>
+      <p>
+        Фасады — это шаблон программирования, в котором предоставляется более
+        простой общедоступный интерфейс для маскировки набора внутренних, более
+        сложных компонентов.
+      </p>
+      <p>
+        При написании большого количества кода NgRx — разработчики быстро
+        накапливают большие наборы классов действий и селекторов. Эти классы
+        используются для отправки запросов в хранилище NgRx и запросов из него.
+      </p>
+      <p>
+        <img
+          src="https://miro.medium.com/max/1346/1*fjwlk2CVF4Y0MS_sADwqmA.jpeg"
+        />
+      </p>
+      <p>
+        Использование фасада — для обертывания и сокрытия NgRx — упрощает доступ
+        и изменение состояния NgRx, маскируя все внутренние взаимодействия с
+        хранилищем, действиями, редьюсерами, селекторами и эффектами.
+      </p>
+      <p>
+        <img
+          src="https://miro.medium.com/max/1354/1*-vkURnukSMKCErX2iktn1w.jpeg"
+        />
+      </p>
+      <p>Фасады побуждают разработчиков мыслить двумя (2) способами:</p>
+      <ol>
+        <li>
+          Разработчикам рекомендуется подумать о явных API-интерфейсах
+          общедоступного фасада.
+        </li>
+        <li>
+          Разработчики начинают думать о представлениях как о презентационных
+          компонентах, которые просто отображают данные, полученные от
+          наблюдаемых объектов Facade.
+        </li>
+      </ol>
+      <h3>Implementing our NgRx Facade</h3>
+      <pre>
+        @Injectable()
+        export class CarsFacade {
+          loaded$ = this.store.select(carsQuery.getIsLoaded);
+          allCars$ = this.store.select(carsQuery.getAllCars);
+          selectedCar$ = this.store.select(carsQuery.getSelectedCar);
+
+          constructor(private store: Store&gt;CarsState&lt;) {}
+
+          loadAllCars() {
+            this.store.dispatch(new LoadCar());
+          }
+          
+          selectCar(carId: string) {
+            this.store.dispatch(new SelectCar(carId));
+          }
+        }
+      </pre>
+      <p>CarListComponent with Facades</p>
+      <pre>
+        import { CarsFacade } from '../+state';
+
+        @Component({
+          template: `
+            &lt;ul&gt;
+            &lt;li *ngFor="let car of (allCars$ | async)"
+                  (click)="carsFacade.selectCar(car.id)"&gt;
+                {{car.name}}
+            &lt;/li&gt;
+            &lt;/ul&gt;
+          `
+        })
+        export class CarListComponent {
+          allCars$ = this.carsFacade.allCars$;
+          selectedCar$ = this.carsFacade.selectedCar$;
+
+          constructor(public carsFacade: CarsFacade) {
+            this.carsFacade.loadAllCars();
+          }
+        } 
+      </pre>
+      <hr />
+
+      <h2>Observable</h2>
+      <h3>What is a data stream</h3>
+      <p>
+        Поток - это данные, которые прибывают в течение определенного периода
+        времени. Поток данных может быть чем угодно.
+      </p>
+      <p>
+        Следующая диаграмма показывает, как значения поступают в течение
+        определенного периода времени. Как вы можете видеть, Stream излучает
+        значения асинхронно.
+      </p>
+      <p>
+        <img
+          src="https://www.tektutorialshub.com/wp-content/uploads/2020/01/mouse-click-events-as-data-streams.jpg"
+        />
+      </p>
+      <p>
+        Значение - это не единственное, что излучает поток. Поток может
+        завершаться, когда пользователь закрывает окно или приложение. Или может
+        произойти ошибка, которая приводит к закрытию потока. В любой момент
+        времени поток может излучать любую из следующих трех вещей
+      </p>
+      <ol>
+        <li><code>Value</code>: i.e the next value in the stream</li>
+        <li><code>Complete</code>: The stream has ended</li>
+        <li><code>Error</code>: The error has stopped the stream.</li>
+      </ol>
+      <p>Поток данных может быть чем угодно</p>
+      <ol>
+        <li>Mouse event</li>
+        <li>Keyboard events</li>
+        <li>Form events like value changes etc</li>
+        <li>Data which arrives after an HTTP request</li>
+        <li>User Notifications</li>
+        <li>Measurements from any sensor</li>
+      </ol>
+      <p>Важные моменты, касающиеся потоков, они могут:</p>
+      <ol>
+        <li>Излучать ноль, одно или несколько значений любого времени.</li>
+        <li>Может излучать ошибки.</li>
+        <li>
+          Должен излучать полный сигнал, когда завершается (конечные потоки).
+        </li>
+        <li>Может быть бесконечным</li>
+      </ol>
+      <h3>What is RxJS</h3>
+      <p>RXJS позволяет нам работать с асинхронными потоками данных</p>
+      <p>
+        Angular использует библиотеку RXJS в своей структуре для реализации
+        реактивного программирования.
+      </p>
+      <ol>
+        <li>Реагирование на HTTP-запрос в Angular</li>
+        <li>Изменениях значений / состояния в Angular формах</li>
+        <li>
+          Модули маршрутизатора и форм используют Observable для прослушивания и
+          реагирования на события
+        </li>
+        <li>
+          Пользовательские события, которые отправляют Observable выходные
+          данные от ребенка в родительский компонент
+        </li>
+        <li>Модуль HTTP использует Observable для обработки запросов</li>
+      </ol>
+      <p>The RxJs has two main players</p>
+      <ol>
+        <li>Observable</li>
+        <li>Observers ( Subscribers)</li>
+      </ol>
+      <h3>What is an Observable in Angular</h3>
+      <p>
+        <code>Observable</code> - это функция, которая преобразует обычный поток
+        данных в наблюдаемый поток данных. Вы можете думать о
+        <code>Observable</code>, как о обертке вокруг обычного потока данных.
+      </p>
+      <p>
+        <code>Observable</code> излучает значение из потока асинхронно. Он
+        возвращает complete, когда поток завершается, или error, если поток
+        вернул ошибку.
+      </p>
+      <p>
+        <code>Observable</code> декларативны. Вы определяете
+        <code>Observable</code>, как и любая другая переменная.
+        <code>Observable</code> начинает выделять значения только тогда, когда
+        кто -то подписывается на него.
+      </p>
+      <h3>Who are observers (subscribers)</h3>
+      <p>
+        <code>Observable</code> бесполезен, пока кто-то не поддпишется на него.
+        Мы называем их <code>observers</code> или <code>subscribers</code>.
+      </p>
+      <p>
+        <code>Observers</code> общаются с <code>Observable</code>, используя
+        обратные вызовы
+      </p>
+      <p>
+        <code>Observer</code> должен подписаться на <code>Observable</code>,
+        чтобы получить значение от <code>Observable</code>. При подписке на него
+        проходит три обратного вызова: <code>next()</code>,
+        <code>error()</code> & <code>complete()</code>.
+      </p>
+      <p>
+        <code>Observable</code> начинает издавать значение, как только
+        наблюдатель или потребитель подписываются на него.
+      </p>
+      <ol>
+        <li>Observers/subscribers subscribe to Observables</li>
+        <li>
+          Observer registers three callbacks with the observable at the time of
+          subscribing. i .e next(), error() & complete()
+        </li>
+        <li>All three callbacks are optional</li>
+        <li>
+          The observer receives the data from the observer via the next()
+          callback
+        </li>
+        <li>
+          They also receive the errors and completion events from the Observable
+          via the error() & complete() callbacks
+        </li>
+      </ol>
+      <pre>
+        public obs = new Observable((observer) => {
+          console.log("Observable starts")
+          observer.next("1")
+          observer.next("2")
+          observer.next("3")
+          observer.error(new Error())
+          observer.complete()
+        });
+
+        ngOnInit() {
+          this.obs.subscribe(
+            val => { console.log(val) },
+            error => { console.log("error") },
+            () => { console.log("Completed") }
+          )
+        }
+
+        ngOnDestroy() {
+          this.obs.unsubscribe();
+        }
+      </pre>
+      <h3>Unsubscribing from an Observable</h3>
+      <p>
+        Нам нужно отписаться, чтобы закрыть Observable, когда он больше не
+        требуется. Иначе, это может привести к утечке памяти и деградации
+        производительности.
+      </p>
+      <pre>
+        ngOnDestroy() {
+          this.obs.unsubscribe();
+        }
+      </pre>
+
+      <h2>Subject</h2>
+      <p>
+        Subject - это особый тип Observable, который позволяет значениям быть
+        многоадресными для многих наблюдателей. Subject также являются
+        наблюдателями, потому что они могут подписаться на другого Observable и
+        получить от него значения, которая будет адресованы для всех его
+        подписчиков.
+      </p>
+      <p>По сути, Subject может действовать как Observable, так и Observer.</p>
+      <h3>How does Subjects work</h3>
+      <p>
+        Субъекты реализуют как метод subscribe(), так и next, error & complete
+        методы. Он также поддерживает коллекцию observers[]
+      </p>
+      <p>
+        <img
+          src="https://www.tektutorialshub.com/wp-content/uploads/2021/04/Angular-Subjects.png"
+        />
+      </p>
+      <p>
+        Observer может подписаться на Subject и получать от него значения.
+        Subject добавляет их в свою коллекцию observers[]. Всякий раз, когда в
+        потоке есть значение, он уведомляет всех его наблюдателей.
+      </p>
+      <h3>Creating a Subject in Angular</h3>
+      <pre>
+        subject$ = new Subject();
+ 
+        ngOnInit() {
+          this.subject$.subscribe(val => {
+            console.log(val);
+          });
+      
+          this.subject$.next("1");
+          this.subject$.next("2");
+          // this.subject$.error("error")
+          this.subject$.complete();
+        }
+      </pre>
+      <h3>Subject is hot Observable</h3>
+      <p>Observables are classified into two groups. Cold & Hot</p>
+      <h4>Cold observable</h4>
+      <p>
+        Cold observable не активирует выдачу данных, пока не появится подписчик.
+        Обычно это тот случай, когда сам наблюдаемая производит данные.
+      </p>
+      <p>
+        Производитель производит значение только тогда, когда подписчик
+        подписывается на него.
+      </p>
+      <h4>Hot observable</h4>
+      <p>
+        Hot observable не ждет подписчика чтобы начать выдачу данных. Он может
+        начать излучать значения сразу. Это происходит, когда производитель
+        находится за пределами observable.
+      </p>
+      <h3>Every Subject is an Observer</h3>
+      <pre>
+        subject$ = new Subject();
+ 
+        observable = new Observable(observer => {
+          observer.next("first");
+          observer.next("second");
+          observer.error("error");
+        });
+      
+        ngOnInit() {
+          this.subject$.subscribe(val => {
+            console.log(val);
+          });
+      
+          this.observable.subscribe(this.subject$);
+        }
+      </pre>
+      <h3>Subjects are Multicast</h3>
+      <p>
+        Более одного подписчика может подписаться на Subject. Все подписчики
+        получают одно и то же значение, когда Subject его излучает.
+      </p>
+      <p>
+        Несколько наблюдателей Observable, с другой стороны, получат отдельный
+        экземпляр Observables.
+      </p>
+      <h3>BehaviorSubject</h3>
+      <p>
+        <code>BehaviorSubject</code> требует начальное значение, хранит текущее
+        значение и отправляет его новым подписчикам.
+      </p>
+      <pre>
+        const sbj = new BehaviorSubject&lt;number&gt;(5);
+
+        sbj.subscribe((vl) => console.log(`1st: ${vl}`));
+        sbj.subscribe((vl) => console.log(`2nd: ${vl}`));
+        sbj.next(7);
+
+        // Log:
+        1st: 5
+        2nd: 5
+        1st: 7
+        2nd: 7
+      </pre>
+      <h3>ReplaySubject</h3>
+      <p>
+        В отличие от <code>BehaviorSubject</code> объекты
+        <code>ReplaySubject</code> способны хранить заданное количество
+        последних значений, которое задается при создании объекта.
+      </p>
+      <p>
+        Все новые "потребители" сразу же получают по очереди все n указанных
+        значений RxJS ReplaySubject.
+      </p>
+      <pre>
+        const sbj = new ReplaySubject(2);
+
+        sbj.next(5);
+        sbj.subscribe((vl) => console.log(`1st: ${vl}`));
+        sbj.next(6);
+        sbj.next(7);
+        sbj.subscribe((vl) => console.log(`2nd: ${vl}`));
+        
+        // Log:
+        1st: 5
+        1st: 6
+        1st: 7
+        2nd: 6
+        2nd: 7
+      </pre>
+      <h3>AsyncSubject</h3>
+      <p>
+        В случае с <code>AsyncSubject</code> "потребителям" передается только
+        последнее значение объекта и только, когда он завершит свое выполнение
+        (вызов <code>complete()</code>).
+      </p>
+      <pre>
+        const sbj = new AsyncSubject();
+
+        sbj.subscribe((vl) => console.log(`Async: ${vl}`));
+        sbj.next(7);
+        sbj.next(8);
+        sbj.next(9);
+        setTimeout(() => sbj.complete(), 3000);
+
+        // Log:
+        Async: 9
+      </pre>
+      <hr />
+
+      <h2>Scheduler</h2>
+      <p>
+        Для управления временем и очередностью выполнения операций в объектах
+        Observable, имеются RxJS Schedulers.
+      </p>
+      <p>Имеются следующие типы RxJS Schedulers:</p>
+      <ul>
+        <li><code>queue</code> - добавляет операцию в callstack;</li>
+        <li><code>asap</code> - регистрирует операцию в очереди микрозадач;</li>
+        <li>
+          <code>async</code> - регистрирует операцию в очереди макрозадач;
+        </li>
+        <li>
+          <code>animationFrame</code> - отвечает за действия, выполняемые перед
+          перерисовкой.
+        </li>
+      </ul>
+      <p>
+        В качестве второго необязательного параметра большинству операторов
+        можно передать объект RxJS <code>Scheduler</code>, который
+        переопределяет поведение оператора по умолчанию.
+      </p>
+      <p>
+        Сама библиотека RxJS написана таким образом, что разработчику
+        практически никогда не приходится менять стандартное поведение
+        Observable, задаваемое операторами совместно с <code>Scheduler</code>.
+      </p>
+      <h3>observeOn()</h3>
+      <p>
+        Для управления передачей данных, в <code>pipe()</code> используйте метод
+        <code>observeOn()</code>. Он принимает <code>Scheduler</code> и
+        определяет, в каком порядке "потребители" получат данные после их
+        отправления.
+      </p>
+      <pre>
+        console.log('Before');
+
+        of(9)
+          .pipe(observeOn(async))
+          .subscribe((vl) => console.log('Value is: ', vl));
+
+        console.log('After');
+      </pre>
+      <h3>subscribeOn()</h3>
+      <p>
+        В отличие от <code>observeOn()</code>, метод
+        <code>subscribeOn()</code> определяет не контекст передачи данных, а
+        контекст вызова метода <code>subscribe()</code>. Параметром ему также
+        передается Scheduler.
+      </p>
+      <pre>
+        console.log('Before');
+
+        of(9)
+          .pipe(subscribeOn(async))
+          .subscribe((vl) => console.log('Value is: ', vl));
+
+        console.log('After');
+      </pre>
+      <hr />
+
+      <h2>From Operator</h2>
+      <p>
+        <code>From</code> принимает только один перебираемый аргумент, и
+        преобразует его в Observable.
+      </p>
+      <ol>
+        <li>an Array,</li>
+        <li>anything that behaves like an array</li>
+        <li>Promise</li>
+        <li>any iterable object</li>
+        <li>collections</li>
+        <li>any observable like object</li>
+      </ol>
+      <p>
+        <img
+          src="https://www.tektutorialshub.com/wp-content/uploads/2020/01/Observable-from-Operator.jpg"
+        />
+      </p>
+      <pre>
+        ngOnInit() {
+            const array = [1, 2, 3]
+            const obsfrom = from(array);
+            obsfrom.subscribe(val => console.log(val))
+        }
+        
+        *** Output ****
+        1
+        2
+        3
+      </pre>
+
+      <hr />
+
+      <h2>FromEvent</h2>
+      <p>
+        Angular предоставляет метод <code>fromEvent</code> для непосредственного
+        создания Observable из событий DOM.
+      </p>
+      <h3>Syntax</h3>
+      <pre>
+        fromEvent&lt;T&gt;(
+          target: fromEventTarget&lt;T&gt;, 
+          eventName: string, 
+          options: EventListenerOptions, 
+          resultSelector: (...args: any[]) => T): Observable&lt;T&gt;
+        )
+      </pre>
+      <p>
+        <code>FromEventTarget</code> - это первый аргумент
+        <code>fromEvent</code>. Это может быть DOM EventTarget, Node.js
+        EventEmitter, JQuery-подобная цель события, NodeList или HTMLCollection.
+        Цель должна иметь метод для регистрации/отмены регистрации обработчика
+        событий. (addEventListener/removeEventListener в случае цели события
+        DOM)
+      </p>
+      <p>
+        <code>eventName</code> - это второй аргумент, который представляет собой
+        тип события, которое мы хотим прослушать.
+      </p>
+      <p>
+        <code>Options</code> - это дополнительный аргумент, который мы хотим
+        передать при регистрации обработчика событий, т. е.
+        <code>addEventListener</code>.
+      </p>
+      <p>
+        <code>resultSelector</code> является необязательным и будет объявлен
+        устаревшим в будущих версиях.
+      </p>
+      <h3>How it works</h3>
+      <p>
+        Когда мы подписываемся на наблюдаемый объект, который мы создали с
+        помощью метода <code>fromEvent</code>, он регистрирует обработчик
+        события с помощью <code>addEventListener</code> в элементе DOM. Всякий
+        раз, когда пользователь нажимает кнопку,
+        <code>fromEvent</code> фиксирует значение и передает его подписчику в
+        качестве первого аргумента. Когда мы отменяем подписку, он отменяет
+        регистрацию обработчика событий, используя метод
+        <code>removeEventListener</code>.
+      </p>
+      <hr />
+
+      <h2>Of Operator</h2>
+      <p>
+        <code>Of</code> создает Observable из аргументов, которые вы ему
+        передаете. Вы можете передать любое количество аргументов в
+        <code>Of</code>. Каждый аргумент выдается отдельно и один за другим. В
+        конце он посылает сигнал Complete.
+      </p>
+      <p>
+        <img
+          src="https://www.tektutorialshub.com/wp-content/uploads/2020/01/Observable-Of-Operator.jpg"
+        />
+      </p>
+      <pre>
+        ngOnInit() {
+          const obs = of(1, 2, 3);
+          obs.subscribe(val => console.log(val))
+        }
+
+        **** Output ***
+        1
+        2
+        3
+      </pre>
+      <hr />
+
+      <h2>ThrowError</h2>
+      <p>
+        Оператор Angular ThrowError возвращает Observable, который при подписке
+        сразу же выдает ошибку. Он не выдает никаких результатов.
+      </p>
+      <h3>Throw Error Vs ThrowError</h3>
+      <p>
+        <code>Throw Error</code> выдает ошибку. Это конструкция JavaScript и не
+        является частью RxJs. Нам нужно использовать блок
+        <code>try/catch</code> для перехвата ошибок, вызванных
+        <code>Throw Error</code>. RxJS использует блок
+        <code>try/catch</code> для перехвата любых ошибок, выдаваемых
+        наблюдаемыми объектами. И когда они ловят один, они выдают уведомление
+        об ошибке (вызывают обратный вызов ошибки), а затем Observable
+        останавливается.
+      </p>
+      <p>
+        <code>ThrowError</code> не выдает такие ошибки, как
+        <code>throw Error</code>. Он возвращает новую Observable, которая выдает
+        уведомление об ошибке (вызывает обратный вызов ошибки), а затем
+        останавливается.
+      </p>
+      <h3>Using ThrowError</h3>
+      <p>
+        Чтобы выдавать уведомление об ошибке, необходимо подписаться на
+        <code>throwError</code>. Мы можем использовать его для компоновки с
+        другими <code>Observables</code>, такими как <code>mergeMap</code>,
+        <code>switchMap</code>, <code>catchError</code> и т. д.
+      </p>
+      <hr />
+
+      <h2>CombineLatest</h2>
+      <p>
+        Объединяет несколько Observables для создания Observable, значения
+        которого рассчитываются на основе последних значений каждого из его
+        входных Observables.
+      </p>
+      <pre>
+        combineLatest(observables: ...Observable, project: function): Observable
+      </pre>
+      <p>
+        <b>
+          Имейте в виду, что combineLatest не будет выдавать начальное значение,
+          пока каждый наблюдаемый объект не выдаст хотя бы одно значение.
+        </b>
+      </p>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/combineLatest.png"
+        />
+      </p>
+      <p>
+        <code>combineLatest</code> объединяет значения из всех Observables,
+        переданных в массив observables. Это делается путем подписки на каждый
+        Observable по порядку и всякий раз, когда какой-либо Observable излучает
+        значение, собирается массив самых последних значений из каждого
+        Observable.
+      </p>
+      <pre>
+        const firstTimer = timer(0, 1000); // emit 0, 1, 2... after every second, starting from now
+        const secondTimer = timer(500, 1000); // emit 0, 1, 2... after every second, starting 0,5s from now
+
+        const combinedTimers = combineLatest([firstTimer, secondTimer]);
+
+        combinedTimers.subscribe(value => console.log(value));
+
+        // Logs
+        // [0, 0] after 0.5s
+        // [1, 0] after 1s
+        // [1, 1] after 1.5s
+        // [2, 1] after 2s
+      </pre>
+      <p>
+        Статическая версия <code>combineLatest</code> принимает массив
+        <code>Observables</code>. Обратите внимание, что массив
+        <code>Observables</code> - хороший выбор, если вы заранее не знаете,
+        сколько <code>Observables</code> вы будете комбинировать. Передача
+        пустого массива приведет к немедленному завершению
+        <code>Observable</code>.
+      </p>
+      <p>
+        Чтобы гарантировать, что выходной массив всегда имеет одинаковую длину,
+        combineLatest фактически будет ждать, пока все входные
+        <code>Observable</code> будут выданы хотя бы один раз, прежде чем он
+        начнет выдавать результаты. Это означает, что если некоторые
+        <code>Observable</code> излучают значения до того, как другие
+        <code>Observable</code> начали излучать, все эти значения, кроме
+        последнего, будут потеряны.
+      </p>
+      <p>
+        С другой стороны, если какой-то <code>Observable</code> не испускает
+        значение, но завершается, результирующий
+        <code>Observable</code> завершится в тот же момент, ничего не испуская,
+        поскольку теперь будет невозможно включить значение из завершенного
+        <code>Observable</code> в результирующий массив. Кроме того, если
+        некоторый входной <code>Observable</code> не выдает никакого значения и
+        никогда не завершается, <code>combineLatest</code> также никогда не
+        выдает и никогда не завершается, так как, опять же, он будет ждать, пока
+        все потоки выдадут какое-то значение.
+      </p>
+      <p>
+        Если хотя бы один <code>Observable</code> был передан в
+        <code>combineLatest</code>, и все переданные Observable что-то
+        испустили, результирующий Observable завершится, когда завершатся все
+        объединенные потоки. Таким образом, даже если какой-либо Observable
+        завершится, результат <code>combineLatest</code> все равно будет
+        выдавать значения, когда это сделают другие <code>Observable</code>. В
+        случае завершенного <code>Observable</code> его значение с этого момента
+        всегда будет последним переданным значением.
+      </p>
+      <p>
+        С другой стороны, если какие-либо <code>Observable</code> ошибки,
+        <code>combineLatest</code> также немедленно выдаст ошибку, и все
+        остальные <code>Observable</code> будут отписаны.
+      </p>
+      <hr />
+
+      <h2>WithLatestFrom</h2>
+      <p>
+        Объединяет исходный Observable с другими Observable для создания нового
+        Observable, значения которого рассчитываются на основе последних
+        значений каждого исходного Observable, только когда исходный Observable
+        излучает значения.
+      </p>
+      <pre>
+        withLatestFrom(other: Observable, project: Function): Observable
+      </pre>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/withLatestFrom.png"
+        />
+      </p>
+      <p>
+        Всякий раз, когда исходный Observable выдает значение, он вычисляет
+        формулу, используя это значение плюс последние значения из других
+        входных Observable, а затем выдает результат этой формулы.
+      </p>
+      <pre>
+        const source = interval(5000);
+        const secondSource = interval(1000);
+
+        source
+          .pipe(withLatestFrom(secondSource))
+          .subscribe((val) => console.log(val));
+        
+        // Logs
+        // [0, 4] after 5s
+        // [1, 9] after 10s
+        // [2, 14] after 15s
+      </pre>
+      <hr />
+
+      <h2>Buffer</h2>
+      <p>
+        Собирает значения из прошлого в виде массива и испускает этот массив
+        только тогда, когда испускается другой Observable.
+      </p>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/buffer.png" />
+      </p>
+      <p>
+        Буферизирует входящие значения Observable до тех пор, пока данный
+        Observable ClosingNotifier не выдаст значение, после чего он выдаст
+        буфер на выходе Observable и запустит новый внутренний буфер, ожидая
+        следующего выброса CloseNotifier.
+      </p>
+      <pre>
+        import { fromEvent, interval, buffer } from 'rxjs';
+
+        const clicks = fromEvent(document, 'click');
+        const intervalEvents = interval(1000);
+        const buffered = intervalEvents.pipe(buffer(clicks));
+        buffered.subscribe(x => console.log(x));
+      </pre>
+      <hr />
+
+      <h2>Map</h2>
+      <p>
+        Применяет заданную функцию проекта к каждому значению, испускаемому
+        исходным Observable, и выдает результирующие значения как Observable.
+      </p>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/map.png" />
+      </p>
+      <pre>
+        import { fromEvent, map } from 'rxjs';
+
+        const clicks = fromEvent&lt;PointerEvent&gt;(document, 'click');
+        const positions = clicks.pipe(map(ev => ev.clientX));
+
+        positions.subscribe(x => console.log(x));
+      </pre>
+      <hr />
+
+      <h2>Filter</h2>
+      <pre>
+        filter(select: Function, thisArg: any): Observable
+      </pre>
+      <p>
+        Подобно известному методу Array.prototype.filter, этот оператор берет
+        значения из исходного Observable, передает их через функцию-предикат и
+        выдает только те значения, которые дали true.
+      </p>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/filter.png" />
+      </p>
+      <pre>
+        const source = from([1, 2, 3, 4, 5]);
+        const example = source.pipe(filter(num => num % 2 === 0));
+        const subscribe = example.subscribe(val => console.log(val));
+
+        //output: 2, 4
+      </pre>
+      <hr />
+      <h2>Debounce</h2>
+      <pre>
+        debounce(durationSelector: function): Observable
+      </pre>
+      <p>
+        debounce отслеживает самое последнее значение и выдает это самое
+        последнее значение, используя наблюдаемую продолжительность в качестве
+        индикатора того, где это сделать
+      </p>
+      <p>Оператор работает следующим образом:</p>
+      <ol>
+        <li>
+          когда появится новое значение, выполните функцию, чтобы получить
+          Observable продолжительности
+        </li>
+        <li>подписаться на Observable продолжительности</li>
+        <li>сохранить значение и отбросить старые, если они существуют</li>
+        <li>
+          когда Observable продолжительности испускает значение или завершается,
+          передать сохраненное значение наблюдателю
+        </li>
+        <li>
+          если новое значение приходит до того, как продолжительность Observable
+          испускает или завершает, снова запустите шаг 1
+        </li>
+      </ol>
+      <p>
+        Этот оператор в основном используется для событий, которые могут
+        запускаться десятки или даже сотни раз в секунду. Наиболее
+        распространенными примерами являются события DOM, такие как прокрутка,
+        движение мыши и нажатие клавиши. При использовании debouce вас
+        интересует только конечное состояние. Например, текущая позиция
+        прокрутки, когда пользователь прекращает прокрутку, или окончательный
+        текст в поле поиска после того, как пользователь перестает вводить
+        символы. По сути, использование оператора позволяет сгруппировать
+        несколько последовательных событий в одно и, следовательно, выполнить
+        обратный вызов только один раз. Это может значительно улучшить
+        производительность.
+      </p>
+      <pre>
+        const clicks = fromEvent(document, 'click');
+        const result = clicks.pipe(
+          scan((i) => ++i, 1),
+          debounce((i) => interval(200 * i))
+        );
+        result.subscribe((x) => console.log(x));
+      </pre>
+      <hr />
+
+      <h2>DebounceTime</h2>
+      <pre>
+        debounceTime(dueTime: number, scheduler: Scheduler): Observable
+      </pre>
+      <p>
+        Этот оператор отслеживает самое последнее уведомление от исходного
+        Observable и выдает его только тогда, когда должное время прошло без
+        каких-либо других уведомлений, появляющихся в исходном Observable.
+      </p>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/debounceTime.png"
+        />
+      </p>
+      <p>
+        Если новое значение появится до наступления тишины dueTime, предыдущее
+        уведомление будет удалено и не будет отправлено, а запланировано новое
+        dueTime.
+      </p>
+      <p>
+        Если событие завершения происходит во время dueTime, последнее
+        кэшированное уведомление выдается до того, как событие завершения будет
+        перенаправлено в выходной наблюдаемый объект.
+      </p>
+      <p>
+        Если событие ошибки происходит во время dueTime или после него, только
+        событие ошибки перенаправляется в выходной наблюдаемый объект.
+        Уведомление кэша в этом случае не выдается.
+      </p>
+      <pre>
+        import { fromEvent, debounceTime } from 'rxjs';
+
+        const clicks = fromEvent(document, 'click');
+        const result = clicks.pipe(debounceTime(1000));
+        result.subscribe(x => console.log(x));
+      </pre>
+      <hr />
+
+      <h2>DistinctuntilChanged</h2>
+      <pre>
+        distinctUntilChanged(
+          comparator?: (previous: K, current: K) => boolean,
+          keySelector: (value: T) => K = identity as (value: T) => K
+        ): Observable
+      </pre>
+      <h3>Parameters</h3>
+      <p>
+        <code>comparator</code> - Optional. Default is undefined. Функция,
+        используемая для сравнения предыдущего и текущего ключей на равенство.
+        По умолчанию используется проверка ===.
+      </p>
+      <p>
+        <code>keySelector</code> - Optional. Используется для выбора значения
+        ключа, которое будет передано в компаратор.
+      </p>
+      <h3>Description</h3>
+      <p>
+        При передаче без параметров или с первым параметром
+        (<code>comparator</code>) он ведет себя следующим образом:
+      </p>
+      <ol>
+        <li>Он всегда будет выдавать первое значение из источника.</li>
+        <li>
+          Для всех последующих значений, переданных источником, они будут
+          сравниваться с ранее переданными значениями с использованием
+          предоставленного компаратора или проверки на равенство ===.
+        </li>
+        <li>
+          Если значение, переданное источником, определяется этой проверкой как
+          неравное, это значение выдается и становится новым «ранее выданным
+          значением» внутри.
+        </li>
+      </ol>
+      <p>
+        Когда указан второй параметр (<code>keySelector</code>), поведение
+        меняется:
+      </p>
+      <ol>
+        <li>Он всегда будет выдавать первое значение из источника.</li>
+        <li>
+          KeySelector будет выполняться для всех значений, включая первое
+          значение.
+        </li>
+        <li>
+          Для всех значений после первого выбранный ключ будет сравниваться с
+          ключом, выбранным из ранее выданного значения, с помощью компаратора.
+        </li>
+        <li>
+          Если эта проверка определяет, что ключи не равны, выдается значение
+          (не ключ), и выбранный ключ из этого значения сохраняется для будущих
+          сравнений с другими ключами.
+        </li>
+      </ol>
+      <pre>
+        const totallyDifferentBuilds$ = of(
+          { engineVersion: '1.1.0', transmissionVersion: '1.2.0' },
+          { engineVersion: '1.1.0', transmissionVersion: '1.4.0' },
+          { engineVersion: '1.3.0', transmissionVersion: '1.4.0' },
+          { engineVersion: '1.3.0', transmissionVersion: '1.5.0' },
+          { engineVersion: '2.0.0', transmissionVersion: '1.5.0' }
+        ).pipe(
+          distinctUntilChanged((prev, curr) => {
+            return (
+              prev.engineVersion === curr.engineVersion ||
+              prev.transmissionVersion === curr.transmissionVersion
+            );
+          })
+        );
+        
+        totallyDifferentBuilds$.subscribe(console.log);
+        
+        // Logs:
+        // { engineVersion: '1.1.0', transmissionVersion: '1.2.0' }
+        // { engineVersion: '1.3.0', transmissionVersion: '1.4.0' }
+        // { engineVersion: '2.0.0', transmissionVersion: '1.5.0' }
+      </pre>
+      <hr />
+
+      <h2>Skip</h2>
+      <pre>
+        skip(the: Number): Observable
+      </pre>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/skip.png" />
+      </p>
+      <p>
+        <code>skip</code> озволяет игнорировать первые x значений из источника.
+        Обычно пропуск используется, когда у вас есть Observable, которое всегда
+        выдает определенные значения при подписке, которые вы хотите
+        игнорировать.
+      </p>
+      <pre>
+        const source = interval(500);
+        const result = source.pipe(skip(10));
+
+        result.subscribe(value => console.log(value));
+        // output: 10...11...12...13...
+      </pre>
+      <hr />
+
+      <h2>Take</h2>
+      <pre>
+        take(count: number): Observable
+      </pre>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/take.png" />
+      </p>
+      <p>
+        <code>take</code> возвращает Observable, который выдает только первые
+        значения счетчика, испускаемые исходным Observable. Если источник выдает
+        меньше значений, чем count, то выдаются все его значения. После этого он
+        завершается, независимо от того, завершается ли источник.
+      </p>
+      <pre>
+        const intervalCount = interval(1000);
+        const takeFive = intervalCount.pipe(take(5));
+        takeFive.subscribe(x => console.log(x));
+
+        // output: 0...1...2...3...4
+      </pre>
+      <hr />
+
+      <h2>Share</h2>
+      <p>
+        Возвращает новый Observable, который выполняет многоадресную рассылку
+        (совместно использует) исходный Observable. Пока есть хотя бы один
+        подписчик, этот Observable будет подписан и будет выдавать данные. Когда
+        все подписчики отпишутся, он отпишется от исходного Observable.
+        Поскольку Observable является многоадресным, это делает поток горячим.
+      </p>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/share.png" />
+      </p>
+      <p>
+        Подписка на базовый исходный Observable может быть сброшена, если
+        количество подписчиков на общий наблюдаемый объект падает до 0 или если
+        исходный Observable ошибается или завершается.
+      </p>
+      <pre>
+        const source = interval(1000).pipe(
+          tap(x => console.log('Processing: ', x)),
+          map(x => x * x),
+          take(6),
+          share()
+        );
+        
+        source.subscribe(x => console.log('subscription 1: ', x));
+        source.subscribe(x => console.log('subscription 2: ', x));
+
+        // Logs:
+        // Processing: 0
+        // subscription 1: 0
+        // subscription 2: 0
+        ...
+        // Processing: 5
+        // subscription 1: 25
+        // subscription 2: 25
+      </pre>
+      <hr />
+
+      <h2>Tap</h2>
+      <pre>
+        tap(nextOrObserver: function, error: function, complete: function): Observable
+      </pre>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/tap.png" />
+      </p>
+      <p>
+        Функция, которая возвращает Observable, идентичный источнику, но
+        запускает указанный Observer или обратный вызов для каждого элемента.
+      </p>
+      <hr />
+
+      <h2>Delay</h2>
+      <pre>
+        delay(delay: number | Date, scheduler: Scheduler): Observable
+      </pre>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/delay.svg"
+          width="100%"
+        />
+      </p>
+      <p>Сдвигает каждый элемент на определенное количество миллисекунд.</p>
+      <p>
+        Если аргумент задержки является числом, время этого оператора сдвигает
+        исходный Observable на это количество времени, выраженное в
+        миллисекундах. Относительные интервалы времени между значениями
+        сохраняются.
+      </p>
+      <p>
+        Если аргумент задержки является датой, время этого оператора сдвигает
+        начало выполнения Observable до тех пор, пока не наступит заданная дата.
+      </p>
+      <pre>
+        const clicks = fromEvent(document, 'click');
+        const delayedClicks = clicks.pipe(delay(1000)); // each click emitted after 1 second
+        delayedClicks.subscribe(x => console.log(x));
+      </pre>
+      <hr />
+
+      <h2>Timeout</h2>
+      <pre>
+        timeout(due: number, scheduler: Scheduler): Observable
+      </pre>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/timeout.png" />
+      </p>
+      <p>
+        Возвращает Observable, которая выдаст ошибку, если источник не передаст
+        значение в течение указанного времени в миллисекундах. Функционально это
+        то же самое, что и timeout({ each: milliseconds })).
+      </p>
+      <hr />
+
+      <h2>Find</h2>
+      <pre>
+        find(predicate: function)
+      </pre>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/find.png" />
+      </p>
+      <p>
+        <code>find</code> ищет первый элемент в исходном Observable, который
+        соответствует указанному условию, воплощенному предикатом, и возвращает
+        первое вхождение в источнике. В отличие от <code>first</code>, предикат
+        требуется в <code>find</code> и не выдает ошибку, если допустимое
+        значение не найдено (вместо этого выдает undefined).
+      </p>
+      <hr />
+
+      <h2>Every</h2>
+      <pre>
+        every(predicate: function, thisArg: any): Observable
+      </pre>
+      <p>
+        <img src="https://rxjs.dev/assets/images/marble-diagrams/every.png" />
+      </p>
+      <p>
+        Если все значения соответствуют условию до завершения источника, перед
+        завершением выдается true, в противном случае выдается false, затем
+        завершается.
+      </p>
+      <pre>
+        of(1, 2, 3, 4, 5, 6)
+          .pipe(every(x => x < 5))
+          .subscribe(x => console.log(x)); // -> false
+      </pre>
+      <hr />
+
+      <h2>ConcatMap</h2>
+      <pre>
+        concatMap(project: function, resultSelector: function): Observable
+      </pre>
+      <p>
+        <b> Функция <code>project</code> должна возвращать Observable!!!</b>
+      </p>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/concatMap.png"
+        />
+      </p>
+      <p>
+        <code>ConcatMap</code> сопоставляет каждое значение из исходного
+        Observable с внутренним Observable, подписывается на внутренний
+        Observable, а затем начинает выдавать значения из него, заменяя исходное
+        значение.
+      </p>
+      <p>
+        Он создает новый внутренний Observable для каждого значения, которое он
+        получает от Источника. Он объединяет значения всех своих внутренних
+        Observable в том порядке, в котором они подписаны, и отправляет значения
+        обратно в поток.
+      </p>
+      <p>
+        В отличие от <code>SwitchMap</code>, <code>ConcatMap</code>
+        <b>не отменяет ни один из своих внутренних Observable</b>. Он похож на
+        <code>MergeMap</code>, за исключением того, что он
+        <b>поддерживает порядок своих внутренних Observable</b>.
+      </p>
+      <pre>
+        const clicks = fromEvent(document, 'click');
+        const result = clicks.pipe(
+          concatMap((ev) => interval(1000).pipe(take(4)))
+        ).subscribe((x) => console.log(x));
+
+        // При каждом клике будут выдаваться значения от 0 до 3,
+        // c интервалом в 1000ms
+        // one click = 1000ms-> 0 -1000ms-> 1 -1000ms-> 2 -1000ms-> 3
+      </pre>
+      <hr />
+
+      <h2>SwitchMap</h2>
+      <pre>
+        switchMap(
+          project: function: Observable, 
+          resultSelector: function(outerValue, innerValue, outerIndex, innerIndex): any
+        ): Observable
+      </pre>
+      <p>
+        <b> Функция <code>project</code> должна возвращать Observable!!!</b>
+      </p>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/switchMap.png"
+        />
+      </p>
+      <p>
+        SwitchMap сопоставляет каждое значение из исходного Observable с
+        внутренним Observable, подписывается на внутренний Observable, а затем
+        начинает излучать из него значения.
+      </p>
+      <p>
+        Он создает новый внутренний Observable для каждого значения, которое он
+        получает от Источника.
+      </p>
+      <p>
+        Всякий раз, когда он создает новый внутренний Observable, он
+        отписывается от всех ранее созданных внутренний Observable,
+        <b>переключается на новейшие Observable, отбрасывая все остальные</b>.
+      </p>
+      <pre>
+        fromEvent(document, 'click').pipe(
+          switchMap(() => interval(1000)) // restart counter on every click
+        ).subscribe(console.log);
+      </pre>
+      <hr />
+
+      <h2>ExhaustMap</h2>
+      <pre>
+        exhaustMap(project: function, resultSelector: function): Observable
+      </pre>
+      <p>
+        <b> Функция <code>project</code> должна возвращать Observable!!!</b>
+      </p>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/exhaustMap.png"
+        />
+      </p>
+      <p>
+        <code><code>ExhaustMap</code></code> сопоставляет каждое значение из
+        исходного Observable с внутренним Observable, подписывается на него.
+        Затем он начинает излучать значения из него, заменяя исходное значение.
+      </p>
+      <p>
+        Затем <code>ExhaustMap</code> ожидает завершения внутренней Observable.
+        Если <code>ExhaustMap</code> получает какие-либо новые значения до
+        завершения внутренней Observable, он игнорирует их.
+      </p>
+      <p>
+        Как только <code>ExhaustMap</code> получает новое значение после
+        завершения внутренней Observable, он создает новую внутреннюю
+        Observable. Весь процесс повторяется до тех пор, пока исходная
+        Observable не будет завершена.
+      </p>
+
+      <pre>
+        // Запуск таймера для каждого клика
+        // только если в данный момент нет активного таймера.
+        
+        const clicks = fromEvent(document, 'click');
+        const result = clicks.pipe(
+          exhaustMap(() => interval(1000).pipe(take(5)))
+        );
+        result.subscribe(x => console.log(x));
+      </pre>
+      <hr />
+
+      <h2>MergeMap</h2>
+      <pre>
+        mergeMap(
+          project: function: Observable, 
+          resultSelector: function: any, 
+          concurrent: number
+        ): Observable
+      </pre>
+      <p>
+        <b> Функция <code>project</code> должна возвращать Observable!!!</b>
+      </p>
+      <p>
+        <img
+          src="https://rxjs.dev/assets/images/marble-diagrams/mergeMap.png"
+        />
+      </p>
+      <p>
+        <code>MergeMap</code> сопоставляет каждое значение из Observable
+        источника с внутренним Observable, подписывается на внутренний
+        Observable, а затем начинает выдавать значения из него, заменяя исходное
+        значение.
+      </p>
+      <p>
+        <code>MergeMap</code> создает новую внутреннюю Observable для каждого
+        значения, которое он получает от Источника.
+      </p>
+      <p>
+        В отличие от <code>SwitchMap</code>, <code>MergeMap</code> не отменяет
+        никаких внутренних Observable. <code>MergeMap</code> объединяет значения
+        всех своих внутренних Observable и отправляет значения обратно в поток.
+      </p>
+      <hr />
+
+      <h2>Типы данных в TypeScript</h2>
+      <p>
+        TypeScript добавляет дополнительные типы данных в JavaScript. Типы
+        данных используются для добавления статических ограничений на
+        программные элементы, такие как функции, переменные и свойства. Это
+        позволяет компилятору и средствам разработки осуществлять более
+        тщательную проверку и поддержку в процессе разработки.
+      </p>
+      <p>
+        Анализ типов в TypeScript осуществляется только во время компиляции и не
+        добавляет никаких задержек во время выполнения готовой программы.
+      </p>
+      <h3>Any</h3>
+      <p>
+        Тип Any используется когда мы не знаем какой тип должна иметь та или
+        иная переменная.
+      </p>
+      <pre>
+        let someVar: any = 4; 
+        someVar= "потом может стать строкой"; 
+        someVar= false; // или boolean
+      </pre>
+      <p>
+        Рекомендуется <b>всегда</b> явно указывать тип там, где это возможно во
+        избежание ошибок.
+      </p>
+      <p>
+        Тип Any может прийти на помощь также, если вам известна только часть
+        типа.
+      </p>
+      <pre>
+        let arr: any[] = [1, true, "some string", ... ];
+        arr[1] = "another string"; // OK  
+      </pre>
+      <h3>Примитивные типы</h3>
+      <h3>Number</h3>
+      <pre>
+        let x: number; // Явное указание типа
+        let y = 0; // Тоже, что и y: number = 0
+        let z = 123.456; // Тоже, что и z: number = 123.456 
+        let s = z.toFixed(2); // Свойство интерфейса Number
+      </pre>
+      <h3>Boolean</h3>
+      <pre>
+        var logical: boolean = false;
+        var checked = true; // Тоже, что и var checked: boolean = true;
+      </pre>
+      <h3>String</h3>
+      <pre>
+        var s: string = "some string";
+        var empty = "";
+        var another = 'another string';
+        var c = another.charAt(2); // Свойство интерфейса 'String'
+      </pre>
+      <h3>Void</h3>
+      <p>
+        Можно сказать, что тип Void является противоположностью типу Any. Этот
+        тип означает отсутствие какого-либо типа. Обычно используется для
+        указания того, что функция не возвращает никакого значения.
+      </p>
+      <pre>
+        function someFunction(): void {
+          alert("message");
+        }
+      </pre>
+      <p>
+        Тип Void является подтипом типа Any, и супертипом для типов Null и
+        Undefined. В тоже время тип Void не зависит от всех остальных типов.
+      </p>
+      <h3>Null и Undefined</h3>
+      <p>
+        Данные типы являются подтипами для всех остальных типов по умолчанию.
+      </p>
+      <pre>
+        let n: number = null; // Примитивные типы могут быть null
+        let m: number = undefined; // Примитивные типы могут быть undefined
+        let x = null; // тоже самое, что и x: any = null 
+        let y = undefined; // тоже самое, что и y: any = undefined
+        let e: Null; // Ошибка
+        let r: Undefined; //Ошибка
+      </pre>
+      <h3>Array</h3>
+      <pre>
+        var arr: number[] = [1, 2, 3];
+        var otherArr: any[] = [1, true, "string"];
+      </pre>
+      <h3>Tuple</h3>
+      <p>
+        Тип Tuple или кортеж представляет собой массив JavaScript, каждому из
+        элементов которого можно указать свой тип.
+      </p>
+      <pre>
+        let tuple: [string, number];
+        tuple = ["some", 10]; // Правильно
+        tuple = [10, "some"]; // Неверно! Типы не совпадают
+        console.log(tuple[0]); // "some"
+        console.log(tuple[1]); // 10
+      </pre>
+      <h3>Never</h3>
+      <p>
+        Тип never представляет тип, значение которого никогда не наступает.
+        Например, never является типом, который возвращает функция, которая
+        всегда бросает исключения или выход из которой никогда не происходит
+        (например бесконечный цикл). Переменные также могут иметь данный тип
+        например для того, чтобы никогда не принимать значение true.
+      </p>
+      <pre>
+        function error(message: string): never {
+          throw new Error(message);
+        }
+        // Выведенным типом fail() будет never
+        function fail() {
+          return error("Something failed");
+        }
+        // нет выхода из этой функции
+        function infiniteLoop(): never {
+          while (true) {
+        }
+      </pre>
+      <h3>Symbol</h3>
+      <p>
+        Тип Symbol является примитивным и соответствует одноименному типу в
+        языке JavaScript. Данный тип предоставляет уникальные идентификаторы,
+        которые могут быть использованы как ключи для свойств объекта.
+      </p>
+      <h3>Приведение типов</h3>
+      <p>
+        Существует две формы приведения типов. Первый — синтаксис с
+        использованием угловых скобок (&lt;&gt;):
+      </p>
+      <pre>
+        let someValue: any = “this is a string”; 
+        let strLength: number = (&lt;string&gt;someValue).length;
+      </pre>
+      <p>Второй — as-синтаксис:</p>
+      <pre>
+        let someValue: any = “this is a string”; 
+        let strLength: number = (someValue as string).length;
+      </pre>
+      <p>
+        Два приведенных примера полностью аналогичны. Использовать один или
+        другой — по большому счету это выбор предпочтений; однако, когда
+        TypeScript используется совместно с JSX, допускаются только приведение
+        типов через as-синтаксис.
+      </p>
+      <hr />
+
+      <h2>Интерфейсы в TypeScript</h2>
+      <p>
+        Интерфейс – это объявление, схожее с классом, но не имеющее реализации
+        методов. С его помощью вы можете описывать свойства и методы объектов.
+      </p>
+      <p>
+        При этом интерфейс не имеет реализации функций и не имеет самого кода –
+        он нужен только для того, чтобы компилятор оценил ваши реализации
+        объекта (напомню, что класс тоже объект).
+      </p>
+      <p>
+        Грубо говоря, интерфейс – это описательная структура. В отличие от
+        классов интерфейсы некомпилируемы и живут лишь в рантайме TypeScript.
+      </p>
+      <p>
+        Объявление интерфейса начинается с ключевого слова
+        <code>interface</code>. Затем идёт имя интерфейса, которые принято
+        начинать с заглавной буквы <code>I</code>.
+        <b>Это не обязательное условие</b>
+      </p>
+      <p>
+        Вы можете писать интерфейсы где угодно: рядом с кодом, в начале файла
+        или даже в отдельном файле. Я рекомендую держать объявление интерфейса
+        там, где это нужно, например, если интерфейс используется только в
+        рамках одного модуля (файла), то его можно смело держать там. Если
+        интерфейс используется во многих модулях проекта, то целесообразнее
+        будет создать директорию types и разложить интерфейсы по логике там.
+      </p>
+      <pre>
+        interface IServer {
+          hostname: string;
+          location: string;
+          active: boolean;
+          public_address: string;
+        }
+      </pre>
+      <p>
+        Теперь, когда мы определили интерфейс, мы можем использовать его в
+        переменной. В случае неверной реализации (нет хотя бы одного свойства),
+        он будет бросать в нас ошибками каждый раз, когда мы делаем что-то не
+        так.
+      </p>
+      <pre>
+        const server: IServer = {
+          hostname: 'Pikachu',
+          location: 'RM1',
+          active: true,
+          public_address: 'Pikachu Str';
+        }
+      </pre>
+      <p>
+        В TypeScript можно использовать один интерфейс как тип для свойства
+        другого интерфейса.
+      </p>
+      <pre>
+        interface IPublicAddress {
+          netmask: string;
+          gateway: string;
+          address: string;
+        }
+        
+        interface IServer {
+          hostname: string;
+          location: string;
+          active: boolean;
+          public_address: IPublicAddress;
+        }
+      </pre>
+      <p>
+        Помимо примитивный типов и других интерфейсов, в интерфесах можно
+        описывать функции. Делается это с помощью стрелочных функций, например,
+        так:
+      </p>
+      <pre>
+        interface ICalculator {
+          sum: (a: number, b: number) => number;
+        }
+      </pre>
+      <h3>Расширение интерфейсов</h3>
+      <p>
+        В TypeScript вы можете лишь расширять интерфейсы, но не наследовать их.
+      </p>
+      <pre>
+        interface IResponse {
+          status: number;
+        }
+        
+        interface ISlackResponse extends IResponse {
+          ok: boolean;
+        }
+      </pre>
+      <h3>Индексируемые типы</h3>
+      <p>
+        Иногда может понадобиться разрешить хранить в объекте не только заранее
+        известное количество свойств, но и переменное, например, когда вы
+        реализуете интерфейс какого-нибудь кэша. В этом случае вы не знаете
+        название свойства, но знаете его тип.
+      </p>
+      <pre>
+        interface ICache {
+          size: number;
+          first: ICacheItem;
+          last: ICacheitem;
+          items: {
+            [item: string]: ICacheItem;
+          };
+        }
+      </pre>
+      <p>
+        Теперь вы сможете записывать любое значение в объект <code>items</code>,
+        которые имеет ключ типа строка и значение типа <code>ICacheItem</code>.
+      </p>
+      <h3></h3>
+      <p>
+        В случае с объектом вы просто присваиваете переменной через двоеточие
+        нужный вам интерфейс в качестве типа и реализуете его. С классами
+        несколько иначе – классы должны имплементировать интерфейсы. Если вы
+        забудете написать реализацию хотя бы одного метода, то компилятор выдаст
+        ошибку.
+      </p>
+      <pre>
+        interface IFileCache {
+          set: (key: string, value: ICacheItem) => void;
+          get: (key: string) => ICacheItem;
+        }
+        
+        class FileCache implements IFileCache {
+          store = new Map();
+        
+          set(key: string, value: ICacheItem): void {
+            this.store.set(key, value);
+          }
+        
+          get(key: string): ICacheItem {
+            return this.store.get(key);
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>Generics в TypeScript</h2>
+      <p>
+        Обобщения (англ. generics) или дженерики - это инструмент, который
+        позволяет писать на TypeScript компоненты, способные работать с
+        различными типами данных. В то же время они позволяют сохранить
+        строгость кода и работоспособность проверки типов.
+      </p>
+      <pre>
+        function echo&lt;T&gt;(arg:T): T {
+          return arg;
+        }
+      </pre>
+      <p>
+        Здесь в угловых скобках мы указываем имя типовой переменной, которую в
+        дальнейшем мы будем использовать для указания типа наших данных. Далее
+        мы указываем, что наша функция должна принимать параметры типа
+        <code>T</code> и возвращать должна тоже данные типа <code>T</code>.
+        Теперь вызываем нашу функцию:
+      </p>
+      <h3>Тип для обобщенной функции</h3>
+      <pre>
+        let myEcho: &lt;T&gt;(arg: T) => T = function &lt;E&gt;(arg: E): E {
+          return arg;
+        }
+      </pre>
+      <h3>Обобщенные интерфейсы</h3>
+      <pre>
+        interface IEcho {
+          &lt;T&gt;(arg: T):T 
+        }
+        
+        let myEcho: IEcho = function &lt;E&gt;(arg: E): E {
+          return arg;
+        }
+      </pre>
+      <h3></h3>
+      <pre>
+        class User &lt;T&gt; {
+          _id: T;
+          constructor(id: T) {
+              this._id = id;            
+          }
+          get id(): T{
+              return this._id;
+          } 
+        }
+      </pre>
+      <p>
+        Теперь воспользуемся этим обобщенным классом, создав новых
+        пользователей:
+      </p>
+      <pre>
+        let pavel = new User&lt;number&gt;(13);
+      </pre>
+      <h3>Ограничения обобщений</h3>
+      <p>
+        Иногда нужно в качестве типового параметра принимать какие-то
+        определенные типы. Можно задать ограничение для обобщения. Предположим,
+        нам нужна функция, которая умела бы работать с объектами, способными
+        летать и плавать. Создадим два интерфейса, которые описывают возможность
+        объектов летать и плавать. А нашу требуемую функцию run обобщим по типу,
+        наследующему эти интерфейсы &lt;T extends Flyable & Swimmable&gt;:
+      </p>
+      <pre>
+        interface Flyable {
+          fly (): void
+        } 
+        
+        interface Swimmable {
+          swim (): void
+        } 
+        
+        function run  &lt;T extends Flyable & Swimmable&gt;(arg: T) {
+          arg.fly();
+          arg.swim();
+          arg.go(); // Ошибка: 'go' does not exist on type 'T'
+        }
+      </pre>
+      <hr />
+
+      <h2>Enum в TypeScript</h2>
+      <p>
+        Полезным добавлением к набору типов данных JavaScript является тип Enum
+        (перечисление). Как и языке C#, enum — это способ указать более
+        привычные имена набору числовых значений.
+      </p>
+
+      <pre>
+        enum Color {Red, Green, Blue}; 
+        let c: Color = Color.Green;
+      </pre>
+      <p>
+        По умолчанию у перечислений нумерация начинается с нуля. Но можно
+        поменять это вручную установкой значения например для одного из значений
+        перечисления.
+      </p>
+      <pre>
+        enum Color {Red = 1, Green, Blue}; // нумерация начинается с 1
+        let c: Color = Color.Green;
+      </pre>
+      <p>Или можно для каждого значения назначить свое значение</p>
+      <pre>
+        enum Color {Red = 1, Green = 2, Blue = 4}; 
+        let c: Color = Color.Green;
+      </pre>
+      <p>Для получения имени по числовому значению, необходимо</p>
+      <pre>
+        console.log(Color[4]); // выведет в консоли Blue
+      </pre>
+      <hr />
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

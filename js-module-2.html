@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Module 1</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>JS Module 1 <a href="./index.html">back ></a></h1>
+
+      <h2>1. Callbacks</h2>
+      <p>
+        <strong>Простыми словами:</strong> коллбэк — это функция, которая должна
+        быть выполнена после того, как другая функция завершила выполнение
+        (отсюда и название: callback – функция обратного вызова).
+      </p>
+      <p>
+        <strong>Чуть сложнее:</strong> В JavaScript функции — это объекты.
+        Поэтому функции могут принимать другие функции в качестве аргументов, а
+        также функции могут возвращать функции в качестве результата. Функции,
+        которые это умеют, называются
+        <strong>функциями высшего порядка</strong>. А любая функция, которая
+        передается как аргумент, называется <strong>callback-функцией</strong>.
+        Чтобы лучше разобраться, давайте посмотрим на примерах, как это
+        выглядит.
+      </p>
+      <p>
+        JavaScript — это событийно-ориентированный язык. Это значит, что вместо
+        того, чтобы ждать ответа для дальнейшего выполнения программы,
+        JavaScript продолжит выполнение, одновременно ожидая других событий.
+      </p>
+      <hr />
+
+      <h2>2. Рекурсия</h2>
+      <p>
+        Рекурсия – это приём программирования, полезный в ситуациях, когда
+        задача может быть разделена на несколько аналогичных, но более простых
+        задач. Или когда задача может быть упрощена до несложных действий плюс
+        простой вариант той же задачи.
+      </p>
+      <p>
+        В процессе выполнения задачи в теле функции могут быть вызваны другие
+        функции для выполнения подзадач. Частный случай – функция вызывает сама
+        себя. Это как раз и называется <strong>рекурсией</strong>.
+      </p>
+      <pre>
+        function pow(x, n) {
+          if (n == 1) return x;
+          return x * pow(x, n - 1);
+        }        
+      </pre>
+      <ol>
+        <li>
+          Если <code>n == 1</code>, тогда всё просто. Эта ветвь называется
+          <strong>базой</strong> рекурсии и сразу же приводит к результату:
+          <code>pow(x, 1)</code> равно <code>x</code>.
+        </li>
+        <li>
+          Мы можем представить <code>pow(x, n)</code> в виде:
+          <code>x * pow(x, n - 1)</code>. Эта ветвь –
+          <strong>шаг рекурсии</strong>: мы сводим задачу к более простому
+          действию и более простой аналогичной задаче.
+        </li>
+      </ol>
+      <p>
+        Общее количество вложенных вызовов называют
+        <strong>глубиной рекурсии</strong>. В нашем случае она будет равна n.
+      </p>
+      <hr />
+
+      <h2>
+        3. What is Promise, why should we use it. Promise vs async await, show
+        similarity in example
+      </h2>
+      <p>Синтаксис создания <code>Promise</code>:</p>
+      <pre>
+        let promise = new Promise(function(resolve, reject) {
+          // функция-исполнитель (executor)
+        });
+      </pre>
+      <p>
+        Функция, переданная в конструкцию new Promise, называется исполнитель
+        (executor). Когда Promise создаётся, она запускается автоматически.
+      </p>
+      <p>
+        Её аргументы <code>resolve</code> и <code>reject</code> – это колбэки,
+        которые предоставляет сам JavaScript. Когда
+        <code>Promise</code> получает результат, он должен вызвать один из этих
+        колбэков:
+      </p>
+      <ul>
+        <li>
+          <code>resolve(value)</code> — если работа завершилась успешно, с
+          результатом <code>value</code>.
+        </li>
+        <li>
+          <code>reject(error)</code> — если произошла ошибка,
+          <code>error</code> – объект ошибки.
+        </li>
+      </ul>
+      <p>
+        У объекта <code>promise</code>, возвращаемого конструктором
+        <code>new Promise</code>, есть внутренние свойства:
+      </p>
+      <ul>
+        <li>
+          <code>state</code> («состояние») — вначале
+          <code>"pending"</code> («ожидание»), потом меняется на
+          <code>"fulfilled"</code> («выполнено успешно») при вызове
+          <code>resolve</code> или на <code>"rejected"</code> («выполнено с
+          ошибкой») при вызове <code>reject</code>.
+        </li>
+        <li>
+          <code>result</code> («результат») — вначале <code>undefined</code>,
+          далее изменяется на <code>value</code> при вызове
+          <code>resolve(value)</code> или на <code>error</code> при вызове
+          <code>reject(error)</code>.
+        </li>
+      </ul>
+      <p>
+        Исполнитель должен вызвать что-то одно: <code>resolve</code> или
+        <code>reject</code>. Состояние промиса может быть изменено только один
+        раз.
+      </p>
+      <h3>Потребители: then, catch, finally</h3>
+      <p>
+        Функции-потребители могут быть зарегистрированы (подписаны) с помощью
+        методов <code>.then</code>, <code>.catch</code> и <code>.finally</code>.
+      </p>
+      <h4>then</h4>
+      <pre>
+        promise.then(
+          function(result) { /* обработает успешное выполнение */ },
+          function(error) { /* обработает ошибку */ }
+        );
+      </pre>
+      <p>
+        Первый аргумент <code>.then</code> – функция, которая выполняется, когда
+        промис переходит в состояние «выполнен успешно», и получает результат.
+      </p>
+      <p>
+        Второй аргумент <code>.then</code> – функция, которая выполняется, когда
+        промис переходит в состояние «выполнен с ошибкой», и получает ошибку.
+      </p>
+      <h4>catch</h4>
+      <p>
+        Вызов <code>.catch(f)</code> – это сокращённый, «укороченный» вариант
+        <code>.then(null, f)</code>.
+      </p>
+      <h4>finally</h4>
+      <p>
+        Вызов <code>.catch(f)</code> – это сокращённый, «укороченный» вариант
+        <code>.then(null, f)</code>.
+      </p>
+      <h3>Promise API</h3>
+      <h4>Promise.all</h4>
+      <pre>
+        Promise.all([
+          new Promise(resolve => resolve(1)), // 1
+          new Promise(resolve => resolve(2)), // 2
+          new Promise(resolve => resolve(3))  // 3
+        ]).then(alert); 
+        // когда все промисы выполнятся, результат будет 1,2,3
+        // каждый промис даёт элемент массива
+      </pre>
+      <p>
+        Если любой из промисов завершится с ошибкой, то промис, возвращённый
+        <code>Promise.all</code>, немедленно завершается с этой ошибкой.
+      </p>
+      <p>
+        <code>Promise.all(iterable)</code> разрешает передавать не-промисы в
+        iterable. Eсли любой из этих объектов не является промисом, он
+        передаётся в итоговый массив «как есть».
+      </p>
+      <h4>Promise.allSettled</h4>
+      <pre>
+        let promise = Promise.allSettled(iterable);
+      </pre>
+      <p>
+        Метод <code>Promise.allSettled</code> всегда ждёт завершения всех
+        промисов. В массиве результатов будет
+      </p>
+      <ul>
+        <li>
+          <code>{status:"fulfilled", value:результат}</code> для успешных
+          завершений,
+        </li>
+        <li><code>{status:"rejected", reason:ошибка}</code> для ошибок.</li>
+      </ul>
+      <h4>Promise.race</h4>
+      <p>
+        Метод очень похож на Promise.all, но ждёт только первый выполненный
+        промис, из которого берёт результат (или ошибку).
+      </p>
+      <pre>
+        let promise = Promise.race(iterable);
+      </pre>
+      <h3>Promise.resolve/reject</h3>
+      <h4>Promise.resolve</h4>
+      <p>
+        Promise.resolve(value) создаёт успешно выполненный промис с результатом
+        value.
+      </p>
+      <pre>
+        let promise = new Promise(resolve => resolve(value));
+      </pre>
+      <h4>Promise.reject</h4>
+      <p>Promise.reject(error) создаёт промис, завершённый с ошибкой error.</p>
+      <pre>
+        let promise = new Promise((resolve, reject) => reject(error));
+      </pre>
+      <h3>Async/await</h3>
+      <p>Ключевое слово <code>async</code> перед объявлением функции:</p>
+      <ol>
+        <li>Обязывает её всегда возвращать промис.</li>
+        <li>Позволяет использовать <code>await</code> в теле этой функции.</li>
+      </ol>
+      <p>
+        Ключевое слово <code>await</code> перед промисом заставит JavaScript
+        дождаться его выполнения, после чего:
+      </p>
+      <ol>
+        <li>
+          Если промис завершается с ошибкой, будет сгенерировано исключение, как
+          если бы на этом месте находилось <code>throw</code>.
+        </li>
+        <li>Иначе вернётся результат промиса.</li>
+      </ol>
+      <pre>
+        async function f() {
+          let promise = new Promise((resolve, reject) => {
+            setTimeout(() => resolve("готово!"), 1000)
+          });
+          let result = await promise; //ждать, пока промис не выполн.(*)
+          alert(result); // "готово!"
+        }
+      </pre>
+
+      <p>
+        Ключевое слово <code>await</code> заставит интерпретатор JavaScript
+        ждать до тех пор, пока промис справа от <code>await</code> не
+        выполнится. После чего оно вернёт его результат, и выполнение кода
+        продолжится, <code>await</code> можно использовать только внутри
+        async–функций.
+      </p>
+      <p>
+        Промис может завершиться с ошибкой не сразу, а через некоторое время. В
+        этом случае будет задержка, а затем <code>await</code> выбросит
+        исключение.
+      </p>
+      <p>
+        Такие ошибки можно ловить, используя <code>try..catch</code>, как с
+        обычным <code>throw</code>:
+      </p>
+      <pre>
+        async function f() {
+          try {
+            let response = await fetch('http://no-such-url');
+          } catch(err) {
+            alert(err); // TypeError: failed to fetch
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>4. Fetch api (отличия от XMLHttpRequest)</h2>
+      <h3>Кратко</h3>
+      <p>
+        С помощью функции <code>fetch</code> можно отправлять сетевые запросы на
+        сервер — как получать, так и отправлять данные. Метод возвращает
+        <code>promise</code> с объектом ответа, где находится дополнительная
+        информация (статус ответа, заголовки) и ответ на запрос.
+      </p>
+      <h3>Как понять</h3>
+      <p>
+        Браузер предоставляет глобальный API для работы с запросами и ответами
+        HTTP. Раньше для подобной работы использовался
+        <code>XMLHttpRequest</code>, однако fetch более гибкая и мощная
+        альтернатива, он понятнее и проще в использовании из-за того, что
+        использует <code>Promise</code>.
+      </p>
+      <h3>Как пишется</h3>
+      <p>Функция <code>fetch</code> принимает два параметра:</p>
+      <ul>
+        <li><code>url</code> — адрес, по которому нужно сделать запрос</li>
+        <li>
+          <code>options</code> (необязательный) — объект конфигурации, в котором
+          можно настроить метод запроса, тело запроса, заголовки и многое другое
+        </li>
+      </ul>
+      <p>
+        По умолчанию вызов <code>fetch</code> делает GET-запрос по указанному
+        адресу. Базовый вызов для получения данных можно записать таким образом:
+      </p>
+      <pre>
+        fetch("http://jsonplaceholder.typicode.com/posts")
+      </pre>
+      <p>
+        Результатом вызова <code>fetch</code> будет <code>Promise</code>, в
+        котором будет содержаться специальный объект ответа
+        <code>Response</code>. У этого объекта есть два важных для нас поля:
+      </p>
+      <ul>
+        <li>
+          <code>ok</code> — принимает состояние <code>true</code> или
+          <code>false</code> и сообщает об успешности запроса
+        </li>
+        <li>
+          <code>json</code> — метод, вызов которого, возвращает результат
+          запроса в виде json
+        </li>
+      </ul>
+      <pre>
+        fetch("http://jsonplaceholder.typicode.com/posts")
+          .then((response) => response.json())
+          .then((data) => data) // Получим ответ [{...}, {...}, {...}, ...]
+      </pre>
+      <p>
+        С помощью второго аргумента <code>options</code> можно передать
+        настройки запроса.
+      </p>
+      <pre>
+        const newPost = { title: "foo", body: "bar", userId: 1 };
+        
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+          method: "POST", // Здесь так же могут быть GET, PUT, DELETE
+          body: JSON.stringify(newPost), // Тело запроса в JSON-формате
+          headers: { // Добавляем необходимые заголовки
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => { console.log(data)})
+      </pre>
+      <h3>
+        Во-вторых, для получения тела ответа нужно использовать дополнительный
+        вызов метода.
+      </h3>
+      <p>
+        Response предоставляет несколько методов, основанных на промисах, для
+        доступа к телу ответа в различных форматах:
+      </p>
+      <ul>
+        <li>
+          <strong><code>response.text()</code></strong> – читает ответ и
+          возвращает как обычный текст,
+        </li>
+        <li>
+          <strong><code>response.json()</code></strong> – декодирует ответ в
+          формате JSON,
+        </li>
+        <li>
+          <strong><code>response.formData()</code></strong> – возвращает ответ
+          как объект <code>FormData</code>
+        </li>
+        <li>
+          <strong><code>response.blob()</code></strong> – возвращает объект как
+          <a href="/blob">Blob</a> (бинарные данные с типом),
+        </li>
+        <li>
+          <strong><code>response.arrayBuffer()</code></strong> – возвращает
+          ответ как
+          <a href="/arraybuffer-binary-arrays">ArrayBuffer</a> (низкоуровневое
+          представление бинарных данных),
+        </li>
+        <li>
+          помимо этого, <code>response.body</code> – это объект
+          <a href="https://streams.spec.whatwg.org/#rs-class">ReadableStream</a
+          >, с помощью которого можно считывать тело запроса по частям. Мы
+          рассмотрим и такой пример несколько позже.
+        </li>
+      </ul>
+      <h3>Обработка ошибок</h3>
+      <p>
+        Если ответом на запрос <code>fetch</code> была ошибка (например HTTP-код
+        400, 404 или 500), то Promise не попадёт в состояние
+        <code>rejected</code>. <code>Promise</code> выполнится с ошибкой только
+        если запрос не случился из-за сбоя сети или что-то помешало выполнению
+        <code>fetch</code>.
+      </p>
+      <p>
+        Чтобы обработать ошибку запроса необходимо обращать внимание на поле
+        <code>ok</code> в объекте ответа <code>Response</code>. В случае ошибки
+        запроса оно будет равно <code>false</code>.
+      </p>
+      <pre>
+        fetch("https://jsonplaceholder.typicode.com/there-is-no-such-route")
+          .then((response) => {
+            // Проверяем успешность запроса и выкидываем ошибку
+            if (!response.ok) throw new Error("Error occurred!");
+            return response.json()
+          }) // Теперь попадём сюда, т.к выбросили ошибку
+          .catch((err) => {
+            console.log(err)
+          }) // Error: Error occurred!
+      </pre>
+      <h3>Fetch GET</h3>
+      <pre>
+        const url = 'http://jsonplaceholder.typicode.com/posts';
+
+        async function loadPosts() {
+          const response = await fetch(url);
+          const posts = await response.json();
+        }
+      </pre>
+
+      <h3>Fetch POST</h3>
+      <pre>
+        async function sendPost() {
+          const response = await fetch(url, {
+            method: 'Post',
+            body: JSON.stringify({
+              title: 'foo',
+              body: 'bar',
+              userId: 1,
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          });
+        
+          const data = await response.json();
+          // console.log(data);
+        }
+      </pre>
+      <h3>XMLHttpRequest GET</h3>
+      <p>
+        В современной веб-разработке <code>XMLHttpRequest</code> используется по
+        трём причинам:
+      </p>
+      <ol>
+        <li>
+          По историческим причинам: существует много кода, использующего
+          <code>XMLHttpRequest</code>, который нужно поддерживать.
+        </li>
+        <li>
+          Необходимость поддерживать старые браузеры и нежелание использовать
+          полифилы (например, чтобы уменьшить количество кода).
+        </li>
+        <li>
+          Потребность в функциональности, которую <code>fetch</code> пока что не
+          может предоставить, к примеру, отслеживание прогресса отправки на
+          сервер.
+        </li>
+      </ol>
+      <pre>
+        let xhr = new XMLHttpRequest();
+        xhr.responseType = 'json';
+
+        xhr.open('GET', url);
+        xhr.send();
+
+        xhr.onload = function () {
+          const respObj = xhr.response;
+        };
+      </pre>
+
+      <h3>XMLHttpRequest POST</h3>
+      <pre>
+        let xhrPost = new XMLHttpRequest();
+        xhrPost.responseType = 'json';
+
+        xhrPost.open('POST', url);
+        xhrPost.setRequestHeader(
+          'Content-type', 
+          'application/json; charset=utf-8'
+        );
+        xhrPost.send(JSON.stringify(message));
+
+        xhrPost.onload = function () {
+          const respObj = xhrPost.response;
+        };
+      </pre>
+      <hr />
+
+      <h2>
+        5. Basic DOM api: update, create, remove classes, attributes. Navigate
+        through DOM tree.
+      </h2>
+      <h3>Стили и классы</h3>
+      <p>Для управления классами существуют два DOM-свойства:</p>
+      <ul>
+        <li>
+          <code>className</code> – строковое значение, удобно для управления
+          всем набором классов.
+        </li>
+        <li>
+          <code>classList</code> – объект с методами
+          <code>add/remove/toggle/contains</code>, удобно для управления
+          отдельными классами.
+        </li>
+      </ul>
+      <p>Чтобы изменить стили:</p>
+      <p>
+        Свойство <code>style</code> является объектом со стилями в формате
+        camelCase. Чтение и запись в него работают так же, как в атрибуте
+        <code>"style"</code>.
+      </p>
+      <p>
+        Метод <code>getComputedStyle(elem, [pseudo])</code> возвращает объект,
+        похожий по формату на <code>style</code>. Только для чтения.
+      </p>
+      <h3>Атрибуты</h3>
+      <ul>
+        <li><code>elem.hasAttribute(name)</code> – проверить на наличие.</li>
+        <li><code>elem.getAttribute(name)</code> – получить значение.</li>
+        <li>
+          <code>elem.setAttribute(name, value)</code> – установить значение.
+        </li>
+        <li><code>elem.removeAttribute(name)</code> – удалить атрибут.</li>
+        <li><code>elem.attributes</code> – это коллекция всех атрибутов.</li>
+      </ul>
+      <h3>DOM Navigation</h3>
+      <p>Есть 6 основных методов поиска элементов в DOM:</p>
+      <ul>
+        <li><code>querySelector</code></li>
+        <li><code>querySelector</code></li>
+        <li><code>getElementById</code></li>
+        <li><code>getElementsByName</code></li>
+        <li><code>getElementsByTagName</code></li>
+        <li><code>getElementsByClassName</code></li>
+      </ul>
+      <p>
+        Получив DOM-узел, мы можем перейти к его ближайшим соседям используя
+        навигационные ссылки.
+      </p>
+      <p>Есть два основных набора ссылок:</p>
+      <ul>
+        <li>
+          Для всех узлов: <code>parentNode</code>, <code>childNodes</code>,
+          <code>firstChild</code>, <code>lastChild</code>,
+          <code>previousSibling</code>, <code>nextSibling</code>.
+        </li>
+        <li>
+          Только для узлов-элементов: <code>parentElement</code>,
+          <code>children</code>, <code>firstElementChild</code>,
+          <code>lastElementChild</code>, <code>previousElementSibling</code>,
+          <code>nextElementSibling</code>.
+        </li>
+      </ul>
+      <hr />
+
+      <h2>
+        6. How to add events. Capturing / Bubbling (жизненный цикл события).
+        Event delegation pattern. PreventDefault. Stop propagation. Stop
+        propagation immediate.
+      </h2>
+      <h3>How to add events</h3>
+      <p>Есть три способа назначения обработчиков событий:</p>
+      <ol>
+        <li>Атрибут HTML: <code>onclick="..."</code>.</li>
+        <li>
+          DOM-свойство: <code>elem.onclick = function</code> (мы не можем
+          назначить больше одного обработчика на один тип события)
+        </li>
+        <li>
+          Специальные методы:
+          <code>elem.addEventListener(event, handler[, phase])</code> для
+          добавления, <code>removeEventListener</code> для удаления.
+        </li>
+      </ol>
+      <h3>Capturing / Bubbling</h3>
+      <p>
+        При наступлении события – самый глубоко вложенный элемент, на котором
+        оно произошло, помечается как «целевой» (<code>event.target</code>).
+      </p>
+      <ul>
+        <li>
+          Затем событие сначала двигается вниз от корня документа к
+          <code>event.target</code>, по пути вызывая обработчики, поставленные
+          через <code>addEventListener(...., true)</code>, где
+          <code>true</code> – это сокращение для <code>{capture: true}</code>.
+        </li>
+        <li>Далее обработчики вызываются на целевом элементе.</li>
+        <li>
+          Далее событие двигается от <code>event.target</code> вверх к корню
+          документа, по пути вызывая обработчики, поставленные через
+          <code>on&lt;event&gt;</code> и <code>addEventListener</code> без
+          третьего аргумента или с третьим аргументом равным <code>false</code>.
+        </li>
+      </ul>
+      <p>
+        Каждый обработчик имеет доступ к свойствам события <code>event</code>:
+      </p>
+      <ul>
+        <li>
+          <code>event.target</code> – самый глубокий элемент, на котором
+          произошло событие.
+        </li>
+        <li>
+          <code>event.currentTarget</code> (=<code>this</code>) – элемент, на
+          котором в данный момент сработал обработчик (тот, на котором «висит»
+          конкретный обработчик)
+        </li>
+        <li>
+          <code>event.eventPhase</code> – на какой фазе он сработал
+          (погружение=1, фаза цели=2, всплытие=3).
+        </li>
+      </ul>
+      <p>
+        Каждый обработчик имеет доступ к свойствам события <code>event</code>:
+      </p>
+      <p>Стандарт DOM Events описывает 3 фазы прохода события:</p>
+      <ol>
+        <li>
+          Фаза погружения (capturing phase) – событие сначала идёт сверху вниз.
+        </li>
+        <li>
+          Фаза цели (target phase) – событие достигло целевого(исходного)
+          элемента.
+        </li>
+        <li>Фаза всплытия (bubbling stage) – событие начинает всплывать.</li>
+      </ol>
+
+      <h3>PreventDefault</h3>
+      <p>Действий браузера по умолчанию достаточно много:</p>
+      <ul>
+        <li>
+          <code>mousedown</code> – начинает выделять текст (если двигать
+          мышкой).
+        </li>
+        <li>
+          <code>click</code> на <code>&lt;input type="checkbox"&gt;</code> –
+          ставит или убирает галочку в <code>input</code>.
+        </li>
+        <li>
+          <code>submit</code> – при нажатии на
+          <code>&lt;input type="submit"&gt;</code> или при нажатии клавиши Enter
+          в форме данные отправляются на сервер.
+        </li>
+        <li>
+          <code>keydown</code> – при нажатии клавиши в поле ввода появляется
+          символ.
+        </li>
+        <li>
+          <code>contextmenu</code> – при правом клике показывается контекстное
+          меню браузера.
+        </li>
+        <li>…и многие другие…</li>
+      </ul>
+      <p>Есть два способа отменить действие браузера:</p>
+      <ul>
+        <li>
+          Основной способ – это воспользоваться объектом <code>event</code>. Для
+          отмены действия браузера существует стандартный метод
+          <code>event.preventDefault()</code>.
+        </li>
+        <li>
+          Если же обработчик назначен через <code>on&lt;событие&gt;</code> (не
+          через <code>addEventListener</code>), то также можно вернуть
+          <code>false</code> из обработчика.
+        </li>
+      </ul>
+      <h3>Stop propagation</h3>
+      <p>
+        <code>event.stopPropagation()</code> препятствует продвижению события
+        дальше, но на текущем элементе все обработчики будут вызваны.
+      </p>
+      <h3>Stop propagation immediate</h3>
+      <p>
+        Для того, чтобы полностью остановить обработку, существует метод
+        <code>event.stopImmediatePropagation()</code>. Он не только
+        предотвращает всплытие, но и останавливает обработку событий на текущем
+        элементе.
+      </p>
+      <hr />
+
+      <h2>7. addEventListener</h2>
+      <p>
+        Фундаментальный недостаток других способов назначения обработчика –
+        невозможность повесить несколько обработчиков на одно событие.
+      </p>
+      <p>Синтаксис добавления обработчика:</p>
+      <pre>
+        element.addEventListener(event, handler[, options]);
+      </pre>
+      <dl>
+        <dt><code>event</code></dt>
+        <dd>Имя события, например <code>"click"</code>.</dd>
+        <dt><code>handler</code></dt>
+        <dd>Ссылка на функцию-обработчик.</dd>
+        <dt><code>options</code></dt>
+        <dd>
+          Дополнительный объект со свойствами:
+          <ul>
+            <li>
+              <code>once</code>: если <code>true</code>, тогда обработчик будет
+              автоматически удалён после выполнения.
+            </li>
+            <li>
+              <code>capture</code>: фаза, на которой должен сработать
+              обработчик. Так исторически сложилось, что
+              <code>options</code> может быть <code>false/true</code>, это то же
+              самое, что <code>{capture: false/true}</code>.
+            </li>
+            <li>
+              <code>passive</code>: если <code>true</code>, то указывает, что
+              обработчик никогда не вызовет <code>preventDefault()</code>.
+            </li>
+          </ul>
+        </dd>
+      </dl>
+      <p>Для удаления обработчика следует использовать removeEventListener:</p>
+      <pre>
+        element.removeEventListener(event, handler[, options]);
+      </pre>
+      <p>
+        Для удаления нужно передать именно ту функцию-обработчик которая была
+        назначена.
+      </p>
+      <hr />
+
+      <h2>8. All events</h2>
+      <p><strong>События мыши:</strong></p>
+      <ul>
+        <li>
+          <code>click</code> – происходит, когда кликнули на элемент левой
+          кнопкой мыши (на устройствах с сенсорными экранами оно происходит при
+          касании).
+        </li>
+        <li>
+          <code>contextmenu</code> – происходит, когда кликнули на элемент
+          правой кнопкой мыши.
+        </li>
+        <li>
+          <code>mouseover</code> / <code>mouseout</code> – когда мышь наводится
+          на / покидает элемент.
+        </li>
+        <li>
+          <code>mousedown</code> / <code>mouseup</code> – когда нажали / отжали
+          кнопку мыши на элементе.
+        </li>
+        <li><code>mousemove</code> – при движении мыши.</li>
+      </ul>
+      <p><strong>События на элементах управления:</strong></p>
+      <ul>
+        <li>
+          <code>submit</code> – пользователь отправил форму
+          <code>&lt;form&gt;</code>.
+        </li>
+        <li>
+          <code>focus</code> – пользователь фокусируется на элементе, например
+          нажимает на <code>&lt;input&gt;</code>.
+        </li>
+      </ul>
+      <p><strong>Клавиатурные события:</strong></p>
+      <ul>
+        <li>
+          <code>keydown</code> и <code>keyup</code> – когда пользователь
+          нажимает / отпускает клавишу.
+        </li>
+      </ul>
+      <p><strong>События документа:</strong></p>
+      <ul>
+        <li>
+          <code>DOMContentLoaded</code> – когда HTML загружен и обработан, DOM
+          документа полностью построен и доступен.
+        </li>
+      </ul>
+      <p><strong>CSS events:</strong></p>
+      <ul>
+        <li><code>transitionend</code> – когда CSS-анимация завершена.</li>
+      </ul>
+      <hr />
+
+      <h2>
+        9. BOM – navigation , history, location, LocalStorage, SessionStorage
+      </h2>
+      <p>
+        В случае с браузерным окружением — это объектная модель браузера
+        (Browser Object Model, BOM). Она предоставляет доступ к navigator,
+        location, fetch и другим объектам.
+      </p>
+      <h3>navigator</h3>
+      <p>
+        Объект <code>navigator</code> содержит информацию о браузере: название,
+        версия, платформа, доступные плагины, доступ к буферу обмена и прочее.
+        Это один из самых больших объектов в окружении.
+      </p>
+      <h3>screen</h3>
+      <p>Объект <code>screen</code> содержит информацию об экране браузера.</p>
+      <h3>location</h3>
+      <p>
+        Объект <code>location</code> даёт возможность узнать, на какой странице
+        мы находимся (какой у неё URL) и перейти на другую страницу программно.
+      </p>
+      <h3>history</h3>
+      <p>
+        <code>history</code> даёт доступ к истории браузера, которая ограничена
+        текущей вкладкой. То есть с её помощью можно перейти на страницу назад,
+        только если мы пришли с неё.
+      </p>
+      <h3>localStorage, sessionStorage</h3>
+      <p>
+        Локальные хранилища используются, чтобы хранить какие-то данные в
+        браузере пользователя.
+      </p>
+      <p>
+        Они удобны, когда мы не хотим отправлять данные на сервер, потому что
+        они, например, промежуточные, или нужны только на клиенте.
+      </p>
+      <p>
+        Разница между <code>localStorage</code> и <code>sessionStorage</code> в
+        длительности хранения данных. Данные из
+        <code>sessionStorage</code> сотрутся, когда пользователь закроет вкладку
+        с приложением. Данные же из <code>localStorage</code> не стираются сами
+        по себе.
+      </p>
+      <p>
+        Объекты хранилища <code>localStorage</code> и
+        <code>sessionStorage</code> предоставляют одинаковые методы и свойства:
+      </p>
+      <ul>
+        <li>
+          <code>setItem(key, value)</code> – сохранить пару ключ/значение.
+        </li>
+        <li>
+          <code>getItem(key)</code> – получить данные по ключу <code>key</code>.
+        </li>
+        <li>
+          <code>removeItem(key)</code> – удалить данные с ключом
+          <code>key</code>.
+        </li>
+        <li><code>clear()</code> – удалить всё.</li>
+        <li><code>key(index)</code> – получить ключ на заданной позиции.</li>
+        <li><code>length</code> – количество элементов в хранилище.</li>
+      </ul>
+      <hr />
+
+      <h2>10. Event Loop with examples</h2>
+      <hr />
+
+      <h2>
+        11. For In vs For Of. What Is Symbol.Iterator (at least basic knowledge)
+      </h2>
+      <h3>for...in</h3>
+      <p>
+        <code>for...in</code> позволяет пройти в цикле по перечисляемым
+        свойствам объекта, в том числе по свойствам из прототипа.
+      </p>
+      <pre>
+        for (переменная in объект) {
+          // действия внутри цикла
+        }
+      </pre>
+      <p>
+        Перечисляемые свойства – это свойства, которые разработчик добавляет
+        объекту. Встроенные свойства, например <code>length</code> у массива, не
+        обходятся в цикле <code>for...in</code>.
+      </p>
+      <h4>Что такое перечисляемые свойства</h4>
+      <p>
+        Перечисляемые свойства объекта – это свойства, которые явно помечены
+        такими. Сказать свойству, что оно перечисляемое, можно через специальный
+        метод <code>defineProperty</code>. Но для простоты все свойства, которые
+        добавляются к объекту, являются перечисляемыми по умолчанию. Встроенные
+        свойства не перечисляется. Например метод indexOf у объекта
+        <code>String</code> или метод <code>toString</code> у любого объекта не
+        участвуют в цикле <code>for...in</code>.
+      </p>
+      <p>
+        В цикле будут перечислены не только собственные свойства объекта, но и
+        все перечисляемые свойства из прототипа объекта и прототипа прототипа и
+        так далее:
+      </p>
+      <h4>Изменение объекта во время перебора</h4>
+      <p>
+        Если во время выполнения <code>for...in</code> добавлять свойства в
+        объект, то нет гарантии, что это свойство попадёт в цикл. Свойство,
+        удалённое из объекта до того, как до него дошёл цикл, не будет
+        участвовать в итерации.
+      </p>
+      <h3>for...of</h3>
+      <p>
+        Практически везде, где нужен перебор, он осуществляется через итераторы.
+        Это включает в себя не только строки, массивы, но и другие структуры
+        данных. В современный JavaScript добавлена новая концепция «итерируемых»
+        (iterable) объектов, например <code>Map</code>, представленный в ES6.
+      </p>
+      <p>
+        Это позволяет перебрать итерируемый объект в цикле <code>for..of</code>:
+      </p>
+      <pre>
+        for (let value of ['a', 'b', 'c']) {
+          console.log(value) // a, b, c
+        }
+      </pre>
+      <p>
+        В некоторых случаях интерфейс итератора вызывается по умолчанию. Такие
+        объекты как <code>String</code>, <code>Array</code>, <code>Map</code> и
+        <code>Set</code> являются итерируемыми, потому что их прототипы содержат
+        <code>Symbol.iterator</code>.
+      </p>
+      <h3>Symbol.Iterator</h3>
+      <p>
+        Технически итерируемые объекты должны иметь метод
+        <code>Symbol.iterator</code>.
+      </p>
+      <pre>
+        let person = {
+          name: "Mark",
+          age: 30,
+          gender: "male",
+          interests: ["music", "fishing"],
+        }
+      </pre>
+      <p>
+        Результат вызова <code>obj[Symbol.iterator]</code> называется
+        <em>итератором</em>. Он управляет процессом итерации.
+      </p>
+      <pre>
+        person[Symbol.iterator] = function () {
+          const properties = Object.keys(this);
+          let count = 0;
+        
+          return {
+            next() {
+              if (count < properties.length) {
+                const key = properties[count];
+                count++;
+                return { done: false, value: person[key] };
+              } else {
+                return { done: true };
+              }
+            },
+          }
+        }
+      </pre>
+      <p>
+        Итератор должен иметь метод <code>next()</code>, который возвращает
+        объект <code>{done: Boolean, value: any}</code>, где
+        <code>done:true</code> сигнализирует об окончании процесса итерации, в
+        противном случае <code>value</code> – следующее значение.
+      </p>
+      <p>
+        Метод <code>Symbol.iterator</code> автоматически вызывается циклом
+        <code>for..of</code>, но можно вызвать его и напрямую.
+      </p>
+      <p>
+        Встроенные итерируемые объекты, такие как строки или массивы, также
+        реализуют метод <code>Symbol.iterator</code>.
+      </p>
+      <hr />
+
+      <h2>12. Generators – at least basic knowledge</h2>
+      <p>
+        Обычные функции возвращают только одно-единственное значение (или
+        ничего).
+      </p>
+      <p>
+        Генераторы могут порождать (yield) множество значений одно за другим, по
+        мере необходимости. Генераторы отлично работают с перебираемыми
+        объектами и позволяют легко создавать потоки данных.
+      </p>
+      <pre>
+        function* generateSequence() {
+          yield 1;
+          yield 2;
+          return 3;
+        }
+      </pre>
+      <p>
+        Основным методом генератора является <code>next()</code>. При вызове он
+        запускает выполнение кода до ближайшей инструкции
+        <code>yield &lt;значение&gt;</code> (значение может отсутствовать, в
+        этом случае оно предполагается равным <code>undefined</code>). По
+        достижении <code>yield</code> выполнение функции приостанавливается, а
+        соответствующее значение – возвращается во внешний код:
+      </p>
+      <p>
+        Результатом метода <code>next()</code> всегда является объект с двумя
+        свойствами:
+      </p>
+      <ul>
+        <li><code>value</code>: значение из <code>yield</code>.</li>
+        <li>
+          <code>done</code>: <code>true</code>, если выполнение функции
+          завершено, иначе <code>false</code>.
+        </li>
+      </ul>
+      <p><b>!!! Генераторы являются перебираемыми объектами.</b></p>
+      <hr />
+
+      <h2>13. Итерируемые объекты и псевдомассивы</h2>
+      <p>
+        <b>Итерируемые объекты</b> – это объекты, которые реализуют метод
+        <code>Symbol.iterator</code>.
+      </p>
+      <p>
+        <b>Псевдомассивы</b> – это объекты, у которых есть индексы и свойство
+        length, то есть, они выглядят как массивы.
+      </p>
+      <p>
+        Например, строки итерируемы (для них работает <code>for..of</code>) и
+        являются псевдомассивами (они индексированы и есть <code>length</code>).
+      </p>
+      <h3>Array.from</h3>
+      <p>
+        Есть универсальный метод <code>Array.from</code>, который принимает
+        итерируемый объект или псевдомассив и делает из него «настоящий»
+        <code>Array</code>. После этого мы уже можем использовать методы
+        массивов.
+      </p>
+      <pre>
+        Array.from(arrayLike[, mapFn[, thisArg]])
+      </pre>
+      <hr />
+
+      <h2>14. Object descriptors</h2>
+      <p>
+        Помимо значения <strong><code>value</code></strong
+        >, свойства объекта имеют три специальных атрибута (так называемые
+        «флаги»).
+      </p>
+      <ul>
+        <li>
+          <strong><code>writable</code></strong> – если <code>true</code>,
+          свойство можно изменить, иначе оно только для чтения.
+        </li>
+        <li>
+          <strong><code>enumerable</code></strong> – если <code>true</code>,
+          свойство перечисляется в циклах, в противном случае циклы его
+          игнорируют.
+        </li>
+        <li>
+          <strong><code>configurable</code></strong> – если <code>true</code>,
+          свойство можно удалить, а эти атрибуты можно изменять, иначе этого
+          делать нельзя.
+        </li>
+      </ul>
+      <p>
+        Когда создаём свойство «обычным способом», все 3 специальных атрибута
+        имеют значение <code>true</code>. Но мы можем изменить их в любое время.
+      </p>
+      <p>
+        Метод <code>Object.getOwnPropertyDescriptor</code> позволяет получить
+        полную информацию о свойстве.
+      </p>
+      <pre>
+        let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
+      </pre>
+      <p>
+        Чтобы изменить флаги, мы можем использовать метод Object.defineProperty.
+      </p>
+      <pre>
+        Object.defineProperty(obj, propertyName, descriptor)
+      </pre>
+      <p>
+        Если свойство существует, <code>defineProperty</code> обновит его флаги.
+        В противном случае метод создаёт новое свойство с указанным значением и
+        флагами; если какой-либо флаг не указан явно, ему присваивается значение
+        <code>false</code>.
+      </p>
+      <p>
+        Существует метод <code>Object.defineProperties(obj, descriptors)</code>,
+        который позволяет определять множество свойств сразу.
+      </p>
+      <pre>
+        Object.defineProperties(user, {
+          name: { value: "John", writable: false },
+          surname: { value: "Smith", writable: false },
+          // ...
+        });
+      </pre>
+      <h3>Object.getOwnPropertyDescriptors</h3>
+      <p>
+        Чтобы получить все дескрипторы свойств сразу, можно воспользоваться
+        методом <code>Object.getOwnPropertyDescriptors(obj)</code>.
+      </p>
+      <p>
+        Вместе с <code>Object.defineProperties</code> этот метод можно
+        использовать для клонирования объекта вместе с его флагами:
+      </p>
+      <pre>
+        let clone = Object.defineProperties(
+          {}, 
+          Object.getOwnPropertyDescriptors(obj),
+        );
+      </pre>
+      <h3>Глобальное запечатывание объекта</h3>
+      <h4>Object.preventExtensions(obj)</h4>
+      <p>Запрещает добавлять новые свойства в объект.</p>
+      <h4>Object.seal(obj)</h4>
+      <p>
+        Запрещает добавлять/удалять свойства. Устанавливает
+        <code>configurable: false</code>
+        для всех существующих свойств.
+      </p>
+      <h4>Object.freeze(obj)</h4>
+      <p>
+        Запрещает добавлять/удалять/изменять свойства. Устанавливает
+        <code>configurable: false, writable: false</code> для всех существующих
+        свойств.
+      </p>
+      <h3>А также есть методы для их проверки:</h3>
+      <h4>Object.isExtensible(obj)</h4>
+      <p>
+        Возвращает <code>false</code>, если добавление свойств запрещено, иначе
+        <code>true</code>.
+      </p>
+      <h4>Object.isSealed(obj)</h4>
+      <p>
+        Возвращает <code>true</code>, если добавление/удаление свойств запрещено
+        и для всех существующих свойств установлено
+        <code>configurable: false</code>.
+      </p>
+      <h4>Object.isFrozen(obj)</h4>
+      <p>
+        Возвращает <code>true</code>, если добавление/удаление/изменение свойств
+        запрещено, и для всех текущих свойств установлено
+        <code>configurable: false, writable: false</code>.
+      </p>
+      <hr />
+
+      <h2>15. Js Errors. Throw, catch, create custom errors. Throw</h2>
+      <p>
+        Существует семь встроенных видов ошибок, также можно создать свои
+        собственные.
+      </p>
+      <ul>
+        <li><b>SyntaxError</b> - Чаще всего встречаются опечатки</li>
+        <li>
+          <b>ReferenceError</b> - сли попытаться обратиться к несуществующей
+          переменной
+        </li>
+        <li>
+          <b>TypeError </b> - Если попытаться обратиться к несуществующему
+          свойству
+        </li>
+        <li>
+          <b>RangeError </b> - Ошибка для значений, которые выходят за диапазон
+          допустимого.
+        </li>
+        <li>
+          <b>URIError </b> - возникает при неправильном использовании обработки
+          URI
+        </li>
+        <li>
+          <b>EvalError</b> - возникающую в глобальной функции
+          <code>eval()</code>
+        </li>
+        <li>
+          <b>InternalError</b> - Ошибка внутри движка JavaScript. (Не стандарт)
+        </li>
+        <li><b>CustomError</b></li>
+      </ul>
+      <p>
+        Встроенные ошибки генерируются самим движком JavaScript при выполнении
+        программы, а пользовательские — создаются с помощью конструктора
+        <code>Error</code>
+      </p>
+      <p>
+        Оба типа ошибок можно ловить в конструкции <code>try...catch</code>.
+      </p>
+      <h3>Throw</h3>
+      <p>Оператор <code>throw</code> генерирует ошибку.</p>
+      <pre>
+        throw new SyntaxError("Данные неполны: нет имени");
+      </pre>
+      <h3>Catch</h3>
+      <p>
+        Конструкция <code>try..catch</code> позволяет обрабатывать ошибки во
+        время исполнения кода. Она позволяет запустить код и перехватить ошибки,
+        которые могут в нём возникнуть.
+      </p>
+      <pre>
+        try {
+          // исполняем код
+        } catch(err) {
+          // если случилась ошибка, прыгаем сюда
+          // err - это объект ошибки
+        } finally {
+          // выполняется всегда после try/catch
+        }
+      </pre>
+      <h3>Error</h3>
+      <p>Общий конструктор ошибок.</p>
+      <pre>
+        new Error('Общая ошибка. Проверьте код')
+      </pre>
+      <p>
+        Вызов конструктора возвращает объект ошибки со следующими свойствами:
+      </p>
+      <ul>
+        <li>
+          <code>message</code> представляет человекопонятное описание ошибки для
+          встроенных типов (<code>SyntaxError</code>, <code>TypeError</code> и
+          так далее) и переданное в конструктор значение для общего типа
+          <code>Error</code>.
+        </li>
+        <li><code>name</code> — имя типа (класса) ошибки.</li>
+      </ul>
+      <h3>Create custom errors</h3>
+      <pre>
+        class WrongDataTypeForSumError extends Error {
+          constructor(message) {
+            super(message)
+            this.name = 'WrongDataTypeForSumError'
+          }
+        }
+        
+        const myCustomError = new WrongDataTypeForSumError('Невалидный тип')
+      </pre>
+
+      <hr />
+
+      <h2>16. Modules</h2>
+      <p>
+        Модули помогают организовать код так, чтобы с проектом было проще и
+        удобнее работать, позволяют переиспользовать код и структурировать
+        программу.
+      </p>
+      <ol>
+        <li>
+          Модуль – это файл. Чтобы работал <code>import/export</code>, нужно для
+          браузеров указывать атрибут <code>&lt;script type="module"&gt;</code>.
+          У модулей есть ряд особенностей:
+          <ul>
+            <li>Отложенное (deferred) выполнение по умолчанию.</li>
+            <li>Атрибут async работает во встроенных скриптах.</li>
+            <li>
+              Для загрузки внешних модулей с другого источника, он должен
+              ставить заголовки CORS.
+            </li>
+            <li>Дублирующиеся внешние скрипты игнорируются.</li>
+          </ul>
+        </li>
+        <li>
+          У модулей есть своя область видимости, обмениваться функциональностью
+          можно через <code>import/export</code>.
+        </li>
+        <li>В модулях всегда включена директива <code>use strict</code>.</li>
+        <li>
+          Код в модулях выполняется только один раз. Экспортируемая
+          функциональность создаётся один раз и передаётся всем импортёрам.
+        </li>
+      </ol>
+      <h3>Импорт всего содержимого модуля</h3>
+      <pre>
+        import * as myModule from '/modules/my-module.js';
+      </pre>
+      <h3>Импорт единичного значения из модуля</h3>
+      <pre>
+        import {myExport} from '/modules/my-module.js';
+      </pre>
+      <h3>Импорт нескольких единичных значений</h3>
+      <pre>
+        import {foo, bar} from '/modules/my-module.js';
+      </pre>
+      <h3>Импорт значений с использованием более удобных имён</h3>
+      <pre>
+        import {reallyReallyLongModuleExportName as shortName}
+          from '/modules/my-module.js';
+      </pre>
+      <h3>Переименование нескольких значений в одном импорте</h3>
+      <pre>
+        import {
+          reallyReallyLongModuleExportName as shortName,
+          anotherLongModuleName as short
+        } from '/modules/my-module.js';
+      </pre>
+      <h3>Импорт модуля для использования его побочного эффекта</h3>
+      <pre>
+        import '/modules/my-module.js';
+      </pre>
+      <h3>Импорт значения по умолчанию</h3>
+      <pre>
+        import myDefault from '/modules/my-module.js';
+      </pre>
+      <h3>Динамический импорт</h3>
+      <p>
+        Ключевое слово <code>import</code> можно использовать как функцию для
+        динамического импорта модулей. Вызов <code>import()</code> возвращает
+        <code>Promise</code>.
+      </p>
+      <pre>
+        let module = await import('/modules/my-module.js');
+      </pre>
+      <hr />
+
+      <h2>17. RAF</h2>
+      <div id="SomeElementYouWantToAnimate"></div>
+      <p>
+        window.requestAnimationFrame указывает браузеру на то, что вы хотите
+        произвести анимацию, и просит его запланировать перерисовку на следующем
+        кадре анимации. В качестве параметра метод получает функцию, которая
+        будет вызвана перед перерисовкой.
+      </p>
+      <p>
+        Вы должны вызывать этот метод всякий раз, когда готовы обновить анимацию
+        на экране, чтобы запросить планирование анимации. Обычно запросы
+        происходят 60 раз в секунду, но чаще всего совпадают с частотой
+        обновления экрана.
+      </p>
+      <p>
+        Callback методу передаётся один аргумент, DOMHighResTimeStamp, который
+        содержит текущее время (количество миллисекунд, прошедших с момента time
+        origin). Когда колбэки, отправленные в очередь с помощью
+        requestAnimationFrame() начинают вызывать несколько колбэков в одном
+        кадре, каждый получает одинаковый timestamp, хотя для вычисления каждого
+        callback было затрачено время. Этот timestamp - десятичное число в
+        миллисекундах, но с минимальной точностью в 1ms (1000 µs)
+      </p>
+      <pre>
+        let start = null;
+        let element2 = document.getElementById('SomeElementYouWantToAnimate');
+
+        function step(timestamp) {
+          if (!start) start = timestamp;
+          let progress = timestamp - start;
+          element2.style.transform = 
+            'translateX(' + Math.min(progress / 10, 500) + 'px)';
+          if (progress < 5000) {
+            window.requestAnimationFrame(step);
+          }
+        }
+
+        window.requestAnimationFrame(step);
+      </pre>
+      <hr />
+
+      <h2>18. Basics about drag/drop api</h2>
+      <p id="p1">Данный элемент является перетаскиваемым.</p>
+      <p id="target">Drop Zone</p>
+
+      <h3>Обозначьте, что можно перетаскивать</h3>
+      <p>
+        Чтобы сделать элемент перетаскиваемым, к нему нужно добавить атрибут
+        <code>draggable</code> и глобальный обработчик события
+        <code>ondragstart</code>
+      </p>
+      <h3>Определите данные перетаскивания</h3>
+      <p>
+        Приложение может добавлять в операцию перетаскивания любое количество
+        элементов данных. Каждый элемент данных — это строка определённого типа.
+        Обычно MIME-тип равен text/html.
+      </p>
+      <p>
+        У каждого события перетаскивания есть свойство dataTransfer (en-US),
+        которое содержит данные о событии. Метод setData() используется для
+        добавления элемента в данные перетаскивания, как показано в следующем
+        примере.
+      </p>
+      <h3>Определите эффект перетаскивания</h3>
+      <p>
+        Свойство dropEffect (en-US) используется для управления обратной связью,
+        которую пользователь получает во время операции перетаскивания. Обычно
+        это влияет на то, какой курсор будет отображаться во время
+        перетаскивания.
+      </p>
+      <h3>Определите зону сброса</h3>
+      <p>
+        По умолчанию, при сбросе на большинство элементов, браузер не производит
+        никаких действий. Чтобы изменить это поведение и сделать элемент зоной
+        сброса или сбрасываемым, он должен иметь атрибуты для обработчиков
+        событий ondragover (en-US) и ondrop (en-US).
+      </p>
+      <h3>Обработайте эффекты сброса</h3>
+      <p>
+        Следующий пример демонстрирует обработчик сброса, получающий id
+        исходного элемента из данных перетаскивания и затем использует id для
+        перемещения исходного элемента к элементу сброса.
+      </p>
+
+      <pre>
+        const element = document.getElementById('p1');
+        element.setAttribute('draggable', true);
+        element.addEventListener('dragstart', dragstart_handler);
+
+        const targetEl = document.getElementById('target');
+        targetEl.addEventListener('dragover', dragover_handler)
+        targetEl.addEventListener('drop', dragdrop_handler)
+
+
+        function dragstart_handler(event) {
+          event.dataTransfer.setData('text/html', event.target.id);
+        }
+
+        function dragover_handler(event) {
+          event.preventDefault();
+          event.dataTransfer.dropEffect = 'move';
+        }
+
+        function dragdrop_handler(event) {
+          event.preventDefault();
+          const data = event.dataTransfer.getData('text/html');
+          console.log(event.dataTransfer);
+          event.target.appendChild(document.getElementById(data));
+        }
+      </pre>
+      <hr />
+
+      <h2>19. Intl: интернационализация (какие проблемы решает, объекты)</h2>
+      <h3>Основные объекты</h3>
+      <dl>
+        <dt><code>Intl.Collator</code></dt>
+        <dd>Умеет правильно сравнивать и сортировать строки.</dd>
+        <dt><code>Intl.DateTimeFormat</code></dt>
+        <dd>
+          Умеет форматировать дату и время в соответствии с нужным языком.
+        </dd>
+        <dt><code>Intl.NumberFormat</code></dt>
+        <dd>Умеет форматировать числа в соответствии с нужным языком.</dd>
+      </dl>
+      <h3>Локаль</h3>
+      <p>
+        Локаль описывается строкой из трёх компонентов, которые разделяются
+        дефисом:
+      </p>
+      <ol>
+        <li>Код языка.</li>
+        <li>Код способа записи.</li>
+        <li>Код страны.</li>
+      </ol>
+      <h3>Строки, Intl.Collator</h3>
+      <pre>
+        let collator = new Intl.Collator([locales, [options]])
+      </pre>
+      <p>Использование:</p>
+      <pre>
+        let result = collator.compare(str1, str2);
+      </pre>
+      <h3>Даты, Intl.DateTimeFormat</h3>
+      <pre>
+        let formatter = new Intl.DateTimeFormat([locales, [options]])
+      </pre>
+      <h3>Числа, Intl.NumberFormat</h3>
+      <p>
+        Форматтер Intl.NumberFormat умеет красиво форматировать не только числа,
+        но и валюту, а также проценты.
+      </p>
+      <pre>
+        let formatter = new Intl.NumberFormat([locales[, options]]);
+        formatter.format(number); // форматирование
+      </pre>
+      <h3>Методы в Date, String, Number</h3>
+      <p>
+        Методы форматирования также поддерживаются в обычных строках, датах,
+        числах:
+      </p>
+      <p>Сравнивает строку с другой, с учётом локали, например:</p>
+      <pre>
+        String.prototype.localeCompare(that [, locales [, options]])
+      </pre>
+      <p>Форматирует дату в соответствии с локалью</p>
+      <pre>
+        Date.prototype.toLocaleString([locales [, options]])
+      </pre>
+      <p>
+        То же, что и выше, но опции по умолчанию включают в себя год, месяц,
+        день
+      </p>
+      <pre>
+        Date.prototype.toLocaleDateString([locales [, options]])
+      </pre>
+      <p>
+        То же, что и выше, но опции по умолчанию включают в себя часы, минуты,
+        секунды
+      </p>
+      <pre>
+        Date.prototype.toLocaleTimeString([locales [, options]])
+      </pre>
+      <p>Форматирует число, используя опции Intl.NumberFormat.</p>
+      <pre>
+        Number.prototype.toLocaleString([locales [, options]])
+      </pre>
+      <hr />
+
+      <h2>
+        20. Curry, chaining, memo, pipe (желательно уметь реализовать самому)
+      </h2>
+      <h3>Curry</h3>
+      <pre>
+        function carry(func) {
+          return function (a) {
+            return function (b) {
+              return function (c) {
+                return func(a, b, c)
+              }
+            }
+          }
+        }
+        const sum = carry((a, b, c) => a * b / c);
+      </pre>
+      <h3>chaining</h3>
+      <pre>
+        ladder.up();
+        ladder.up();
+        ladder.down();
+        ladder.showStep(); // 1
+      </pre>
+      <p>Решением является возврат самого объекта в каждом методе.</p>
+      <pre>
+        ladder.up().up().down().showStep(); // 1
+      </pre>
+      <h3>memo</h3>
+      <pre>
+        function factorialMemo() {
+          const cache = {};
+          return (n) => {
+            if (n in cache) {
+              console.log('Fetching from cache ', cache[n]);
+              return cache[n]
+            }
+            
+            cache[n] = factorial(n);
+            console.log('Calculating result', cache[n]);
+            return cache[n]
+          };
+        }
+      </pre>
+      <h3>pipe</h3>
+      <pre>
+        function pipe(...args) {
+          return x => args.reduce((acc, func) => func(acc), x);
+        }
+        
+        const add1 = x => x + 1;
+        const mul5 = x => x * 5;
+        
+        const res = compose(add1, mul5)(2)
+      </pre>
+      <hr />
+
+      <h2>21. Новинки JS</h2>
+      <dl>
+        <dt>ES2021 / ES12</dt>
+        <dd>
+          <li>
+            <code>String.prototype.replaceAll()</code> заменяет все вхождения
+            строки другим строковым значением.
+          </li>
+          <li>
+            Приватные методы могут быть доступны только внутри класса, в котором
+            они определены. Имена приватных методов начинаются с символа
+            <code>#</code>
+          </li>
+          <li>
+            Функции-аксессоры <code>(get/set)</code> можно сделать приватными,
+            добавив <code>#</code> к имени функции.
+          </li>
+          <li>
+            <code>Promise.any()</code> успешно завершается, если успешно
+            завершился любой из предоставленных в качестве аргументов промис.
+          </li>
+          <li>
+            Оператор логического присваивания - объединяет логические операции
+            (&&, || или ??) с присваиванием.
+          </li>
+        </dd>
+      </dl>
+      <hr />
+      <h2>22. Конструкторы Event и customЕvent</h2>
+      <h3>Конструктор Event</h3>
+      <p>Событие встроенного класса Event можно создать так:</p>
+      <pre>
+        let event = new Event(type[, options]);
+      </pre>
+      <h3>Метод dispatchEvent</h3>
+      <p>
+        После того, как объект события создан, мы должны запустить его на
+        элементе, вызвав метод <code>elem.dispatchEvent(event)</code>.
+      </p>
+      <h3>MouseEvent, KeyboardEvent и другие</h3>
+      <p>
+        Для некоторых конкретных типов событий есть свои специфические
+        конструкторы. Вот небольшой список конструкторов для различных событий
+        пользовательского интерфейса, которые можно найти в спецификации UI
+        Event:
+      </p>
+      <p>
+        Стоит использовать их вместо new Event, если мы хотим создавать такие
+        события. К примеру, new MouseEvent("click").
+      </p>
+      <h3>Пользовательские события</h3>
+      <p>
+        Для генерации событий совершенно новых типов, таких как "hello", следует
+        использовать конструктор new CustomEvent. Технически CustomEvent
+        абсолютно идентичен Event за исключением одной небольшой детали.
+      </p>
+      <p>
+        У второго аргумента-объекта есть дополнительное свойство detail, в
+        котором можно указывать информацию для передачи в событие.
+      </p>
+      <hr />
+      <h2>23. Логические операторы (|| , &&, ??)</h2>
+      <h3>|| (ИЛИ)</h3>
+      <p>
+        Традиционно в программировании ИЛИ предназначено только для
+        манипулирования булевыми значениями: в случае, если какой-либо из
+        аргументов <code>true</code>, он вернёт <code>true</code>, в
+        противоположной ситуации возвращается <code>false</code>.
+      </p>
+      <p>
+        Если значение не логического типа, то оно к нему приводится в целях
+        вычислений.
+      </p>
+      <h4>ИЛИ «||» находит первое истинное значение</h4>
+      <p>Оператор <code>||</code> выполняет следующие действия:</p>
+      <ul>
+        <li>Вычисляет операнды слева направо.</li>
+        <li>
+          Каждый операнд конвертирует в логическое значение. Если результат
+          <code>true</code>, останавливается и возвращает исходное значение
+          этого операнда.
+        </li>
+        <li>
+          Если все операнды являются ложными (<code>false</code>), возвращает
+          последний из них.
+        </li>
+      </ul>
+      <p>Значение возвращается в исходном виде, без преобразования.</p>
+      <h3>&& (И)</h3>
+      <p>
+        В традиционном программировании И возвращает true, если оба аргумента
+        истинны, а иначе – false:
+      </p>
+      <h4>И «&&» находит первое ложное значение</h4>
+      <p>Оператор <code>&amp;&amp;</code> выполняет следующие действия:</p>
+      <ul>
+        <li>Вычисляет операнды слева направо.</li>
+        <li>
+          Каждый операнд преобразует в логическое значение. Если результат
+          <code>false</code>, останавливается и возвращает исходное значение
+          этого операнда.
+        </li>
+        <li>Если все операнды были истинными, возвращается последний.</li>
+      </ul>
+      <h3>Оператор нулевого слияния (??)</h3>
+      <p>
+        это логический оператор, возвращающий значение правого операнда, если
+        значение левого операнда содержит <code>null</code> или
+        <code>undefined</code>, в противном случае возвращается значение левого
+        операнда.
+      </p>
+      <hr />
+      <h2>24. Class (особенности)</h2>
+      <ol>
+        <li>
+          Во-первых, функция, созданная с помощью class, помечена специальным
+          внутренним свойством [[IsClassConstructor]]: true. Поэтому это не
+          совсем то же самое, что создавать её вручную. совсем то же самое, что
+          создавать её вручную.
+          <p>
+            В отличие от обычных функций, конструктор класса не может быть
+            вызван без new: совсем то же самое, что создавать её вручную.
+          </p>
+          <p>
+            Кроме того, строковое представление конструктора класса в
+            большинстве движков JavaScript начинается с «class …»
+          </p>
+        </li>
+        <li>
+          Методы класса являются неперечислимыми. Определение класса
+          устанавливает флаг enumerable в false для всех методов в "prototype".
+        </li>
+        <li>
+          Классы всегда используют use strict. Весь код внутри класса
+          автоматически находится в строгом режиме.
+        </li>
+      </ol>
+    </main>
+
+    <script src="./index.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

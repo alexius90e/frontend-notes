@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Module 1</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>JS Module 1 <a href="./index.html">back ></a></h1>
+
+      <h2>1. Типы данных</h2>
+
+      <p>В JavaScript есть 8 основных типов.</p>
+      <ul>
+        <li>
+          <b>number</b> - для любых чисел: целочисленных или чисел с плавающей
+          точкой; целочисленные значения ограничены диапазоном ±(253-1).
+        </li>
+        <li><b>bigint</b> - для целых чисел произвольной длины.</li>
+        <li>
+          <b>string</b> - для строк. Строка может содержать ноль или больше
+          символов, нет отдельного символьного типа.
+        </li>
+        <li><b>boolean</b> - для true/false.</li>
+        <li>
+          <b>null</b> - для неизвестных значений – отдельный тип, имеющий одно
+          значение null.
+        </li>
+        <li>
+          <b>undefined</b> - для неприсвоенных значений – отдельный тип, имеющий
+          одно значение undefined.
+        </li>
+        <li><b>object</b> - для более сложных структур данных.</li>
+        <li><b>symbol</b> - для уникальных идентификаторов.</li>
+      </ul>
+      <hr />
+
+      <h2>2. Виды функций (особенности стрелочных)</h2>
+      <h3>Function declaration</h3>
+      <pre>
+        function square(number) {
+          return number * number;
+        }</pre
+      >
+      <h3>Function definition expression</h3>
+      <pre>
+        const square = function(number) { return number * number };</pre
+      >
+      <h3>Arrow function expression</h3>
+      <pre>        const square = (number) => { return number * number };</pre>
+      <p>Arrow function expression:</p>
+      <ol>
+        <li>Не имеют <code>this</code>.</li>
+        <li>Не имеют <code>arguments</code>.</li>
+        <li>Не могут быть вызваны с <code>new</code>.</li>
+        <li>(У них также нет <code>super</code></li>
+      </ol>
+      <p>
+        Объявление функции не выполняет её. Объявление функции просто называет
+        функцию и указывает, что делать при вызове функции.
+      </p>
+      <p>
+        Переменные объявленные в функции не могут быть доступными где-нибудь вне
+        этой функции. При этом функция имеет доступ ко всем переменным и
+        функциям, объявленным внутри её scope.
+      </p>
+      <p>
+        Объект arguments функции является псевдо-массивом. Внутри функции вы
+        можете ссылаться к аргументам <code>arguments[i]</code>
+      </p>
+      <p>
+        Остаточные параметры предоставляют нам массив неопределённых аргументов.
+      </p>
+      <pre>
+        function multiply(multiplier, ...theArgs) {
+          return theArgs.map(x => multiplier * x);
+        }</pre
+      >
+      <hr />
+
+      <h2>3. Symbols для чего</h2>
+      <p>
+        Символ (symbol) – примитивный тип данных, использующийся для создания
+        уникальных идентификаторов.
+      </p>
+      <p>
+        Символы создаются вызовом функции <code>Symbol()</code>, в которую можно
+        передать описание (имя) символа.
+      </p>
+      <p>
+        Для чтения (или, при отсутствии, создания) символа из реестра
+        используется вызов <code>Symbol.for(key)</code>.
+      </p>
+      <p>
+        <code>Symbol.keyFor(sym)</code> принимает глобальный символ и возвращает
+        его имя.
+      </p>
+      <p>Символы имеют два основных варианта использования:</p>
+      <ol>
+        <li>«Скрытые» свойства объектов.</li>
+        <li>
+          Существует множество системных символов, используемых внутри
+          JavaScript, доступных как Symbol.*.
+        </li>
+      </ol>
+      <p>
+        Технически символы скрыты не на 100%. Существует встроенный метод
+        <code>Object.getOwnPropertySymbols(obj)</code> – с его помощью можно
+        получить все свойства объекта с ключами-символами.
+      </p>
+      <hr />
+
+      <h2>4. Hosting, be able to create an example of it in code</h2>
+      <p>
+        Поднятие или hoisting — это механизм в JavaScript, в котором переменные
+        и объявления функций, передвигаются вверх своей области видимости перед
+        тем, как код будет выполнен.
+      </p>
+      <h3>var</h3>
+      <pre>
+        console.log(hoist); // Вывод: undefined
+        var hoist = 'The variable has been hoisted.';</pre
+      >
+      <p>
+        JavaScript «поднял» объявление переменной. Вот как это выглядит для
+        движка JavaScript:
+      </p>
+      <pre>
+        var hoist;
+        console.log(hoist); // Вывод: undefined
+        hoist = 'The variable has been hoisted.';</pre
+      >
+      <p>
+        Включая strict mode, JavaScript не будет использовать переменные перед
+        их объявлением.
+      </p>
+      <pre>
+        'use strict';
+        console.log(hoist); // Вывод: ReferenceError: hoist...
+        var hoist = 'Hoisted';</pre
+      >
+      <h3>let</h3>
+      <pre>
+        console.log(hoist); // ReferenceError: hoist is not defined
+        let hoist = 'The variable has been hoisted.';</pre
+      >
+      <pre>
+        let hoist;
+        console.log(hoist); // Вывод: undefined
+        hoist = 'Hoisted'</pre
+      >
+      <h3>const</h3>
+      <pre>
+        console.log(hoist); //ReferenceError: hoist is not defined
+        const hoist = 'The variable has been hoisted.';</pre
+      >
+      <pre>
+        const PI;
+
+        console.log(PI); //SyntaxError: Missing initializer in const
+        declaration
+
+        PI=3.142;</pre
+      >
+      <h3>Function declarations</h3>
+      <p>Объявленные функции полностью поднимаются вверх кода.</p>
+      <pre>
+        hoisted(); //"This function has been hoisted."
+
+        function hoisted() {
+          console.log('This function has been hoisted.');
+        };</pre
+      >
+      <h3>Function expressions</h3>
+      <p>Функциональные выражения, однако, не поднимаются.</p>
+      <pre>
+        expression(); //"TypeError: expression is not a function
+
+        var expression = function() {
+          console.log('Will this work?');
+        };
+      </pre>
+      <h3>Order of precedence</h3>
+      <ol>
+        <li>Variable assignment takes precedence over function declaration</li>
+        <li>
+          Function declarations take precedence over variable declarations
+        </li>
+      </ol>
+      <h3>Hoisting classes</h3>
+      <p>
+        Так же как и свои коллеги функции, JavaScript классы при объявлении
+        «поднимаются». Тем не менее, они остаются неинициализированными до
+        определения.
+      </p>
+      <pre>
+        var Frodo = new Hobbit();
+        Frodo.height = 100;
+        console.log(Frodo); // ReferenceError: Hobbit is not defined
+
+        class Hobbit {
+          constructor(height) {
+            this.height = height;
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>
+        5. Closures, be able to create an example of it in code (Контекст
+        выполнения, лексическое окружение).
+      </h2>
+      <p>
+        Замыкание это функция у которой есть доступ к своей внешней функции по
+        области видимости, даже после того, как внешняя функция прекратилась.
+      </p>
+      <p>
+        замыкание может запоминать и получать доступ к переменным, и аргументам
+        своей внешней функции, даже после того, как та прекратит выполнение.
+      </p>
+      <p>
+        Каждый раз, когда движок JavaScript создаёт контекст выполнения, чтобы
+        выполнить функцию или глобальный код, он также создаёт новое лексическое
+        окружение, чтобы хранить переменную определенную в этой функции во время
+        её выполнения.
+      </p>
+      <p>A lexical environment conceptually looks like this:</p>
+      <pre>
+        lexicalEnvironment = {
+          environmentRecord: {
+            identifier : value,
+            identifier : value
+          }
+          outer:  Reference to the parent lexical environment>
+        }
+      </pre>
+      <p>У лексического окружения есть два компонента:</p>
+      <ol>
+        <li>
+          environment record - это место хранятся объявления переменной или
+          функции.
+        </li>
+        <li>
+          reference to the outer environment - cсылка к внешнему окружению
+        </li>
+      </ol>
+      <p>
+        когда функция выполняется, её контекст выполнения удаляется из стека, но
+        её лексическое окружение может или не может быть удалено из памяти, в
+        зависимости от того, ссылается ли на это лексическое окружение другое
+        лексическое окружение.
+      </p>
+
+      <hr />
+
+      <h2>6. Сборка Мусора</h2>
+      <p>
+        Основной концепцией управления памятью в JavaScript является принцип
+        достижимости.
+      </p>
+      <ul>
+        <li>
+          Сборка мусора выполняется автоматически. Мы не можем ускорить или
+          предотвратить её.
+        </li>
+        <li>Объекты сохраняются в памяти, пока они достижимы.</li>
+        <li>
+          Наличие ссылки не гарантирует, что объект достижим (от корня):
+          несколько взаимосвязанных объектов могут стать недостижимыми как
+          единое целое.
+        </li>
+      </ul>
+      <p>
+        Существует базовое множество достижимых значений, которые не могут быть
+        удалены.
+      </p>
+      <ul>
+        <li>Локальные переменные и параметры текущей функции.</li>
+        <li>
+          Переменные и параметры других функций в текущей цепочке вложенных
+          вызовов.
+        </li>
+        <li>Глобальные переменные.</li>
+      </ul>
+      <p>
+        Согласно этому алгоритму, сборщик мусора регулярно выполняет следующие
+        шаги:
+      </p>
+      <ul>
+        <li>Сборщик мусора «помечает» (запоминает) все корневые объекты.</li>
+        <li>Затем он идёт по их ссылкам и помечает все найденные объекты.</li>
+        <li>
+          Затем он идёт по ссылкам помеченных объектов и помечает объекты, на
+          которые есть ссылка от них. Все объекты запоминаются, чтобы в будущем
+          не посещать один и тот же объект дважды.
+        </li>
+        <li>
+          …И так далее, пока не будут посещены все ссылки (достижимые от
+          корней).
+        </li>
+        <li>Все непомеченные объекты удаляются.</li>
+      </ul>
+      <hr />
+
+      <h2>
+        7. This keyword – basic idea, and its use in common and arrow function
+        with examples
+      </h2>
+      <p><b>Вызов без объекта: this == undefined</b></p>
+      <ul>
+        <li>
+          Функции, которые находятся в объекте в качестве его свойств,
+          называются «методами».
+        </li>
+        <li>
+          Методы позволяют объектам «действовать»:
+          <code>object.doSomething()</code>.
+        </li>
+        <li>Методы могут ссылаться на объект через <code>this</code>.</li>
+      </ul>
+      <p>Значение <code>this</code> определяется во время исполнения кода.</p>
+      <ul>
+        <li>
+          При объявлении любой функции в ней можно использовать
+          <code>this</code>, но этот <code>this</code> не имеет значения до тех
+          пор, пока функция не будет вызвана.
+        </li>
+        <li>
+          Эта функция может быть скопирована между объектами (из одного объекта
+          в другой).
+        </li>
+        <li>
+          Когда функция вызывается синтаксисом «метода» –
+          <code>object.method()</code>, значением <code>this</code> во время
+          вызова является объект перед точкой.
+        </li>
+      </ul>
+      <hr />
+
+      <h2>8. Потеря this + call/bind/apply</h2>
+      <p>
+        Некоторые способы вызова метода приводят к потере значения this,
+        например:
+      </p>
+      <pre>
+        let user = {
+          name: "Джон",
+          hi() { alert(this.name); },
+          bye() { alert("Пока"); }
+        };
+        
+        user.hi(); // Джон (простой вызов метода работает хорошо)
+        
+        // теперь давайте попробуем вызывать user.hi или user.bye
+        // в зависимости от имени пользователя user.name
+        (user.name == "Джон" ? user.hi : user.bye)(); // Ошибка!
+      </pre>
+      <p>
+        Присмотревшись поближе, в выражении obj.method() можно заметить две
+        операции:
+      </p>
+      <ol>
+        <li>
+          Сначала оператор точка <code>' . '</code> возвращает свойство объекта
+          – его метод <code>(obj.method)</code>.
+        </li>
+        <li>Затем скобки () вызывают этот метод (исполняется код метода).</li>
+      </ol>
+      <p>
+        <b
+          >Для работы вызовов типа <code>user.hi()</code>, JavaScript использует
+          трюк – точка <code>'.'</code> возвращает не саму функцию, а
+          специальное значение «ссылочного типа», называемого Reference Type.</b
+        >
+      </p>
+      <p>
+        Значение ссылочного типа – это «триплет»: комбинация из трёх значений
+        (base, name, strict), где:
+      </p>
+      <ol>
+        <li><code>base</code> – это объект.</li>
+        <li><code>name</code> – это имя свойства объекта.</li>
+        <li>
+          <code>strict</code> – это режим исполнения. Является true, если
+          действует строгий режим <code>(use strict)</code>.
+        </li>
+      </ol>
+      <h3>Bind</h3>
+      <p>
+        Метод <code>bind</code> возвращает «привязанный вариант» функции
+        <code>func</code>, фиксируя контекст <code>this</code> и первые
+        аргументы <code>arg1</code>, <code>arg2</code>…, если они заданы.
+      </p>
+      <pre>
+        let bound = func.bind(context);
+      </pre>
+      <p>
+        Обычно <code>bind</code> применяется для фиксации <code>this</code> в
+        методе объекта, чтобы передать его в качестве колбэка. Например, для
+        <code>setTimeout</code>.
+      </p>
+      <p>
+        Когда мы привязываем аргументы, такая функция называется «частично
+        применённой» или «частичной».
+      </p>
+      <pre>
+        let bound = func.bind(context, [arg1], [arg2], ...);
+      </pre>
+      <p>
+        Частичное применение удобно, когда мы не хотим повторять один и тот же
+        аргумент много раз.
+      </p>
+      <h3>Call</h3>
+      <p>
+        Метод <code><strong>call()</strong></code> вызывает функцию с указанным
+        значением <code>this</code> и индивидуально предоставленными
+        аргументами.
+      </p>
+      <pre>
+        fun.call(thisArg[, arg1[, arg2[, ...]]])
+      </pre>
+      <p>
+        <code>thisArg</code> Значение <code>this</code>, предоставляемое для
+        вызова функции <code>fun</code>.
+      </p>
+      <p><code>arg1, arg2, ...</code> Аргументы для объекта.</p>
+      <h3>Apply</h3>
+      <p>
+        Метод <code><strong>apply()</strong></code> вызывает функцию с указанным
+        значением <code>this</code> и аргументами, предоставленными в виде
+        массива (либо массивоподобного объекта).
+      </p>
+      <pre>
+        fun.apply(thisArg, [argsArray])
+      </pre>
+      <p>
+        <strong>Примечание:</strong> что функция <code>call()</code> принимает
+        список аргументов, функция <code>apply()</code> принимает единичный
+        массив аргументов.
+      </p>
+      <hr />
+
+      <h2>9. New keyword. How it works</h2>
+      <p>
+        Создать множество однотипных объектов, можно при помощи
+        функции-конструктора и оператора "new".
+      </p>
+      <h3>Функция-конструктор</h3>
+      <p>
+        Функции-конструкторы являются обычными функциями. Но есть два
+        соглашения:
+      </p>
+      <ol>
+        <li>Имя функции-конструктора должно начинаться с большой буквы.</li>
+        <li>
+          Функция-конструктор должна вызываться при помощи оператора "new".
+        </li>
+      </ol>
+      <p>Когда функция вызывается как new User(...), происходит следующее:</p>
+      <ol>
+        <li>Создаётся новый пустой объект, и он присваивается this.</li>
+        <li>
+          Выполняется код функции. Обычно он модифицирует this, добавляет туда
+          новые свойства.
+        </li>
+        <li>Возвращается значение this.</li>
+      </ol>
+      <pre>
+        function User(name) {
+          // this = {};  (неявно)
+        
+          // добавляет свойства к this
+          this.name = name;
+          this.isAdmin = false;
+        
+          // return this;  (неявно)
+        }
+      </pre>
+      <p>
+        JavaScript предоставляет функции-конструкторы для множества встроенных
+        объектов языка: например, Date, Set и других, которые нам ещё предстоит
+        изучить.
+      </p>
+      <hr />
+
+      <h2>10. == comparison algorithm</h2>
+      <p>
+        При сравнении значений разных типов JavaScript приводит каждое из них к
+        числу.
+      </p>
+      <p>
+        Оператор строгого равенства === проверяет равенство без приведения
+        типов.
+      </p>
+      <ul>
+        <li>Операторы сравнения возвращают значения логического типа.</li>
+        <li>Строки сравниваются посимвольно в лексикографическом порядке.</li>
+        <li>
+          Значения разных типов при сравнении приводятся к числу. Исключением
+          является сравнение с помощью операторов строгого
+          равенства/неравенства.
+        </li>
+        <li>
+          Значения <code>null</code> и <code>undefined</code> равны
+          <code>==</code> друг другу и не равны любому другому значению.
+        </li>
+        <li>
+          Будьте осторожны при использовании операторов сравнений вроде
+          <code>&gt;</code> и <code>&lt;</code> с переменными, которые могут
+          принимать значения <code>null/undefined</code>. Хорошей идеей будет
+          сделать отдельную проверку на <code>null/undefined</code>.
+        </li>
+      </ul>
+      <hr />
+
+      <h2>11. SetTimeout , как отменить</h2>
+      <p>
+        <code>SetTimeout</code> позволяет вызвать функцию один раз через
+        определённый интервал времени.
+      </p>
+      <p>Синтаксис:</p>
+      <pre>
+        let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
+      </pre>
+      <p>Параметры:</p>
+      <dl>
+        <dt><code>func|code</code></dt>
+        <dd>
+          Функция или строка кода для выполнения. Обычно это функция. По
+          историческим причинам можно передать и строку кода, но это не
+          рекомендуется.
+        </dd>
+        <dt><code>delay</code></dt>
+        <dd>
+          Задержка перед запуском в миллисекундах (1000 мс = 1 с). Значение по
+          умолчанию – 0.
+        </dd>
+        <dt><code>arg1</code>, <code>arg2</code>…</dt>
+        <dd>Аргументы, передаваемые в функцию (не поддерживается в IE9-)</dd>
+      </dl>
+      <h3>Отмена через clearTimeout</h3>
+      <p>
+        Вызов setTimeout возвращает «идентификатор таймера» timerId, который
+        можно использовать для отмены дальнейшего выполнения.
+      </p>
+      <p>Синтаксис для отмены:</p>
+      <pre>
+          let timerId = setTimeout(...);
+          clearTimeout(timerId);
+      </pre>
+      <hr />
+
+      <h2>12. Деструктуризация массива объекта</h2>
+      <p>
+        Деструктуризация позволяет разбивать объект или массив на переменные при
+        присвоении.
+      </p>
+      <p>Полный синтаксис для массива:</p>
+      <pre>
+        let [item1 = default, item2, ...rest] = array
+      </pre>
+      <p>
+        Первый элемент отправляется в item1; второй отправляется в item2, все
+        остальные элементы попадают в массив rest.
+      </p>
+      <hr />
+
+      <h2>13. Priority of operations</h2>
+      <table class="table-js">
+        <thead>
+          <tr>
+            <td>Operator</td>
+            <td>Operation</td>
+            <td>Order of Precedence</td>
+            <td>Order of Evaluation</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>++</code></td>
+            <td>Increment</td>
+            <td>First</td>
+            <td>R -&gt; L</td>
+          </tr>
+          <tr>
+            <td><code>--</code></td>
+            <td>Decrement</td>
+            <td>First</td>
+            <td>R -&gt; L</td>
+          </tr>
+          <tr>
+            <td><code>—</code></td>
+            <td>Negation</td>
+            <td>First</td>
+            <td>R -&gt; L</td>
+          </tr>
+          <tr>
+            <td><code>!</code></td>
+            <td>NOT</td>
+            <td>First</td>
+            <td>R -&gt; L</td>
+          </tr>
+          <tr>
+            <td><code>*, /, %</code></td>
+            <td>Multiplication, division, modulus</td>
+            <td>Second</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>+, —</code></td>
+            <td>Addition, subtraction</td>
+            <td>Third</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>+</code></td>
+            <td>Concatenation</td>
+            <td>Third</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>&lt;, &lt;=</code></td>
+            <td>Less than, less than, or equal</td>
+            <td>Fourth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>&gt;, &gt;=</code></td>
+            <td>Greater than, greater than, or equal</td>
+            <td>Fourth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>==</code></td>
+            <td>Equal</td>
+            <td>Fifth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>!=</code></td>
+            <td>Not equal</td>
+            <td>Fifth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>===</code></td>
+            <td>Identity</td>
+            <td>Fifth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>!==</code></td>
+            <td>Non-identity</td>
+            <td>Fifth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>&amp;&amp;</code></td>
+            <td>AND</td>
+            <td>Sixth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>||</code></td>
+            <td>OR</td>
+            <td>Sixth</td>
+            <td>L -&gt; R</td>
+          </tr>
+          <tr>
+            <td><code>?:</code></td>
+            <td>Ternary</td>
+            <td>Seventh</td>
+            <td>R -&gt; L</td>
+          </tr>
+          <tr>
+            <td><code>=</code></td>
+            <td>Assignment</td>
+            <td>Eighth</td>
+            <td>R -&gt; L</td>
+          </tr>
+          <tr>
+            <td><code>+=</code>, <code>-=</code>, and so on.</td>
+            <td>Arithmetic assignment</td>
+            <td>Eighth</td>
+            <td>R -&gt; L</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+
+      <h2>
+        14. Have solid understanding of types auto conversion, what is unary,
+        binary, ternary operations.
+      </h2>
+      <h3>Строковое</h3>
+      <p>
+        Происходит, когда нам нужно что-то вывести. Может быть вызвано с помощью
+        <code>String(value)</code>. Для примитивных значений работает очевидным
+        образом.
+      </p>
+      <h3>Численное</h3>
+      <p>
+        Численное – Происходит в математических операциях. Может быть вызвано с
+        помощью <code>Number(value)</code>. Преобразование подчиняется правилам:
+      </p>
+      <ol>
+        <li><code>undefined</code> => <code>NaN</code></li>
+        <li><code>null</code> => <code>0</code></li>
+        <li><code>true / false</code> => <code>1 / 0</code></li>
+        <li>
+          string => Пробелы по краям обрезаются. Далее, если остаётся
+          <code>' '</code>, то получаем <code>0</code>, иначе из
+          <code>'213'</code> «считывается» число. При ошибке результат
+          <code>NaN</code>.
+        </li>
+      </ol>
+      <h3>Логическое</h3>
+      <p>
+        Логическое – Происходит в логических операциях. Может быть вызвано с
+        помощью Boolean(value).
+      </p>
+      <ol>
+        <li>
+          <code>0</code>, <code>null</code>, <code>undefined</code>,
+          <code>NaN</code>, <code>""</code> => <code>false</code>
+        </li>
+        <li><code>любое другое значение</code> => <code>true</code></li>
+      </ol>
+      <p>
+        <code>Унарным</code> называется оператор, который применяется к одному
+        операнду.
+      </p>
+      <p>
+        <code>Бинарным</code> называется оператор, который применяется к двум
+        операндам.
+      </p>
+      <hr />
+
+      <h2>15. Type of vs instance of show difference in examples.</h2>
+      <p>
+        <code>typeof</code> работает для <code>примитивов</code> возвращает
+        <code>строка</code>
+      </p>
+      <p>
+        <code>instanceof</code> работает для <code>объектов</code> возвращает
+        <code>true/false</code>
+      </p>
+
+      <p>
+        The <code>typeof</code> operator checks if a value has type of primitive
+        type which can be one of <code>boolean</code>, <code>function</code>,
+        <code>object</code>, <code>number</code>, <code>string</code>,
+        <code>undefined</code> and <code>symbol</code> (ES6).
+      </p>
+      <pre>
+        typeof 'helloworld'; // 'string'
+        typeof new String('helloworld'); // 'object'
+      </pre>
+      <p>
+        The <code>instanceof</code> operator checks if a value is an instance of
+        a class or constructor function.
+      </p>
+      <pre>
+        'helloworld' instanceof String; // false
+        new String('helloworld') instanceof String; // true
+      </pre>
+      <hr />
+
+      <h2>
+        16. Prototype inheritance, props and cons, be able to realize, __proto__
+        / prototype
+      </h2>
+      <ul>
+        <li>
+          В JavaScript все объекты имеют скрытое свойство
+          <code>[[Prototype]]</code>, которое является либо другим объектом,
+          либо <code>null</code>.
+        </li>
+        <li>
+          Мы можем использовать <code>obj.__proto__</code> для доступа к нему
+          (исторически обусловленный геттер/сеттер.
+        </li>
+        <li>
+          Объект, на который ссылается <code>[[Prototype]]</code>, называется
+          «прототипом».
+        </li>
+        <li>
+          Если мы хотим прочитать свойство <code>obj</code> или вызвать метод,
+          которого не существует у <code>obj</code>, тогда JavaScript попытается
+          найти его в прототипе.
+        </li>
+        <li>
+          Операции записи/удаления работают непосредственно с объектом, они не
+          используют прототип (если это обычное свойство, а не сеттер).
+        </li>
+        <li>
+          Если мы вызываем <code>obj.method()</code>, а метод при этом взят из
+          прототипа, то <code>this</code> всё равно ссылается на
+          <code>obj</code>. Таким образом, методы всегда работают с текущим
+          объектом, даже если они наследуются.
+        </li>
+        <li>
+          Цикл <code>for..in</code> перебирает как свои, так и унаследованные
+          свойства. Остальные методы получения ключей/значений работают только с
+          собственными свойствами объекта.
+        </li>
+      </ul>
+      <h3>F.prototype</h3>
+      <ul>
+        <li>
+          Свойство <code>F.prototype</code> (не путать с
+          <code>[[Prototype]]</code>) устанавливает<code>[[Prototype]]</code>
+          для новых объектов при вызове <code>new F()</code>.
+        </li>
+        <li>
+          Значение <code>F.prototype</code> должно быть либо объектом, либо
+          <code>null</code>. Другие значения не будут работать.
+        </li>
+        <li>
+          Свойство <code>"prototype"</code> является особым, только когда оно
+          назначено функции-конструктору, которая вызывается оператором
+          <code>new</code>.
+        </li>
+      </ul>
+      <h3>Встроенные прототипы</h3>
+      <ul>
+        <li>
+          Все встроенные объекты следуют одному шаблону:
+          <ul>
+            <li>
+              Методы хранятся в прототипах (<code>Array.prototype</code>,
+              <code>Object.prototype</code>, <code>Date.prototype</code> и
+              т.д.).
+            </li>
+            <li>
+              Сами объекты хранят только данные (элементы массивов, свойства
+              объектов, даты).
+            </li>
+          </ul>
+        </li>
+        <li>
+          Примитивы также хранят свои методы в прототипах объектов-обёрток:
+          <code>Number.prototype</code>, <code>String.prototype</code>,
+          <code>Boolean.prototype</code>. Только у значений
+          <code>undefined</code> и <code>null</code> нет объектов-обёрток.
+        </li>
+        <li>
+          Встроенные прототипы могут быть изменены или дополнены новыми
+          методами. Но не рекомендуется менять их. Единственная допустимая
+          причина – это добавление нового метода из стандарта, который ещё не
+          поддерживается движком JavaScript.
+        </li>
+      </ul>
+      <p>Современные способы установки и прямого доступа к прототипу это:</p>
+      <ul>
+        <li>
+          <a
+            href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/create"
+            >Object.create(proto[, descriptors])</a
+          >
+          – создаёт пустой объект со свойством <code>[[Prototype]]</code>,
+          указанным как <code>proto</code> (может быть <code>null</code>), и
+          необязательными дескрипторами свойств.
+        </li>
+        <li>
+          <a
+            href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object.getPrototypeOf"
+            >Object.getPrototypeOf(obj)</a
+          >
+          – возвращает свойство <code>[[Prototype]]</code> объекта
+          <code>obj</code> (то же самое, что и геттер <code>__proto__</code>).
+        </li>
+        <li>
+          <a
+            href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object.setPrototypeOf"
+            >Object.setPrototypeOf(obj, proto)</a
+          >
+          – устанавливает свойство <code>[[Prototype]]</code> объекта
+          <code>obj</code> как <code>proto</code> (то же самое, что и сеттер
+          <code>__proto__</code>).
+        </li>
+      </ul>
+      <hr />
+
+      <h2>17. Про Классы (особенности, супер)</h2>
+      <p>Базовый синтаксис для классов выглядит так:</p>
+      <pre>
+        class MyClass {
+          prop = value; // свойство
+          constructor(...) { // конструктор
+            // ...
+          }
+          method(...) {} // метод
+          get something(...) {} // геттер
+          set something(...) {} // сеттер
+          [Symbol.iterator]() {} // метод с вычисляемым именем (здесь - символом)
+          // ...
+        }
+      </pre>
+      <p>Вот что на самом деле делает конструкция class User {...}:</p>
+      <ol>
+        <li>
+          Создаёт функцию с именем User, которая становится результатом
+          объявления класса. Код функции берётся из метода constructor (она
+          будет пустой, если такого метода нет).
+        </li>
+        <li>Сохраняет все методы, такие как sayHi, в User.prototype.</li>
+      </ol>
+      <p>
+        Чтобы унаследовать от класса: <code>class Child extends Parent</code>:
+        При этом <code>Child.prototype.__proto__</code> будет равен
+        <code>Parent.prototype</code>, так что методы будут унаследованы.
+      </p>
+      <p>
+        При переопределении конструктора: Обязателен вызов конструктора родителя
+        <code>super()</code> в конструкторе <code>Child</code> до обращения к
+        this.
+      </p>
+      <p>
+        При переопределении другого метода: Мы можем вызвать
+        <code>super.method()</code> в методе <code>Child</code> для обращения к
+        методу родителя Parent.
+      </p>
+      <pre>
+        stop() {
+          super.stop(); // вызываем родительский метод stop
+          this.hide(); // и затем hide
+        }
+      </pre>
+      <hr />
+
+      <h2>
+        18. Primitive vs reference types with example. Pass by value vs pass by
+        reference
+      </h2>
+      <p>
+        Одним из фундаментальных отличий объектов от примитивных типов данных
+        является то, что они хранятся и копируются «по ссылке».
+      </p>
+      <p>
+        Примитивные типы: строки, числа, логические значения – присваиваются и
+        копируются «по значению».
+      </p>
+      <p>
+        <b
+          >Переменная хранит не сам объект, а его «адрес в памяти», другими
+          словами «ссылку» на него.</b
+        >
+      </p>
+      <p>
+        <b
+          >Когда переменная объекта копируется – копируется ссылка, сам же
+          объект не дублируется.</b
+        >
+      </p>
+      <p>
+        <b
+          >Два объекта равны только в том случае, если это один и тот же
+          объект.</b
+        >
+      </p>
+      <hr />
+
+      <h2>
+        19. Как полностью скопировать объект, чтобы он не был связан с родителем
+      </h2>
+      <p>
+        нам нужно создавать новый объект и повторять структуру дублируемого
+        объекта, перебирая его свойства и копируя их.
+      </p>
+      <pre>
+        let user = {
+          name: "Иван",
+          age: 30
+        };
+        
+        let clone = {}; // новый пустой объект
+        
+        for (let key in user) {  // скопируем все свойства user в него
+          clone[key] = user[key];
+        }
+      </pre>
+      <p>
+        Кроме того, для этих целей мы можем использовать метод
+        <code>Object.assign</code>.
+      </p>
+      <pre>
+        Object.assign(dest, [src1, src2, src3...])
+      </pre>
+      <ul>
+        <li>Первый аргумент <code>dest</code> — целевой объект.</li>
+        <li>
+          Остальные аргументы <code>src1, ..., srcN</code> (может быть столько,
+          сколько нужно) являются исходными объектами
+        </li>
+        <li>
+          Метод копирует свойства всех исходных объектов
+          <code>src1, ..., srcN</code> в целевой объект <code>dest</code>. То
+          есть, свойства всех перечисленных объектов, начиная со второго,
+          копируются в первый объект.
+        </li>
+        <li>Возвращает объект <code>dest</code>.</li>
+      </ul>
+      <hr />
+
+      <h2>20. Set, Map, WeakMap, WeakSet</h2>
+      <h3>Map</h3>
+      <p><code>Map</code> – коллекция пар ключ-значение.</p>
+      <p>Методы и свойства:</p>
+      <ul>
+        <li>
+          <code>new Map([iterable])</code> – создаёт коллекцию, можно указать
+          перебираемый объект (обычно массив) из пар
+          <code>[ключ,значение]</code> для инициализации.
+        </li>
+        <li>
+          <code>map.set(key, value)</code> – записывает по ключу
+          <code>key</code> значение <code>value</code>.
+        </li>
+        <li>
+          <code>map.get(key)</code> – возвращает значение по ключу или
+          <code>undefined</code>, если ключ <code>key</code> отсутствует.
+        </li>
+        <li>
+          <code>map.has(key)</code> – возвращает <code>true</code>, если ключ
+          <code>key</code> присутствует в коллекции, иначе <code>false</code>.
+        </li>
+        <li>
+          <code>map.delete(key)</code> – удаляет элемент по ключу
+          <code>key</code>.
+        </li>
+        <li><code>map.clear()</code> – очищает коллекцию от всех элементов.</li>
+        <li>
+          <code>map.size</code> – возвращает текущее количество элементов.
+        </li>
+      </ul>
+      <p>Отличия от обычного объекта <code>Object</code>:</p>
+      <ul>
+        <li>Что угодно может быть ключом, в том числе и объекты.</li>
+        <li>Есть дополнительные методы, свойство <code>size</code>.</li>
+      </ul>
+      <h3>Set</h3>
+      <p>Методы и свойства:</p>
+      <ul>
+        <li>
+          <code>new Set([iterable])</code> – создаёт <code>Set</code>, можно
+          указать перебираемый объект со значениями для инициализации.
+        </li>
+        <li>
+          <code>set.add(value)</code> – добавляет значение (если оно уже есть,
+          то ничего не делает), возвращает тот же объект <code>set</code>.
+        </li>
+        <li>
+          <code>set.delete(value)</code> – удаляет значение, возвращает
+          <code>true</code> если <code>value</code> было в множестве на момент
+          вызова, иначе <code>false</code>.
+        </li>
+        <li>
+          <code>set.has(value)</code> – возвращает <code>true</code>, если
+          значение присутствует в множестве, иначе <code>false</code>.
+        </li>
+        <li><code>set.clear()</code> – удаляет все имеющиеся значения.</li>
+        <li>
+          <code>set.size</code> – возвращает количество элементов в множестве.
+        </li>
+      </ul>
+      <p>
+        Перебор <code>Map</code> и <code>Set</code> всегда осуществляется в
+        порядке добавления элементов, так что нельзя сказать, что это –
+        неупорядоченные коллекции, но поменять порядок элементов или получить
+        элемент напрямую по его номеру нельзя.
+      </p>
+      <h3>WeakMap</h3>
+      <p>
+        <code>WeakMap</code> – это <code>Map</code>-подобная коллекция,
+        позволяющая использовать в качестве ключей только объекты, и
+        автоматически удаляющая их вместе с соответствующими значениями, как
+        только они становятся недостижимыми иными путями.
+      </p>
+      <h3>WeakSet</h3>
+      <p>
+        <code>WeakSet</code> – это <code>Set</code>-подобная коллекция, которая
+        хранит только объекты и удаляет их, как только они становятся
+        недостижимыми иными путями.
+      </p>
+      <p>
+        Обе этих структуры данных не поддерживают методы и свойства, работающие
+        со всем содержимым сразу или возвращающие информацию о размере
+        коллекции. Возможны только операции на отдельном элементе коллекции.
+      </p>
+      <p>
+        <code>WeakMap</code> и <code>WeakSet</code> используются как
+        вспомогательные структуры данных в дополнение к «основному» месту
+        хранения объекта. Если объект удаляется из основного хранилища и нигде
+        не используется, кроме как в качестве ключа в <code>WeakMap</code> или в
+        <code>WeakSet</code>, то он будет удалён автоматически.
+      </p>
+      <hr />
+
+      <h2>21. Циклы, ветвления</h2>
+      <ul>
+        <li><code>while</code> – Проверяет условие перед каждой итерацией.</li>
+        <li>
+          <code>do..while</code> – Проверяет условие после каждой итерации.
+        </li>
+        <li>
+          <code>for (;;)</code> – Проверяет условие перед каждой итерацией, есть
+          возможность задать дополнительные настройки.
+        </li>
+      </ul>
+      <p>
+        Чтобы организовать бесконечный цикл, используют конструкцию
+        <code>while (true)</code>. При этом он, как и любой другой цикл, может
+        быть прерван директивой <code>break</code>.
+      </p>
+      <p>
+        Если на данной итерации цикла делать больше ничего не надо, но полностью
+        прекращать цикл не следует – используют директиву <code>continue</code>.
+      </p>
+      <p>
+        Обе этих директивы поддерживают <em>метки</em>, которые ставятся перед
+        циклом. Метки – единственный способ для
+        <code>break/continue</code> выйти за пределы текущего цикла, повлиять на
+        выполнение внешнего.
+      </p>
+      <p>
+        Заметим, что метки не позволяют прыгнуть в произвольное место кода, в
+        JavaScript нет такой возможности.
+      </p>
+      <p>Конструкция switch заменяет собой сразу несколько if</p>
+      <pre>
+          switch(x) {
+            case 'value1':  // if (x === 'value1')
+              ...
+              [break]
+          
+            case 'value2':  // if (x === 'value2')
+              ...
+              [break]
+          
+            default:
+              ...
+              [break]
+          }
+        </pre
+      >
+      <hr />
+
+      <h2>22. Методы массивов строк (будут простые задачи)</h2>
+      <h3>String</h3>
+      <ul>
+        <li>Для получения символа используйте <code>[]</code>.</li>
+        <li>
+          Для получения подстроки используйте <code>slice</code> или
+          <code>substring</code>.
+        </li>
+        <li>
+          Для того, чтобы перевести строку в нижний или верхний регистр,
+          используйте <code>toLowerCase/toUpperCase</code>.
+        </li>
+        <li>
+          Для поиска подстроки используйте <code>indexOf</code> или
+          <code>includes/startsWith/endsWith</code>, когда надо только
+          проверить, есть ли вхождение.
+        </li>
+      </ul>
+      <h3>Array</h3>
+      <ul>
+        <li>
+          <p>Для добавления/удаления элементов:</p>
+          <ul>
+            <li><code>push (...items)</code> – добавляет элементы в конец,</li>
+            <li><code>pop()</code> – извлекает элемент с конца,</li>
+            <li><code>shift()</code> – извлекает элемент с начала,</li>
+            <li>
+              <code>unshift(...items)</code> – добавляет элементы в начало.
+            </li>
+            <li>
+              <code>splice(pos, deleteCount, ...items)</code> – начиная с
+              индекса <code>pos</code>, удаляет
+              <code>deleteCount</code> элементов и вставляет <code>items</code>.
+            </li>
+            <li>
+              <code>slice(start, end)</code> – создаёт новый массив, копируя в
+              него элементы с позиции <code>start</code> до <code>end</code> (не
+              включая <code>end</code>).
+            </li>
+            <li>
+              <code>concat(...items)</code> – возвращает новый массив: копирует
+              все члены текущего массива и добавляет к нему <code>items</code>.
+              Если какой-то из <code>items</code> является массивом, тогда
+              берутся его элементы.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>Для поиска среди элементов:</p>
+          <ul>
+            <li>
+              <code>indexOf/lastIndexOf(item, pos)</code> – ищет
+              <code>item</code>, начиная с позиции <code>pos</code>, и
+              возвращает его индекс или <code>-1</code>, если ничего не найдено.
+            </li>
+            <li>
+              <code>includes(value)</code> – возвращает <code>true</code>, если
+              в массиве имеется элемент <code>value</code>, в противном случае
+              <code>false</code>.
+            </li>
+            <li>
+              <code>find/filter(func)</code> – фильтрует элементы через функцию
+              и отдаёт первое/все значения, при прохождении которых через
+              функцию возвращается <code>true</code>.
+            </li>
+            <li>
+              <code>findIndex</code> похож на <code>find</code>, но возвращает
+              индекс вместо значения.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>Для перебора элементов:</p>
+          <ul>
+            <li>
+              <code>forEach(func)</code> – вызывает <code>func</code> для
+              каждого элемента. Ничего не возвращает.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>Для преобразования массива:</p>
+          <ul>
+            <li>
+              <code>map(func)</code> – создаёт новый массив из результатов
+              вызова <code>func</code> для каждого элемента.
+            </li>
+            <li>
+              <code>sort(func)</code> – сортирует массив «на месте», а потом
+              возвращает его.
+            </li>
+            <li>
+              <code>reverse()</code> – «на месте» меняет порядок следования
+              элементов на противоположный и возвращает изменённый массив.
+            </li>
+            <li>
+              <code>split/join</code> – преобразует строку в массив и обратно.
+            </li>
+            <li>
+              <code>reduce(func, initial)</code> – вычисляет одно значение на
+              основе всего массива, вызывая <code>func</code> для каждого
+              элемента и передавая промежуточный результат между вызовами.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>Дополнительно:</p>
+          <ul>
+            <li>
+              <code>Array.isArray(arr)</code> проверяет, является ли
+              <code>arr</code> массивом.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <hr />
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Code smells</h2>
+
+    <h2>Pull request</h2>
+
+    <h2>Code review (для чего, как, best practices, на что смотреть)</h2>
+
+    <dl>
+      <dd>
+        Practice mandatory peer code review on a pull/merge request basis.
+      </dd>
+      <dd>
+        Identify how to choose and assign reviewers in the code review strategy
+        for your project.
+      </dd>
+      <dd>
+        Work with your team to develop a code review checklist: a guide that
+        every team member reviews regularly.
+      </dd>
+
+      <dd>Ensure that during the code review process, all team members:</dd>
+
+      <dd>Follow the coding standards.</dd>
+
+      <dd>Validate business logic.</dd>
+      <dd>
+        Validate unit tests for changed logic as a part of the code review
+        process.
+      </dd>
+    </dl>
+
+    <dl>
+      <dd>Functional Correctness/Business Logic</dd>
+      <dd>Structural Correctness/Design</dd>
+      <dd>Readability/Complexity</dd>
+      <dd>Test Correctness</dd>
+      <dd>Non-Functional Hidden Implications</dd>
+    </dl>
+
+    <h2>Dry, kiss, yagni</h2>
+
+    <h2>Код стайл</h2>
+
+    <h2>SOLID</h2>
+
+    <dl>
+      <dd>
+        S: Single Responsibility Principle (Принцип единственной
+        ответственности). Класс должен быть ответственен лишь за что-то одно.
+        Если класс отвечает за решение нескольких задач, его подсистемы,
+        реализующие решение этих задач, оказываются связанными друг с другом.
+      </dd>
+      <dd>
+        O: Open-Closed Principle (Принцип открытости-закрытости). Программные
+        сущности (классы, модули, функции) должны быть открыты для расширения,
+        но не для модификации.
+      </dd>
+      <dd>
+        L: Liskov Substitution Principle (Принцип подстановки Барбары Лисков).
+        Необходимо, чтобы подклассы могли бы служить заменой для своих
+        суперклассов. Цель этого принципа заключаются в том, чтобы
+        классы-наследники могли бы использоваться вместо родительских классов,
+        от которых они образованы, не нарушая работу программы.
+      </dd>
+      <dd>
+        I: Interface Segregation Principle (Принцип разделения интерфейса).
+        Создавайте узкоспециализированные интерфейсы, предназначенные для
+        конкретного клиента. Клиенты не должны зависеть от интерфейсов, которые
+        они не используют.
+      </dd>
+      <dd>
+        D: Dependency Inversion Principle (Принцип инверсии зависимостей).
+        Объектом зависимости должна быть абстракция, а не что-то конкретное.
+        Модули верхних уровней не должны зависеть от модулей нижних уровней. Оба
+        типа модулей должны зависеть от абстракций. Абстракции не должны
+        зависеть от деталей. Детали должны зависеть от абстракций.
+      </dd>
+    </dl>
+
+    <h2>Семантическое версионирование SemVerClean code</h2>
+
+    <h2>performance optimization techniques (в целом по проекту)</h2>
+
+    <dl>
+      <dd>Caching & Content Delivery Networks</dd>
+      <dd>Minimize HTTP Requests</dd>
+      <dd>Reduce Redirects</dd>
+      <dd>Enable Compression</dd>
+      <dd>Caching</dd>
+      <dd>Optimize Database</dd>
+      <dd>Optimize HTML, CSS and JavaScript</dd>
+      <dd>Optimize Images</dd>
+    </dl>
+  </body>
+</html>

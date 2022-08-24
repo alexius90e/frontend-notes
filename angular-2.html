@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angular Module 2</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Angular Module 2 <a href="./index.html">back ></a></h1>
+
+      <h2>19. Сервисы (провайдерс, констурктор, для чего)</h2>
+      <h3>What is an Angular Service</h3>
+      <p>
+        Angular сервис - это обычный класс, используемый в контексте Angular для
+        хранения глобального состояния приложения или в качестве поставщика
+        данных.
+      </p>
+      <p>
+        Компонент должен сосредоточиться на представлении данных пользователю.
+        Задача получения данных с внутреннего сервера должна быть делегирована
+        какому-то другому классу. Мы называем такой класс сервисным классом.
+        Потому что он предоставляет услугу предоставления данных каждому
+        компоненту, который в них нуждается.
+      </p>
+      <pre>
+        @Injectable({ providedIn: 'root' })
+        export class AccountsHttpService {
+          constructor(private http: HttpClient) {}
+
+          getUsers(): Observable {
+            return this.http.get('/api/users')
+          }
+        }
+      </pre>
+      <p>
+        Для того чтобы созданный сервис мог быть использован компонентом или
+        другим сервисом, его объявление должно предваряться декоратором
+        <code>@Injectable()</code>. Поскольку сервисы создаются именно для
+        стороннего использования, то рекомендуется всегда использовать
+        декоратор.
+      </p>
+      <h3>What Angular Services are used for</h3>
+      <ol>
+        <li>Функции, не зависящие от компонентов</li>
+        <li>Обмен логикой или данными между компонентами</li>
+        <li>Инкапсуляция внешних взаимодействий, такие как доступ к данным</li>
+      </ol>
+      <h3>Advantageous of Angular Service</h3>
+      <ol>
+        <li>Сервисы легче тестировать.</li>
+        <li>Их легче отлаживать.</li>
+        <li>Мы можем повторно использовать сервис во многих местах.</li>
+      </ol>
+      <h3>@Injectable</h3>
+      <p>
+        <code>Injectable</code> — это декоратор, который вам нужно добавить к
+        потребителю зависимости. Этот декоратор сообщает Angular, что он должен
+        внедрить аргументы конструктора через систему Angular DI.
+      </p>
+      <p>
+        Компоненты и директивы уже украшены декораторами
+        <code>@Component</code> и <code>@Directive</code>. Эти декораторы также
+        говорят Angular использовать DI, поэтому вам не нужно добавлять
+        <code>@Injectable()</code>.
+      </p>
+      <p>
+        Вводимый декоратор также имеет свойство <code>ProvidedIn</code>, с
+        помощью которого вы можете указать, как Angular должен предоставлять
+        зависимость.
+      </p>
+      <pre>
+        @Injectable({  
+          providedIn: 'root'
+        })
+        export class SomeService {}
+      </pre>
+      <h3>@Inject</h3>
+      <p>
+        <code>@Inject()</code> – это декоратор параметров конструктора, который
+        сообщает angular, что нужно внедрить параметр с зависимостью,
+        представленной в данном токене. Это ручной способ внедрения зависимости
+      </p>
+      <p>
+        @Inject принимает токен Injector в качестве параметра. Маркер
+        используется для обнаружения зависимости в Providers.
+      </p>
+      <pre>
+        export class ProductService{
+          constructor(@Inject(LoggerService) private loggerService) {
+              this.loggerService.log("Product Service Constructed");
+          }
+        }
+      </pre>
+      <h3>What are Angular Providers</h3>
+      <p>
+        Angular Provider — это инструкция (или рецепт), описывающая, как
+        создается объект для определенного токена. Angular Providers — это
+        массив таких инструкций (Provider).
+      </p>
+      <p>Есть два способа регистрации сервиса</p>
+      <ol>
+        <li>
+          Зарегистрированть непосредственно в массиве Providers @NgModule или
+          @Component или в @Directive.
+        </li>
+        <li>Или используйте свойство ProvidedIn декоратора @Injectable</li>
+      </ol>
+      <h3>Configuring the Angular Provider</h3>
+      <p>
+        Чтобы предоставить экземпляр зависимости, нам нужно зарегистрировать его
+        в метаданных Providers.
+      </p>
+      <pre>
+        providers: [ProductService]
+      </pre>
+      <p>Выше приведено фактическое сокращение для следующего синтаксиса</p>
+      <pre>
+        providers :[{ provide: ProductService, useClass: ProductService }]
+      </pre>
+      <p>Приведенный выше синтаксис имеет два свойства.</p>
+      <h4>Provide</h4>
+      <p>
+        Cодержит токен DI. Инжектор использует токен для поиска провайдера в
+        массиве Providers. Токен может быть типом, строкой или экземпляром
+        InjectionToken.
+      </p>
+      <h4>Provider</h4>
+      <p>
+        Он сообщает Angular, как создать экземпляр зависимости. Angular может
+        создать экземпляр зависимости четырьмя различными способами. Он может
+        создать зависимость от существующего класса обслуживания (useClass). Он
+        может вводить значение, массив или объект (useValue). Он может
+        использовать фабричную функцию, которая возвращает экземпляр класса
+        обслуживания или значение (useFactory). Он может вернуть экземпляр из
+        уже существующего токена (useExisting).
+      </p>
+      <h3>@Self</h3>
+      <p>
+        Декоратор @Self указывает Angular искать зависимость только в локальном
+        инжекторе. Локальный инжектор — это инжектор, являющийся частью текущего
+        компонента или директивы.
+      </p>
+      <h3>@SkipSelf</h3>
+      <p>
+        Декоратор @SkipSelf указывает Angular искать зависимость в родительском
+        инжекторе и выше.
+      </p>
+      <h3>@Optional</h3>
+      <p>
+        Необязательный помечает зависимость как необязательную. Если зависимость
+        не найдена, то вместо ошибки возвращается null
+      </p>
+      <h3>@Host</h3>
+      <p>
+        Parameter decorator on a view-provider parameter of a class constructor
+        that tells the DI framework to resolve the view by checking injectors of
+        child elements, and stop when reaching the host element of the current
+        component.
+      </p>
+      <hr />
+
+      <h2>20. Dependency injection: where we can provide services?</h2>
+      <p>
+        Dependency injection позволяет нам внедрять зависимости в Component,
+        Directives, Pipes, или Service
+      </p>
+      <h3>What is Angular Dependency Injection</h3>
+      <p>
+        Внедрение зависимостей (DI) — это метод, при котором класс получает свои
+        зависимости из внешних источников, а не создает их сам.
+      </p>
+      <h3>Benefits of Dependency Injection</h3>
+      <ol>
+        <li>Слабо связанный</li>
+        <li>Легче тестировать</li>
+        <li>Повторное использование компонента</li>
+      </ol>
+      <h3>Angular Dependency Injection Framework</h3>
+      <p>
+        В Angular Dependency Injection Framework есть пять основных игроков.
+      </p>
+      <ol>
+        <li>
+          <h4>Consumer (Потребитель)</h4>
+          Потребитель — это класс (компонент, директива или служба), которому
+          нужна зависимость.
+        </li>
+        <li>
+          <h4>Dependency (зависимость)</h4>
+          Сервис, который мы хотим видеть в нашем потребителе.
+        </li>
+        <li>
+          <h4>Injection Token (DI Token)</h4>
+          Токен внедрения (токен DI) однозначно идентифицирует зависимость. Мы
+          используем DI Token, когда регистрируем зависимость
+        </li>
+        <li>
+          <h4>Provider (поставщик)</h4>
+          Провайдеры поддерживают список зависимостей вместе со своим токеном
+          инъекции. Он использует токен инъекции для идентификации зависимости.
+        </li>
+        <li>
+          <h4>Injector</h4>
+          Инжектор содержит провайдеров и отвечает за разрешение зависимостей и
+          внедрение экземпляра зависимости потребителю. Инжектор использует DI
+          Token для поиска зависимости в провайдерах. Затем он создает экземпляр
+          зависимости и внедряет его в потребитель.
+        </li>
+      </ol>
+      <h3>Using Dependency Injection</h3>
+      <p>
+        Angular Предоставляет экземпляр Injector & Provider для каждого
+        компонента и директивы в приложении (Consumers). Он также создает
+        экземпляр Injector на уровне модуля, а также в корне приложения.
+      </p>
+      <p>
+        Зависимости регистрируются у провайдера. Это делается в метаданных
+        Providers инжектора.
+      </p>
+      <pre>
+        providers: [ProductService]
+      </pre>
+      <p>
+        Angular сервисы могут быть определены на уровне приложения, модуля или
+        компонента.
+      </p>
+      <p>Уровень приложения.</p>
+      <pre>
+        @Injectable({providedIn: 'root'})
+      </pre>
+      <p>Уровень модуля.</p>
+      <pre>
+        @Injectable({providedIn: AccountsModule})
+      </pre>
+      <p>Уровень компонента.</p>
+      <pre>
+        @Component({
+          selector: 'accounts-list',
+          providers: [AccountsHttpService],
+          template: `&lt;div&gt;My accounts&lt;/div&gt;`
+        })
+      </pre>
+      <h3>Asking for Dependency in the Constructor</h3>
+      <p>
+        Компоненты, директивы и службы (потребители) объявляют зависимости,
+        которые им нужны, в своем конструкторе.
+      </p>
+      <pre>
+        constructor(private productService:ProductService) {}
+      </pre>
+      <p>
+        Инжектор считывает зависимости из конструктора Потребителя. Затем он
+        ищет эту зависимость в провайдере. Поставщик предоставляет экземпляр и
+        инжектор, а затем внедряет их в потребитель.
+      </p>
+      <p>
+        Если экземпляр зависимости уже существует, он будет использовать его
+        повторно. Это сделает зависимость singleton.
+      </p>
+      <h3>Providing Dependency from Angular Module</h3>
+      <p>
+        Чтобы сделать зависимости доступными для всего приложения, нам нужно
+        зарегистрировать его в корневом модуле.
+      </p>
+      <pre>
+          import { BrowserModule } from '@angular/platform-browser';
+          import { NgModule } from '@angular/core';
+          import { AppComponent } from './app.component';
+          import { ProductService } from './product.service';
+          
+          @NgModule({
+            declarations: [AppComponent],
+            imports: [BrowserModule],
+            providers: [ProductService],
+            bootstrap: [AppComponent]
+          })
+          export class AppModule { }
+      </pre>
+      <h3>ProvidedIn</h3>
+      <p>
+        Вместо того, чтобы добавлять Service к поставщикам AppModule, вы также
+        можете добавить его в метаданные <code>providedIn</code> со значением
+        root.
+      </p>
+      <pre>
+        @Injectable({
+          providedIn:'root'
+        })
+        export class ProductService {
+      </pre>
+      <h3>Service Scope</h3>
+      <p>
+        Service, которые мы предоставляем в корневом модуле, относятся к области
+        приложения, мы можем получить к ним доступ из каждого компонента/службы
+        в приложении.
+      </p>
+      <p>
+        Service, предоставляемая в других модулях (кроме Lazy Loaded Module),
+        также доступна для всего приложения.
+      </p>
+      <p>
+        Service, предоставляемые в Lazy Loaded Module, относятся к области
+        модуля и доступны только в Lazy Loaded Module.
+      </p>
+      <p>
+        Service, предоставляемые на уровне компонента, доступны только для
+        компонента и дочерних компонентов.
+      </p>
+      <hr />
+
+      <h2>21. Способы динамической загрузки компонента</h2>
+      <p>
+        В этой версии упростилось API для создания динамического компонента (нам
+        больше не нужно заботиться о его фабрике), а в 13.2 версии классы
+        ComponentFactory и ComponentFactoryResolver устарели.
+      </p>
+      <p>
+        Теперь нам достаточно просто передать тип компонента
+        <code>DynamicComponent</code> в метод <code>createComponent()</code>, а
+        с фабрикой Angular сам разберется.
+      </p>
+      <h4>app.component.html</h4>
+      <pre>
+        &lt;div class="buttons-container"&gt;
+          &lt;button (click)="showDynamicComponent()"&gt;Show&lt;/button&gt;
+          &lt;button (click)="removeDynamicComponent()"&gt;Remove&lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;ng-template #dynamic&gt;&lt;/ng-template&gt;
+      </pre>
+      <h4>app.component.ts</h4>
+      <pre>
+        import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+        import { DynamicComponent } from './dynamic.component';
+
+        @Component({
+          selector: 'my-app',
+          templateUrl: './app.component.html',
+          styleUrls: ['./app.component.css'],
+        })
+        export class AppComponent {
+          @ViewChild('dynamic', { read: ViewContainerRef })
+          private viewRef: ViewContainerRef;
+
+          showDynamicComponent(): void {
+            this.viewRef.clear();
+            this.viewRef.createComponent(DynamicComponent);
+          }
+
+          removeDynamicComponent(): void {
+            this.viewRef.clear();
+          }
+        }
+      </pre>
+      <p>Создавать динамический компонент стало проще:</p>
+      <ol>
+        <li>не нужно беспокоиться о создании фабрики</li>
+        <li>не нужно инжектировать вспомогательные зависимости</li>
+        <li>
+          схожая сигнатура метода создания компонента не требует значительного
+          изменения кода
+        </li>
+      </ol>
+      <hr />
+
+      <h2>22. Template-driven forms vs Reactive forms.</h2>
+      <p>
+        Манипуляция формами (Angular forms) осуществляется мощными и
+        продуманными инструментами библиотеки @angular/forms.
+      </p>
+      <p>С точки зрения Angular различают формы:</p>
+      <ol>
+        <li>Стандартные (Template-driven);</li>
+        <li>Реактивные (Reactive).</li>
+      </ol>
+      <h3>Template-driven forms</h3>
+      <p>
+        Для создания Angular форм импортируйте <code>FormsModule</code> из
+        @angular/forms.
+      </p>
+      <p>Не забудьте добавить <code>FormsModule</code> в корневой модуль.</p>
+      <pre>
+        &lt;form&gt;
+          &lt;div&gt;
+            &lt;label&gt;Логин&lt;/label&gt;
+            &lt;input type="text" required name="login" /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label&gt;Пароль&lt;/label&gt;
+            &lt;input type="password" required name="password" /&gt;
+          &lt;/div&gt;
+        
+          &lt;button&gt;Войти&lt;/button&gt;
+        &lt;/form&gt;
+      </pre>
+      <pre>
+        loginForm: any = {
+          login: '',
+          password: '',
+        }
+      </pre>
+      <h3>Angular reactive forms</h3>
+      <p>
+        Реактивные формы (Angular reactive forms) построены на основе механизма,
+        использующего реактивный подход к программированию.
+      </p>
+      <p>
+        Для их использования нужно импортировать модуль ReactiveFormsModule.
+      </p>
+      <p>
+        Создание и валидация Angular reactive forms осуществляется прямо в
+        контроллере. В шаблоне привязывается уже определенная в компоненте
+        модель.
+      </p>
+      <h4>FormGroup и FormControl</h4>
+      <p>
+        Реактивная форма Angular — объединение взаимосвязанных полей (группа),
+        которое может содержать дочерние группы.
+      </p>
+      <p>
+        Группа представляет собой объект <code>FormGroup</code>, а поле — объект
+        <code>FormControl</code>. Оба класса импортируются из
+        <code>@angular/forms</code>.
+      </p>
+      <p>reactive-form-example.component.ts</p>
+      <pre>
+        @Component({
+          selector: 'reactive-form-example',
+          templateUrl: './reactive-form-example.component.html',
+        })
+        export class ReactiveFormExampleComponent {
+          buyTicketForm: FormGroup
+        
+          constructor() {
+            this._createForm()
+          }
+        
+          private _createForm() {
+            this.buyTicketForm = new FormGroup({
+              passenger: new FormControl(null),
+              passengerAge: new FormControl(null),
+        
+              passengerContacts: new FormGroup({
+                telegram: new FormControl(null),
+                whatsapp: new FormControl(null),
+              }),
+            })
+          }
+        }
+      </pre>
+      <p>reactive-form-example.component.html</p>
+      <pre>
+        &lt;form [formGroup]="buyTicketForm" novalidate&gt;
+          &lt;div&gt;
+            &lt;label&gt;Passenger&lt;/label&gt;
+            &lt;input type="text" formControlName="passenger" /&gt;
+          &lt;/div&gt;
+        
+          &lt;div&gt;
+            &lt;label&gt;Age&lt;/label&gt;
+            &lt;input type="number" formControlName="passengerAge" /&gt;
+          &lt;/div&gt;
+        
+          &lt;div formGroupName="passengerContacts"&gt;
+            &lt;div&gt;
+              &lt;label&gt;Telegram&lt;/label&gt;
+              &lt;input type="text" formControlName="telegram" /&gt;
+            &lt;/div&gt;
+        
+            &lt;div&gt;
+              &lt;label&gt;Whatsapp&lt;/label&gt;
+              &lt;input type="text" formControlName="whatsapp" /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      </pre>
+      <h4>Основные поля объекта реактивной формы Angular:</h4>
+      <ul>
+        <li>
+          <code>controls</code> — поля, включая вложенные
+          <code>FormGroup</code>;
+        </li>
+        <li><code>errors</code> — содержит ошибки валидации;</li>
+        <li>
+          <code>status</code> — строка, определяющая правильность заполнения
+          формы, значение либо <code>VALID</code>, либо <code>INVALID</code>;
+        </li>
+        <li><code>valid</code> — <code>true</code>, если форма валидна;</li>
+        <li><code>invalid</code> — <code>true</code>, если форма невалидна;</li>
+        <li>
+          <code>pristine</code> — <code>true</code>, если не было взаимодействия
+          с полями;
+        </li>
+        <li>
+          <code>touched</code> — <code>true</code>, если одно из полей
+          становилось активным (получало фокус);
+        </li>
+        <li>
+          <code>dirty</code> — <code>true</code>, если пользователь заполнил
+          хотя бы одно из полей;
+        </li>
+        <li><code>value</code> — значение формы в виде объекта;</li>
+        <li>
+          <code>statusChanges</code> — позволяет отслеживать изменение статуса
+          валидности;
+        </li>
+        <li>
+          <code>valueChanges</code> — позволяет отслеживать изменение значения.
+        </li>
+      </ul>
+      <p>
+        Реактивные формы позволяют обращаться к отдельному полю используя метод
+        get(), которому передается в виде строки наименование поля.
+      </p>
+      <pre>
+        this.loginForm.get('login') //поле
+        this.loginForm.get('address') //вложенная группа
+        this.loginForm.get('address.city') //поле вложенной группы
+      </pre>
+      <p>
+        Отслеживание изменений формы осуществляется через подписку на
+        valueChanges Observable. Функция обработчик принимает параметром
+        значение формы.
+      </p>
+      <pre>
+        this.loginForm.valueChanges.subscribe((v) => {
+          console.log(v)
+        })
+      </pre>
+      <p>Использовать valueChanges можно применительно к отдельному полю.</p>
+      <p>
+        Для сброса значений полей формы или полей одной из ее групп используется
+        метод reset(), который принимает объект с начальным значением.
+      </p>
+      <pre>
+        this.loginForm.reset()
+      </pre>
+      <h4>patchValue() и setValue()</h4>
+      <p>
+        Для задания форме значений, например, при редактировании данных,
+        полученных от сервера, используются методы <code>patchValue()</code> и
+        <code>setValue()</code>.
+      </p>
+      <p>
+        Методу <code>setValue()</code> должен передаваться объект, полностью
+        совпадающий по строению с описанной моделью формы, а
+        <code>patchValue()</code> — лишь часть этой структуры.
+      </p>
+      <p>
+        Если <code>setValue()</code> передать "неполную" модель, будет
+        сгенерирована ошибка.
+      </p>
+      <h4>FormArray</h4>
+      <p>
+        Для вывода (или динамического добавления) одной и той же группы или
+        отдельного поля более, чем один раз, необходим экземпляр класса
+        FormArray.
+      </p>
+      <p>
+        В представлении для обозначения сущности FormArray используется
+        formArrayName. Причем не должно быть совпадений значений formGroupName
+        или formControlName в пределах всей формы.
+      </p>
+      <h4>Angular Form Builder</h4>
+      <p>
+        В качестве альтернативы можно создать реактивную форму (и настоятельно
+        рекомендуется) с Angular FormBuilder.
+      </p>
+      <pre>
+        @Component({
+          selector: 'reactive-form-example',
+          templateUrl: './reactive-form-example.component.html',
+        })
+        export class ReactiveFormExampleComponent {
+          buyTicketForm: FormGroup
+        
+          constructor(private fb: FormBuilder) {
+            this._createForm()
+          }
+        
+          private _createForm() {
+            this.buyTicketForm = this.fb.group({
+              passenger: '',
+              passengerAge: '',
+            })
+          }
+        }
+      </pre>
+      <p>
+        Модель также может содержать дочерние FormGroup, созданные с помощью
+        Angular Form Builder.
+      </p>
+      <pre>
+        this.buyTicketForm = this.fb.group({
+          passenger: '',
+          passengerAge: '',
+          passengerContacts: this.fb.group({
+            telegram: '',
+            whatsapp: '',
+          }),
+        })
+      </pre>
+      <hr />
+
+      <h2>23. Routing & Navigation</h2>
+      <p>
+        Маршрутизация позволяет вам переходить из одной части приложения в
+        другую часть или из одного представления в другое представление.
+      </p>
+      <h3>The Angular Router Module</h3>
+      <p>
+        Router — это отдельный модуль в Angular. Он находится в собственном
+        пакете @angular/router. Модуль Router предоставляет необходимые сервисы
+        и директивы для навигации по представлениям приложений.
+      </p>
+      <p>С помощью Angular Router вы можете</p>
+      <ol>
+        <li>
+          Перейдите к определенному представлению, введя URL-адрес в адресной
+          строке.
+        </li>
+        <li>Передать необязательные параметры в представление</li>
+        <li>
+          Привяжите интерактивные элементы к представлению и загрузите
+          представление
+        </li>
+        <li>Обрабатывает кнопки «назад» и «вперед» браузера</li>
+        <li>Позволяет динамически загружать представление</li>
+        <li>
+          Защитите маршруты от неавторизованных пользователей с помощью Guards
+        </li>
+      </ol>
+      <h3>Components of Angular Router Module</h3>
+      <h4>Router</h4>
+      <p>
+        Angular <code>Router</code> — это объект, который позволяет переходить
+        от одного компонента к другому, когда пользователи выполняют нажатие
+        ссылок меню, кнопок или нажатие кнопки «назад/вперед» в браузере. Мы
+        можем получить доступ к объекту <code>Router</code> и использовать его
+        методы, такие как <code>navigation()</code> или
+        <code>navigationByUrl()</code>, для перехода к маршруту.
+      </p>
+      <h4>Route</h4>
+      <p>
+        Route сообщает Angular <code>Router</code>, какое представление
+        отображать, когда пользователь щелкает ссылку или вставляет URL-адрес в
+        адресную строку браузера. Каждый маршрут состоит из пути и компонента, с
+        которым он сопоставлен.
+      </p>
+      <h4>Routes</h4>
+      <p><code>Routes</code> — это массив объектов <code>Route</code></p>
+      <h4>RouterOutlet</h4>
+      <p>
+        <code>RouterOutlet</code> — это директива (<code>router-outlet</code>),
+        которая служит указателем, где маршрутизатор должен отображать
+        представление.
+      </p>
+      <h4>RouterLink</h4>
+      <p>
+        <code>RouterLink</code> — это директива, которая связывает HTML-элемент
+        с <code>Route</code>. Нажатие на элемент HTML, привязанный к
+        <code>RouterLink</code>, приведет к переходу к Route. ц может содержать
+        параметры для передачи компоненту маршрута.
+      </p>
+      <h4>RouterLinkActive</h4>
+      <p>
+        <code>RouterLinkActive</code> — это директива для добавления или
+        удаления классов из элемента HTML, привязанного к
+        <code>RouterLink</code>. Используя эту директиву, мы можем переключать
+        классы CSS для активных RouterLink на основе текущего состояния
+        <code>RouterState</code>.
+      </p>
+      <h4>ActivatedRoute</h4>
+      <p>
+        <code>ActivatedRoute</code> — это объект, представляющий текущий
+        активированный маршрут, связанный с загруженным компонентом.
+      </p>
+      <h4>RouterState</h4>
+      <p>
+        Текущее состояние маршрутизатора, включая дерево активных в данный
+        момент маршрутов вместе с удобными методами обхода дерева маршрутов.
+      </p>
+      <h4>RouteLink Parameters array</h4>
+      <p>
+        Параметры или аргументы для <code>Route</code>. Это массив, который вы
+        можете привязать к директиве <code>RouterLink</code> или передать в
+        качестве аргумента методу <code>Router.navigate</code>.
+      </p>
+      <h3>How to configure Angular Router</h3>
+      <p>
+        Чтобы настроить маршрутизатор в Angular, вам необходимо выполнить
+        следующие действия.
+      </p>
+      <ol>
+        <li>Установите базовый адрес</li>
+        <li>Определить маршруты для view</li>
+        <li>Зарегистрируйте Router Service с помощью Routes</li>
+        <li>Сопоставление действий элемента HTML с маршрутом</li>
+        <li>Выберите, где вы хотите отобразить представление</li>
+      </ol>
+      <p>
+        Чтобы маршрутизация HTML5 работала, нам нужно настроить «base href» в
+        DOM. Это делается в файле index.html приложения сразу после тега head.
+      </p>
+      <p>
+        Затем создайте массив объектов маршрута. Каждый маршрут отображает путь
+        (сегмент URL) к компоненту
+      </p>
+      <pre>
+        const appRoutes={ path: 'product', component: ProductComponent }
+      </pre>
+      <p>
+        Импортируйте модуль маршрутизатора из библиотеки @angular/router в
+        корневой модуль приложения.
+      </p>
+      <pre>
+        import { RouterModule } from '@angular/router';
+      </pre>
+      <p>
+        Затем установите маршруты с помощью метода RouterModule.forRoot, передав
+        маршруты в качестве аргумента в массиве импорта.
+      </p>
+      <pre>
+        imports: [RouterModule.forRoot(routes)],
+      </pre>
+      <p>
+        Далее нам нужно привязать событие клика к маршруту. Это делается с
+        помощью директивы routerlink.
+      </p>
+      <pre>
+        &lt;li&gt;&lt;a [routerLink]="['product']"&gt;Product&lt;/a&gt;&lt;/li&gt;
+      </pre>
+      <p>
+        Наконец, нам нужно указать angular, где отображать представление. Это
+        делается с помощью директивы RouterOutlet
+      </p>
+      <pre>
+        &lt;router-outlet&gt;&lt;/router-outlet&gt;
+      </pre>
+      <p>При определении маршрута можно указать ряд свойств:</p>
+      <ol>
+        <li><code>path</code> — наименование маршрута;</li>
+        <li>
+          <code>component</code> — компонент для отображения при переходе на
+          URL, совпадающий с <code>path</code>;
+        </li>
+        <li>
+          <code>children</code> — одно из дополнительных свойств, объединяющее в
+          себе группу маршрутов относительно текущего;
+        </li>
+        <li>
+          <code>data</code> — дополнительные данные, например, значение хлебных
+          крошек;
+        </li>
+        <li>
+          <code>redirectTo</code> — перенаправляет на указанный URL при
+          попадании на маршрут, указанный в path;
+        </li>
+        <li><code>pathMatch</code> — используется совместно с redirectTo.</li>
+      </ol>
+      <h3>Location Strategy in Angular</h3>
+      <p>Angular поддерживает две стратегии определения местоположения:</p>
+      <ol>
+        <li>
+          <b>HashLocationStrategy</b>: Where URL looks like
+          http://localhost:4200/#/product
+        </li>
+        <li>
+          <b>PathLocationStrategy</b> Where URL looks like
+          http://localhost:4200/product
+        </li>
+      </ol>
+      <h3>How to Pass parameters to Angular Route</h3>
+      <h4>Defining the Route</h4>
+      <p>
+        Мы можем определить параметр, добавив косую черту, за которой следует
+        двоеточие и заполнитель (id), как показано ниже.
+      </p>
+      <pre>
+        { path: 'product/:id', component: ProductDetailComponent }
+      </pre>
+      <h4>Defining the Navigation</h4>
+      <p>
+        Это делается путем добавления productID в качестве второго элемента в
+        массив параметров routerLink, как показано ниже.
+      </p>
+      <pre>
+        [routerLink]="['/Product', ‘2’]"
+      </pre>
+      <p>или</p>
+      <pre>
+        [routerLink]="['/Product', product.productID]"
+      </pre>
+      <h3>Retrieve the parameter in the component</h3>
+      <p>
+        ActivatedRoute — это служба, которая отслеживает текущий активированный
+        маршрут, связанный с загруженным компонентом.
+      </p>
+      <p>
+        Чтобы использовать ActivatedRoute, нам нужно импортировать его в наш
+        компонент
+      </p>
+      <pre>
+        import { ActivatedRoute } from '@angular/router';
+      </pre>
+      <p>Затем введите его в компонент, используя внедрение зависимостей.</p>
+      <pre>
+        constructor(private _Activatedroute:ActivatedRoute)
+      </pre>
+      <h3>ParamMap</h3>
+      <p>
+        Angular добавляет на карту все параметры маршрута в объекте ParamMap,
+        доступ к которому можно получить из службы ActivatedRoute.
+      </p>
+      <p>
+        Существует два способа использования ActivatedRoute для получения
+        значения параметра из объекта ParamMap.
+      </p>
+      <h4>Using Snapshot</h4>
+      <pre>
+        this.id=this._Activatedroute.snapshot.paramMap.get("id");
+      </pre>
+      <h4>Using observable</h4>
+      <pre>
+        this._Activatedroute.paramMap.subscribe(params => { 
+          this.id = params.get('id'); 
+        });
+      </pre>
+      <h3>How to Create Child Routes</h3>
+      <p>
+        Определение дочернего маршрута аналогично определению родительского
+        маршрута. У него есть путь и компонент, который вызывается, когда
+        пользователь переходит к дочернему маршруту.
+      </p>
+      <pre>
+        { path: 'product',
+          component: ProductComponent,
+          children: [
+            { path: 'detail/:id', component: ProductDetailComponent }
+          ],
+        }   
+      </pre>
+      <h3>What are query parameters</h3>
+      <p>
+        Параметры запроса — это необязательные параметры, которые вы передаете
+        маршруту. Параметры запроса добавляются в конец URL-адреса, разделенного
+        вопросительным знаком.
+      </p>
+      <p>
+        Вы можете передать более одного параметра запроса, как показано ниже.
+      </p>
+      <pre>
+        [routerLink]="['product']" [queryParams]="{ val1:2 , val2:10}"
+      </pre>
+      <p>
+        Маршрутизатор создаст URL-адрес как <code>/product?val1=2&val2=10</code>
+      </p>
+      <h3>How to use Query Parameters</h3>
+      <p>
+        Используйте директиву queryParams, чтобы добавить параметр запроса.
+        Используйте эту директиву вместе с директивой routerlink, как показано
+        ниже.
+      </p>
+      <pre>
+        [routerLink]="['product']" [queryParams]="{ page:2 }"
+      </pre>
+      <p>
+        Чтение параметров запроса аналогично чтению параметра маршрутизатора
+        (<code>queryParamMap</code>).
+      </p>
+      <h3>Relative and Absolute Paths in Routes</h3>
+      <p>
+        Мы можем использовать синтаксис, например / (корневой узел), ./ (текущий
+        узел) или ../ (родительский узел) в массиве параметров ссылки.
+      </p>
+      <p>
+        Если Первый сегмент маршрута начинается с «/», то путь считается
+        Абсолютным путем.
+      </p>
+      <p>
+        Если первый сегмент начинается с «./» или не начинается с косой черты,
+        путь считается относительным.
+      </p>
+      <p>
+        And if the First segment begins with “. ./“, then the path is relative
+        to the parent route. (one level up)
+      </p>
+      <hr />
+
+      <h2>24. Как ограничить доступ к странице</h2>
+      <p>
+        Guards позволяют ограничить доступ к маршрутам на основе определенного
+        условия, например, только авторизованные пользователи с определенным
+        набором прав могут просматривать страницу.
+      </p>
+      <p>Различают следующие виды Guards-ов:</p>
+      <ol>
+        <li>
+          <code>CanActivate</code> - разрешает/запрещает доступ к маршруту;
+        </li>
+        <li>
+          <code>CanActivateChild</code> -разрешает/запрещает доступ к дочернему
+          маршруту;
+        </li>
+        <li>
+          <code>CanDeactivate</code> - разрешает/запрещает уход с текущего
+          маршрута;
+        </li>
+        <li>
+          <code>Resolve</code> - выполняет какое-либо действие перед переходом
+          на маршрут, обычно ожидает данные от сервера;
+        </li>
+        <li>
+          <code>CanLoad</code> - разрешает/запрещает загрузку модуля,
+          загружаемого асинхронно.
+        </li>
+      </ol>
+      <p>
+        Все guard-ы должны возвращать либо <code>true</code>, либо
+        <code>false</code>. И происходить это может как в синхронном режиме (тип
+        Boolean), так и в асинхронном режиме (Observable&lt;boolean&gt; или
+        Promise&lt;boolean&gt;).
+      </p>
+      <p>
+        Если будет возвращено <code>false</code>, будет инициировано событие
+        маршрутизации <code>NavigationCancel</code>.
+      </p>
+      <p>
+        У одного URL может быть одновременно несколько guard-ов, причем одного и
+        того же типа. Все guard-ы - обычные классы, реализующие определенный
+        интерфейс. Указываются они в виде массива значением одноименных свойств
+        при определении маршрутов.
+      </p>
+      <p>
+        Сначала выполняются <code>CanDeactivate</code> и
+        <code>CanActivateChild</code>, затем - <code>CanActivate</code>.
+        <code>CanLoad</code> будет вызван только в случае асинхронной загрузки
+        модуля.
+      </p>
+      <p>auth.guard.ts</p>
+      <pre>
+        @Injectable()
+        export class AuthGuard
+          implements CanActivate, CanActivateChild {
+          constructor( private auth: AuthService ) {}
+
+          canActivate(
+            next: ActivatedRouteSnapshot,
+            state: RouterStateSnapshot
+          ): boolean {
+            return this.auth.isLoggedIn
+          }
+
+          canActivateChild(
+            next: ActivatedRouteSnapshot,
+            state: RouterStateSnapshot
+          ): boolean {
+            return this.canActivate(next, state)
+          }
+        }
+      </pre>
+      <p>
+        В AuthGuard реализуется интерфейс <code>CanActivate</code> и
+        <code>CanActivateChild</code>
+        (создаваемый класс обязательно должен содержать определение метода
+        <code>CanActivate</code> и
+        <code>CanActivateChild</code> соответственно).
+      </p>
+      <p>
+        Присутствие <code>CanActivateChild</code> говорит о том, что метод будет
+        вызываться при каждом переходе на дочерний URL независимо от уровня
+        иерархии. Часто оба метода выполняют одну и ту же проверку, и
+        <code>CanActivateChild</code> нужен в этом случае для того, чтобы
+        указать его у самого верхнего маршрута.
+      </p>
+      <p>can-deactivate.guard.ts</p>
+      <pre>
+        @Injectable()
+        export class DataChangesGuard
+          implements CanDeactivate&lt;BuyTicketFormComponent&gt; {
+          constructor() {}
+
+          canDeactivate(
+            component: BuyTicketFormComponent,
+            currentRoute: ActivatedRouteSnapshot,
+            currentState: RouterStateSnapshot,
+            nextState: RouterStateSnapshot
+          ) {
+            if (component.buyTicketForm.dirty)
+              return window.confirm(
+                'Unsaved data detected. Want to exit?'
+              )
+            else return true
+          }
+        }
+      </pre>
+      <p>
+        После того, как пользователь попал на маршрут, можно предотвратить с
+        него уход используя <code>CanDeactivate</code> guard-а. Например, можно
+        попросить пользователя подтвердить уход со страницы, чтобы предотвратить
+        потерю несохраненных данных или других внесенных изменений.
+      </p>
+      <p>
+        При обращении приложения к удаленному API, отображение данных происходит
+        с некоторой задержкой, во время которой интерфейс может оказаться
+        "сломанным", что сразу негативно скажется на общем впечатлении.
+      </p>
+      <p>
+        <code>Resolver</code> - это сервис, реализующий интерфейс
+        <code>Resolve</code>, а именно метод <code>resolve()</code>, который
+        обязательно должен возвращать данные типа <code>Observable</code>.
+        Указанный для любого маршрута, <code>Resolver</code> разрешает переход
+        на него после выполнения <code>Observable</code> в
+        <code>resolve()</code>.
+      </p>
+      <p>
+        Выполнение метода <code>resolve()</code> (как синхронного, так и
+        асинхронного) инициирует событие <code>NavigationEnd</code>, что можно
+        использовать для скрытия прелоадера при переходах между страницами.
+      </p>
+      <hr />
+
+      <h2>
+        25. Что будет с 2+ router-outlets в одном компоненте. Как сделать, чтобы
+        2 router-outlets рендерили данные
+      </h2>
+      <p>
+        Каждая <code>router-outlet</code> может иметь уникальное имя,
+        определяемое необязательным атрибутом <code>name</code>. Имя нельзя
+        установить или изменить динамически.
+      </p>
+      <p>
+        Именованные <code>router-outlet</code> могут быть целями вторичных
+        маршрутов. Объект Route для вторичного маршрута имеет свойство
+        <code>outlet</code> для идентификации целевого <code>outlet</code>:
+      </p>
+      <pre>
+        {path: &lt;base-path&gt;, component: &lt;component&gt;, outlet: &lt;target_outlet_name&gt;}
+      </pre>
+      <p>
+        Используя именованные <code>router-outlet</code> и вторичные маршруты,
+        вы можете настроить таргетинг на несколько <code>router-outlet</code> в
+        одной и той же директиве <code>RouterLink</code>.
+      </p>
+      <hr />
+
+      <h2>
+        26. Что будет с 2+ ng-content одной странице. Как сделать, чтобы 2
+        ng-content рендерили данные
+      </h2>
+      <p>
+        <code>ng-content</code> позволяет нам создавать несколько слотов в
+        шаблоне. Каждый слот должен определять селектор.
+      </p>
+      <p>
+        В родительском компоненте мы можем создавать различное содержимое, и
+        каждое содержиме может быть проецировано в любой слот в зависимости от
+        селектора. Для реализации этого мы используем атрибут
+        <code>select</code> <code>ng-content</code>. Атрибут
+        <code>select</code> — это селектор CSS.
+      </p>
+      <p>Parent component template</p>
+      <pre>
+        &lt;app-card&gt;
+          &lt;header&gt;&lt;h1&gt;Angular&lt;/h1&gt;&lt;/header&gt;
+          &lt;main&gt;One framework. Mobile & desktop.&lt;/main&gt;
+          &lt;footer&gt;&lt;b&gt;Super-powered by Google &lt;/b&gt;&lt;/footer&gt;
+         &lt;/app-card&gt;
+      </pre>
+      <p>Child component template</p>
+      <pre>
+        &lt;ng-content&gt; select="custom-element" &gt;&lt;/ng-content&gt;
+        &lt;ng-content&gt; select=".custom-class" &gt;&lt;/ng-content&gt;
+        &lt;ng-content&gt; select="[custom-attribute]" &gt;&lt;/ng-content&gt;
+      </pre>
+      <p>
+        <code>ng-content</code> без селектора будет отображать весь контент,
+        который нельзя проецировать ни в какие другие слоты.
+      </p>
+      <hr />
+
+      <h2>27. Lazy loading components.</h2>
+      <p>
+        Приложения Angular становятся больше по мере того, как мы добавляем все
+        больше и больше функций. Модули Angular помогают нам управлять
+        приложением, создавая отдельные модули для каждой новой функции.
+      </p>
+      <p>
+        Но чем больше размер приложения, тем медленнее оно загружается. Это
+        из-за того, что angular загружает все приложение заранее.
+      </p>
+      <h3>How Lazy loading works</h3>
+      <p>
+        В Angular Lazy loading работает на уровне модуля. то есть вы можете
+        лениво загружать только модули Angular.
+        <b>Мы не можем лениво загружать отдельные компоненты.</b>
+      </p>
+      <p>
+        Ленивая загрузка работает через модуль <code>Angular Router</code>.
+        Метод <code>loadChildren</code> маршрутизатора Angular отвечает за
+        загрузку модулей.
+      </p>
+      <pre>
+        {path: "admin", loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)},
+      </pre>
+      <h3>loadChildren</h3>
+      <p>
+        Нам нужно предоставить функцию обратного вызова для аргумента
+        <code>loadChildren</code>. Обратный вызов должен загрузить
+        <code>AdminModule</code>.
+      </p>
+      <p>
+        Мы используем синтаксис динамического импорта. Метод импорта загружает
+        модуль по пути, который мы предоставляем ему в качестве аргумента.
+      </p>
+      <p>
+        Модуль с Lazy loading загружается только при первом посещении
+        URL-адреса, он не будет загружаться при повторном посещении этого
+        URL-адреса.
+      </p>
+      <hr />
+
+      <h2>28. JIT vs AOT Compilation</h2>
+      <p>Angular предоставляет два режима компиляции:</p>
+      <ol>
+        <li>AOT(Ahead Of Time) Compilation</li>
+        <li>JIT(Just In Time) Compilation</li>
+      </ol>
+      <p>
+        До Angular 8 режим компиляции по умолчанию был JIT, но начиная с Angular
+        9 компиляция по умолчанию — AOT.
+      </p>
+      <h3>JIT</h3>
+      <p>
+        В режиме JIT приложение компилируется во время выполнения приложения.
+        Браузер загружает компилятор вместе с файлами проекта. Компилятор — это
+        около 45% файла vendor.bundle.js, загружаемого в браузер.
+      </p>
+      <h4>Недостатки JIT-компилятора</h4>
+      <ol>
+        <li>
+          Увеличивает размер приложения из-за компилятора в браузере, что влияет
+          на общую производительность приложения.
+        </li>
+        <li>
+          Пользователь должен дождаться загрузки сначала компилятора, а затем
+          приложения. Таким образом, увеличивается время загрузки.
+        </li>
+        <li>
+          Кроме того, ошибки привязки шаблона не отображаются во время сборки.
+        </li>
+      </ol>
+      <h3>AOT</h3>
+      <p>
+        AOT компиляция выполняется в процессе сборки, а скомпилированные файлы
+        обрабатываются и объединяются в поставщике. bundle.js, который
+        загружается браузером. Компиляция происходит во время сборки, поэтому
+        размер уменьшается на 50%.
+      </p>
+      <h4>Преимущества AOT-компиляции :</h4>
+      <ol>
+        <li>
+          Рендеринг приложения становится быстрее, так как браузер загружает
+          только предварительно скомпилированную версию приложения.
+        </li>
+        <li>
+          Небольшой размер приложения, потому что оно не включает в себя
+          компилятор, так как компилятор занимает половину фактического размера
+          приложения.
+        </li>
+        <li>
+          Выявляются ошибки привязки шаблона во время сборки приложения.
+          Следовательно, это помогает быстро выйти из строя и упрощает процесс
+          разработки.
+        </li>
+      </ol>
+      <hr />
+
+      <h2>29. Ways to improve Angular app performance.</h2>
+      <h3>Performance Issues</h3>
+      <ol>
+        <li>Unnecessary server usage</li>
+        <li>Slow page response</li>
+        <li>Unexpected errors due to a real-time data stream</li>
+        <li>Periodic slowdown</li>
+      </ol>
+      <h3>Methods of performance optimization techniques</h3>
+      <ol>
+        <li>
+          <h4>Using AoT Compilation</h4>
+          <p>
+            Так, размер бандла уменьшается, а время рендеринга значительно
+            увеличивается. Итак, мы всегда должны использовать компиляцию AoT
+            для наших приложений.
+          </p>
+        </li>
+        <li>
+          <h4>Using OnPush Change Detection Strategy</h4>
+          Стратегия OnPush делает наш компонент умнее. Он вызывает обнаружение
+          изменений текущего компонента только при изменении привязок @input. Он
+          запускает обнаружение изменений только для компонентов-потомков. Таким
+          образом, это помогает улучшить производительность приложения.
+        </li>
+        <li>
+          <h4>Using Pure Pipes</h4>
+          Angular применяет хороший метод оптимизации: метод «transform»,
+          который вызывается только в том случае, если изменяется ссылка на
+          значение, которое он преобразует, или если изменяется один из
+          аргументов. Он кэширует значение для конкретной привязки и использует
+          его, когда получает такое же значение.
+        </li>
+        <li>
+          <h4>Unsubscribe from Observables</h4>
+          всегда рекомендуется отписываться от <code>Observables</code> с
+          помощью хука жизненного цикла <code>onDestroy</code>.
+        </li>
+        <li>
+          <h4>Lazy Loading</h4>
+          <p>
+            Как только размер сборки увеличивается, производительность падает
+            экспоненциально
+          </p>
+          <p>
+            Это можно решить с помощью Lazy Loading. Lazy Loading загружает
+            только необходимые модули при начальной загрузке. Это не только
+            уменьшает размер сборки, но и уменьшает время загрузки. Другие
+            модули загружаются только тогда, когда пользователь переходит по
+            роутам.
+          </p>
+        </li>
+        <li>
+          <h4>Use trackBy option for For Loop</h4>
+          <p>
+            Для каждого добавления и удаления данных запускается Change
+            Detection и проверяет, имеет ли объект какое-то новое значение. Если
+            он находит изменения, он уничтожает предыдущий DOM и заново создает
+            DOM для каждого элемента.
+          </p>
+          <p>
+            Это оказывает огромное влияние на производительность, поскольку
+            рендеринг DOM обходится дорого. Итак, для исправления этого
+            используется функция <code>trackBy</code>. Он отслеживает все
+            изменения и обновляет только измененные значения.
+          </p>
+        </li>
+        <li>
+          <h4>Avoid computation in template files</h4>
+          Необходимо, чтобы шаблонные выражения выполнялись быстро. Если
+          требуется много вычислений, их следует переместить в файл компонента и
+          выполнить расчет заранее.
+        </li>
+        <li>
+          <h4>Usage of Web Workers</h4>
+          Использование веб-воркеров для выполнения тяжелых вычислений и потока
+          DOM для легких задач помогает нам повысить эффективность и сократить
+          время загрузки.
+        </li>
+      </ol>
+      <hr />
+
+      <h2>30. Как повесить стили на сам компонент в css/scss</h2>
+      <h3>:host</h3>
+      <p>Cелектор псевдокласса <code>:host</code> стилизует хост компонент.</p>
+      <pre>
+        :host {
+          display: block;
+          background-color: lightcoral;
+        }
+      </pre>
+      <p>
+        Селектор <code>:host</code> является единственным способом стилизовать
+        хост т.к. он не является частью собственного шаблона компонента. Элемент
+        host находится в шаблоне родительского компонента.
+      </p>
+      <h3>:host(selector)</h3>
+      <p>
+        Для установки стилей хост компоненту при наличии на нём определённого
+        класса используется функциональная форма с круглыми скобками
+        <code>:host(selector)</code>
+      </p>
+      <p>
+        Следующий стиль будет применён к хост компоненту, если на компонент
+        повесить класс <code>active</code> например через
+        <code>@HostBinding</code> т.е.
+        <code>&lt;hello class="active"&gt;&lt;/hello&gt;</code>
+      </p>
+      <h3>:host-context(selector)</h3>
+      <p>
+        Для установки стилей зависящих от каскада родительских элементов
+        применяется форма <code>:host-context(selector)</code>
+      </p>
+      <p>
+        Следующий стиль будет применён к хост компоненту, если он размещен
+        внутри <code>&lt;aside&gt;</code> элемента
+        (<code>&lt;aside&gt;&lt;hello&gt;&lt;/hello&gt;&lt;/aside&gt;</code>)
+      </p>
+      <pre>
+        :host-context(aside) {
+          text-align: right;
+          background-color: lightblue;
+        }
+      </pre>
+      <hr />
+
+      <h2>31. Ivy, Tree shaking</h2>
+      <p>
+        Angular Ivy представляет собой абсолютно новый компилятор, который
+        пришел на смену View Engine. Разработка Angular Ivy началась задолго до
+        его официального релиза, и начиная с версии 8 он стал доступен в
+        тестовом режиме, а стабильная версия появилась уже в Angular 9.
+      </p>
+      <p>Преимущества Angular Ivy:</p>
+      <ol>
+        <li>
+          Более быстрая сборка за счет того, что зависимые компоненты и
+          директивы теперь не включаются в зависящий компонент, вместо этого в
+          зависящем компоненте указываются ссылки на зависимости, Таким образом,
+          при изменении одной из зависимостей нужно перекомпилировать только ее,
+          а не весь использующий ее код;
+        </li>
+        <li>
+          Меньший размер файлов сборки из-за преобразования всех декораторов в
+          статические методы класса и большей подверженности файлов процессу под
+          названием Tree Shaking;
+        </li>
+        <li>Усовершенствованная отладка;</li>
+        <li>Использование динамической загрузки.</li>
+      </ol>
+      <p>
+        Для активации/деактивации Angular Ivy в уже созданном проекте,
+        необходимо в файле <code>tsconfig.app.json</code> изменить значение
+        параметра <code>enableIvy</code> в блоке
+        <code>angularCompilerOptions</code>.
+      </p>
+      <pre>
+        {
+          "angularCompilerOptions": {
+            "enableIvy": true
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>32. Animation in Angular</h2>
+      <p>
+        Angular имеет свой собственный механизм реализации анимаций, в основе
+        которого лежит стандарт Web Animations API.
+      </p>
+      <p>
+        За Angular анимацию отвечает модуль
+        <code>BrowserAnimationsModule</code>.
+      </p>
+      <p>
+        Анимации определяются прямо в<code> @Component()</code> и состоят из
+        множества сменяющих друг друга состояний конкретного элемента. Описания
+        состояний объединяются в триггер, который и является полноценной Angular
+        animation. Рассмотрим пример.
+      </p>
+      <p>example-panel.component.ts</p>
+      <pre>
+        @Component({
+          selector: 'example-panel',
+          templateUrl: './example-panel.component.html',
+          animations: [
+            trigger('expandedPanel', [
+              state('initial', style({ height: 0 })),
+              state('expanded', style({ height: '*' })),
+              transition('initial <=> expanded', animate('0.3s')),
+            ]),
+          ],
+        })
+        export class ExamplePanelComponent {
+          isExpanded: boolean = false
+          state: string = 'initial'
+        
+          expand() {
+            this.isExpanded = !this.isExpanded
+            this.state = this.isExpanded ? 'expanded' : 'initial'
+          }
+        }
+      </pre>
+      <p>example-panel.component.html</p>
+      <pre>
+        &lt;p (click)="expand()"&gt;Toggle panel&lt;/p&gt;
+      
+        &lt;div class="content" [@expandedPanel]="state"&gt;
+          &lt;h1&gt;Title&lt;/h1&gt;
+          &lt;p&gt;Expanded panel&lt;/p&gt;
+        &lt;/div&gt;
+      </pre>
+      <p>
+        Триггер определяется функцией trigger(), принимающей два аргумента - имя
+        анимации и массив с определением состояний и описанием их смены.
+      </p>
+      <p>
+        Состояние описывается функцией state(). В качестве параметров ей
+        передаются название состояния и набор CSS-стилей, задаваемых функцией
+        style().
+      </p>
+      <p>
+        В представлении активация анимации контролируется специальным атрибутом
+        (имя триггера с префиксом @, заключенное в квадратные скобки). В
+        качестве значения атрибуту передается название одного из определенных
+        для анимации состояний. Angular animation срабатывает, если описана пара
+        состояний "было" => "стало"
+      </p>
+      <p>
+        Для указания всех состояний используйте *. Например, если анимация
+        должна срабатывать при переходе с initial на любое другое состояние, то
+        это указывается так:
+      </p>
+      <pre>
+        transition('initial => *', animate('0.3s'))
+      </pre>
+      <p>Анимирование смены всех состояний:</p>
+      <pre>
+        transition('* => *', animate('0.3s'))
+      </pre>
+      <p>
+        Еще имеется особое состояние void. Оно используется для обозначения
+        элементов, которых еще нет в представлении. Частое использование void -
+        анимированное появление/исчезновение элемента совместно с *ngIf.
+      </p>
+      <pre>
+        &lt;div @animationTriggerName *ngIf="isVisible"&gt;
+          &lt;h1&gt;Welcome to webdraftt.com!&lt;/h1&gt;
+        &lt;/div&gt;
+        
+        trigger('animationTriggerName', [
+          transition('void => *', [
+            style({ opacity: 0 }),
+            animate('1.2s', style({ opacity: 1 })),
+          ]),
+          transition('* => void', [
+            animate('1.2s', style({ opacity: 0 })),
+          ]),
+        ])
+      </pre>
+      <p>
+        Определение переходов void => * и * => void имеют краткие альтернативные
+        варианты записи:
+      </p>
+      <pre>
+        trigger('animationTriggerName', [
+          transition(':enter', [
+            // code
+          ]),
+          transition(':leave', [
+            // code
+          ]),
+        ])
+      </pre>
+      <p>
+        Функция transition() является аналогом одноименного CSS-свойства и
+        описывает при смене с какого на какое состояние должна срабатывать
+        анимация. Первый параметр - строка с указанием изменяемых состояний,
+        второй - параметры и (или) стили анимации, указываемые функциями
+        animate() или style().
+      </p>
+      <p>Функция animate() принимает строку с тремя параметрами:</p>
+      <ol>
+        <li>длительность анимации;</li>
+        <li>время задержки перед стартом анимации;</li>
+        <li>easing</li>
+      </ol>
+      <p>
+        Для определения Angular animation, которая в процессе смены состояний
+        должна применять промежуточные стили, используется функция keyframes(),
+        принимающая массив промежуточных стилей, определенных с помощью style().
+      </p>
+      <pre>
+        animate(
+          '1.25s',
+          keyframes([
+            style({ fontSize: '12px', offset: 0 }),
+            style({ fontSize: '18px', offset: 0.67 }),
+            style({ fontSize: '16px', offset: 1 }),
+          ])
+        )
+      </pre>
+      <p>
+        Параметр offset указывает, в рамках какого интервала анимации
+        применяется промежуточный стиль.
+      </p>
+      <p>
+        Для полного контроля Angular анимации у триггера предусмотрено два
+        события start() и done(), которые срабатывают при старте и окончании
+        анимации соответственно.
+      </p>
+      <p>
+        Функции, определенные для этих событий, в качестве аргумента получают
+        объект типа AnimationEvent, который содержит следующие свойства:
+      </p>
+      <ol>
+        <li>fromState - исходное состояние;</li>
+        <li>toState - состояние, на которое происходит смена;</li>
+        <li>totalTime - длительность анимации.</li>
+      </ol>
+      <hr />
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

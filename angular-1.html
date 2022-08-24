@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angular Module 1</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Angular Module <a href="./index.html">back ></a></h1>
+
+      <h2>1. Основные строительные блоки приложения</h2>
+      <ol>
+        <li>Component</li>
+        <li>Templates</li>
+        <li>Metadata</li>
+        <li>Data Binding</li>
+        <li>Directives</li>
+        <li>Services</li>
+        <li>Dependency Injection</li>
+      </ol>
+
+      <h3>Component</h3>
+      <p>
+        Компонент Angular — это класс, который мы декорируем декоратором класса
+        @Component. Компонент управляет частью нашего пользовательского
+        интерфейса (view)).
+      </p>
+      <p>Компонент состоит из четырех важных частей.</p>
+      <ol>
+        <li>Import Statement</li>
+        <li>Class</li>
+        <li>Template</li>
+        <li>Metadata</li>
+      </ol>
+
+      <h3>Templates</h3>
+      <p>
+        Шаблон — это просто подмножество HTML, которое сообщает Angular, как
+        отображать представление. Это обычная HTML-страница. Она также
+        использует разметку, специфичную для Angular, например {} (для
+        интерполяции), [] (для привязки свойств) и т. д.
+      </p>
+
+      <h3>Metadata</h3>
+      <p>Метаданные сообщают angular, как обрабатывать класс.</p>
+      <p>
+        Когда мы присоединяем декоратор класса <code>@Component</code> к классу,
+        он становится классом <code>Component</code>.
+      </p>
+      <p>
+        Декоратор класса использует объект конфигурации, который предоставляет
+        информацию Angular, необходимую для создания компонента. Например,
+        директивы <code>@Component</code> поставляются с параметрами
+        конфигурации, такими как selector, templateURL (or template), directives
+        и т. д.
+      </p>
+
+      <h3>Data Binding</h3>
+      <p>
+        Angular использует Data Binding для передачи данных из компонента в наше
+        представление (шаблон). Это делается с помощью специальной разметки
+        HTML, специфичной для Angular, известной как синтаксис шаблона.
+      </p>
+      <p>Angular поддерживает четыре типа привязки данных.</p>
+      <ol>
+        <li>
+          Interpolation - Данные привязываются от компонента к представлению
+        </li>
+        <li>
+          Property Binding - Данные привязываются от компонента к свойству
+          элемента управления HTML в представлении
+        </li>
+        <li>
+          Event Binding - События DOM привязываются из представления к методу в
+          компоненте.
+        </li>
+        <li>
+          Two-way Binding - Поток данных в обоих направлениях от представления к
+          компоненту или от компонента к представлению
+        </li>
+      </ol>
+
+      <h3>Directives</h3>
+      <p>Директивы помогают нам манипулировать представлением.</p>
+      <p>
+        Директива — это класс, который мы создаем с помощью декоратора класса
+        <code>@Directive</code>. Он содержит метаданные и логику для управления
+        DOM.
+      </p>
+      <p>
+        Представления создаются Angular с использованием шаблонов, определенных
+        в компонентах. Эти шаблоны являются динамическими и трансформируются в
+        соответствии с Директивами.
+      </p>
+      <p>
+        Angular поддерживает два типа директив. Одна из них —
+        <b>структурные директивы</b>, которые изменяют структуру представления,
+        а другая — <b>директива атрибутов</b>, которая изменяет стиль нашего
+        представления.
+      </p>
+      <h3>Services</h3>
+      <p>Services предоставляют услуги Компонентам или другим Services.</p>
+      <p>
+        Что делает Angular, так это делает эти сервисы доступными для
+        компонентов, используя так называемую dependency injection.
+      </p>
+
+      <h3>Dependency Injection</h3>
+      <p>
+        Внедрение зависимостей — это метод, с помощью которого новый экземпляр
+        сервиса внедряется в компонент (or pipe, directive, services, etc), для
+        которого это требуется. Component, Directive, Pipe, or Service,
+        требующие сервис, называются потребителем сервиса.
+      </p>
+      <p>
+        <code>Injectable</code> — это декоратор, который нужно добавить к
+        потребителю зависимости. Этот декоратор сообщает angular, что он должен
+        внедрить аргументы конструктора через систему Angular DI. Но декоратор
+        <code>@Injectable()</code> не нужен, если в классе уже есть другие
+        декораторы Angular, такие как <code>@Component</code>,
+        <code>@pipe</code> или <code>@directive</code> и т. д. Поскольку все они
+        являются подтипом <code>Injectible</code>.
+      </p>
+      <hr />
+
+      <h2>2. Основные свойства декоратора @Component</h2>
+      <p>
+        <b>@Component</b> - Декоратор, который помечает класс как компонент
+        Angular и предоставляет метаданные конфигурации, которые определяют, как
+        компонент должен обрабатываться, создаваться и использоваться во время
+        выполнения.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <td>Option</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>changeDetection?</td>
+            <td>The change-detection strategy to use for this component.</td>
+          </tr>
+          <tr>
+            <td>viewProviders?</td>
+            <td>
+              Defines the set of injectable objects that are visible to its view
+              DOM children.
+            </td>
+          </tr>
+          <tr>
+            <td>moduleId?</td>
+            <td>
+              The module ID of the module that contains the component. The
+              component must be able to resolve relative URLs for templates and
+              styles.
+            </td>
+          </tr>
+          <tr>
+            <td>templateUrl?</td>
+            <td>
+              The relative path or absolute URL of a template file for an
+              Angular component. If provided, do not supply an inline template
+              using template.
+            </td>
+          </tr>
+          <tr>
+            <td>template?</td>
+            <td>
+              An inline template for an Angular component. If provided, do not
+              supply a template file using templateUrl.
+            </td>
+          </tr>
+          <tr>
+            <td>styleUrls?</td>
+            <td>
+              One or more relative paths or absolute URLs for files containing
+              CSS stylesheets to use in this component.
+            </td>
+          </tr>
+          <tr>
+            <td>styles?</td>
+            <td>
+              One or more inline CSS stylesheets to use in this component.
+            </td>
+          </tr>
+          <tr>
+            <td>animations?</td>
+            <td>
+              One or more animation trigger() calls, containing state() and
+              transition() definitions.
+            </td>
+          </tr>
+          <tr>
+            <td>encapsulation?</td>
+            <td>
+              An encapsulation policy for the component's styling. Possible
+              values:
+              <ul>
+                <li>
+                  <code>ViewEncapsulation.Emulated</code>: Apply modified
+                  component styles in order to emulate a native Shadow DOM CSS
+                  encapsulation behavior.
+                </li>
+                <li>
+                  <code>ViewEncapsulation.None</code>: Apply component styles
+                  globally without any sort of encapsulation.
+                </li>
+                <li>
+                  <code>ViewEncapsulation.ShadowDom</code>: Use the browser's
+                  native Shadow DOM API to encapsulate styles.
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>entryComponents?</td>
+            <td>
+              Набор компонентов, которые должны быть скомпилированы вместе с
+              этим компонентом. Для каждого перечисленного здесь компонента
+              Angular создает ComponentFactory и сохраняет его в
+              ComponentFactoryResolver.
+            </td>
+          </tr>
+          <tr>
+            <td>preserveWhitespaces?</td>
+            <td>
+              Значение true для сохранения или значение false для удаления из
+              скомпилированного шаблона потенциально лишних пробельных символов.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Унаследовано от декоратора <code>@Directive</code></h3>
+      <table>
+        <thead>
+          <tr>
+            <td>Option</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>selector?</td>
+            <td>
+              Селектор CSS, который идентифицирует эту директиву в шаблоне и
+              инициирует создание экземпляра директивы.
+            </td>
+          </tr>
+          <tr>
+            <td>inputs?</td>
+            <td>
+              Перечисляет набор входных свойств с привязкой к данным для
+              директивы.
+            </td>
+          </tr>
+          <tr>
+            <td>outputs?</td>
+            <td>Перечисляет набор выходных свойств, привязанных к событию.</td>
+          </tr>
+          <tr>
+            <td>providers?</td>
+            <td>
+              Configures the injector of this directive or component with a
+              token that maps to a provider of a dependency.
+            </td>
+          </tr>
+          <tr>
+            <td>exportAs?</td>
+            <td>
+              Определяет имя, которое можно использовать в шаблоне для
+              назначения этой директивы переменной.
+            </td>
+          </tr>
+          <tr>
+            <td>queries?</td>
+            <td>Настраивает запросы, которые будут внедрены в директиву.</td>
+          </tr>
+          <tr>
+            <td>host?</td>
+            <td>
+              Maps class properties to host element bindings for properties,
+              attributes, and events, using a set of key-value pairs.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+
+      <h2>3. How many modules we can create and use it Angular app?</h2>
+      <hr />
+
+      <h2>4. Что происходит, когда загружается приложение</h2>
+      <ol>
+        <li>Index.html loads</li>
+        <li>Angular, Third-party libraries &amp; Application loads</li>
+        <li>Main.ts the application entry point</li>
+        <li>Root Module</li>
+        <li>Root Component</li>
+        <li>Template</li>
+      </ol>
+      <hr />
+
+      <h2>5. взаимодействие между компонентами. @Input, @Output.</h2>
+      <h3>Component Communication</h3>
+      <ol>
+        <li>Parent to Child Communication</li>
+        <li>Child to Parent Communication</li>
+        <li>Interaction when there is no parent-child relation</li>
+      </ol>
+      <h4>Parent to Child Communication</h4>
+      <p>
+        Создайте свойство (someProperty) в дочернем компоненте и украсьте его с
+        помощью @Input(). Это пометит свойство как входное свойство
+      </p>
+      <p>Есть два способа, которыми мы можем достичь этого.</p>
+      <ol>
+        <li>Using OnChanges life Cycle hook or</li>
+        <li>Using a Property Setter on Input Property</li>
+      </ol>
+      <h4>Child to Parent Communication</h4>
+      <ol>
+        <li>Listens to Events from Child</li>
+        <li>Uses Local Variable to access the child in the Template</li>
+        <li>Uses a @ViewChild to get a reference to the child component</li>
+      </ol>
+      <h3>@input</h3>
+      <p>
+        Декоратор ввода помечает свойство как свойство ввода. То есть он может
+        получать данные от родительского компонента. Родительский компонент
+        использует привязку свойства, чтобы связать его со свойством компонента.
+        Всякий раз, когда значение в родительском компоненте изменяется, angular
+        обновляет значение в дочернем компоненте.
+      </p>
+      <pre>
+        @Component({
+          selector: 'app-customer-detail',
+          templateUrl: './customer-detail.component.html',
+          styleUrls: ['./customer-detail.component.css']
+        })
+        export class CustomerDetailComponent implements OnInit {
+          @Input() customer:Customer;
+        }        
+      </pre>
+      <h3>@output</h3>
+      <p>
+        Output оформляет свойство как выходное свойство. Мы инициализируем его
+        как EventEmitter. Дочерний компонент вызывает событие и передает данные
+        в качестве аргумента события. Родительский компонент прослушивает
+        события, используя привязку событий, и считывает данные.
+      </p>
+      <pre>
+        //Declare the property
+        @Output() customerChange:EventEmitter&lt;Customer&gt; =new EventEmitter&lt;Customer&gt;();
+        
+        //Raise the event to send the data back to parent
+        update() {
+          this.customerChange.emit(this.customer);
+        }
+      </pre>
+      <p>
+        В родительском компоненте мы подписываемся на событие, используя
+        синтаксис привязки событий. Используйте () вокруг имени события
+        (customerChange) и назначьте ему оператор шаблона (update($event)). Он
+        получает данные в аргументе $event.
+      </p>
+      <pre>
+        &lt;app-customer-detail [customer]="selectedCustomer" (customerChange)="update($event)"&gt;&lt;/app-customer-detail&gt;
+      </pre>
+      <h3>EventEmitter</h3>
+      <p>
+        EventEmitter отвечает за инициирование события. Свойство @output обычно
+        имеет тип EventEmitter. Дочерний компонент будет использовать метод
+        emit() для генерации события вместе с данными.
+      </p>
+      <hr />
+
+      <h2>6. Хуки (жизненный цикл компонента)</h2>
+      <p>
+        Каждый компонент имеет свой жизненный цикл (Component Lifecycle), в
+        процессе которого вызываются ряд описывающих текущий этап методов
+        (Angular Hooks):
+      </p>
+      <ul>
+        <li>
+          <a href="https://angular.io/api/core/OnChanges"
+            ><code>OnChanges</code></a
+          >
+          - устанавливаются или изменяются значения входных свойств класса
+          компонента;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/OnInit"><code>OnInit</code></a> -
+          устанавливаются "обычные" свойства; вызывается единожды вслед за
+          первым вызовом <code>OnChanges()</code>;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/DoCheck"><code>DoCheck</code></a>
+          - происходит изменения свойства или вызывается какое-либо событие;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/AfterContentInit"
+            ><code>AfterContentInit</code></a
+          >
+          - в шаблон включается контент, заключенный между тегами компонента;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/AfterContentChecked"
+            ><code>AfterContentChecked</code></a
+          >
+          - аналогичен <code>DoCheck()</code>, только используется для контента,
+          заключенного между тегами компонента;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/AfterViewInit"
+            ><code>AfterViewInit</code></a
+          >
+          - инициализируются компоненты, которые входят в шаблон текущего
+          компонента;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/AfterViewChecked"
+            ><code>AfterViewChecked</code></a
+          >
+          - аналогичен <code>DoCheck()</code>, только используется для дочерних
+          компонентов;
+        </li>
+        <li>
+          <a href="https://angular.io/api/core/OnDestroy"
+            ><code>OnDestroy</code></a
+          >
+          - компонент "умирает", т. е. удаляется из DOM-дерева
+        </li>
+      </ul>
+      <hr />
+
+      <h2>7. @ViewChild, @ViewChildren, шаблонные переменные</h2>
+      <p>
+        Декораторы <code>@ViewChild</code> или
+        <code>@ViewChildren</code> используются для запроса и получения ссылки
+        на элемент DOM в компоненте. <code>@ViewChild</code> возвращает первый
+        соответствующий элемент, а <code>@ViewChildren</code> возвращает все
+        соответствующие элементы в виде списка элементов <code>QueryList</code>.
+        Мы можем использовать эти ссылки для управления свойствами элемента в
+        компоненте.
+      </p>
+      <h3>@ViewChild</h3>
+      <p>
+        Запрос ViewChild возвращает первый соответствующий элемент из DOM и
+        обновляет переменную компонента, к которой мы его применяем.
+      </p>
+      <pre>
+        ViewChild(selector: string, opts: { read?: any; static: boolean; }): any
+      </pre>
+      <h4>Injecting Component or Directive Reference</h4>
+      <p>
+        Одним из вариантов использования ViewChild является получение ссылки на
+        дочерний компонент в родительском компоненте и управление его
+        свойствами.
+      </p>
+      <pre>
+        @ViewChild(ChildComponent, {static:true}) child: ChildComponent;
+      </pre>
+      <h4>Using Template Reference Variable</h4>
+      <p>
+        Вы можете использовать ссылочную переменную шаблона вместо типа
+        компонента.
+      </p>
+      <pre>
+        &lt;child-component #child&gt;&lt;/child-component&gt;
+        @ViewChild("child", { static: true }) child: ChildComponent;
+      </pre>
+      <p>
+        <b>ViewChild Returning undefined</b> — одна из распространенных ошибок,
+        с которыми мы сталкиваемся при их использовании.
+      </p>
+      <p>
+        Решение состоит в том, чтобы дождаться, пока Angular инициализирует
+        представление. Angular поднимает хук жизненного цикла AfterViewInit
+        после завершения инициализации представления. Таким образом, мы можем
+        использовать ngAfterViewInit для доступа к дочерней переменной.
+      </p>
+
+      <h3>@ViewChildren</h3>
+      <p>
+        Декоратор <code>ViewChildren</code> используется для получения списка
+        ссылок на элементы из представления.
+      </p>
+      <pre>
+        ViewChildren(selector: string | Function | Type&lt;any&gt;, opts: { read?: any; }): any
+      </pre>
+
+      <h4>QueryList</h4>
+      <p>
+        QueryList сохраняет элементы, возвращенные <code>viewChildren</code> или
+        <code>contentChildren</code>, в списке.
+      </p>
+      <p>Вы можете использовать следующие методы и свойства.</p>
+      <ul>
+        <li><code>first:</code>&nbsp;returns the first item in the list.</li>
+        <li><code>last:</code>&nbsp;get the last item in the list.</li>
+        <li><code>length:</code> get the length of the items.</li>
+        <li>
+          <code>changes:</code> Is an observable. It emits a new value, whenever
+          the Angular adds, removes or moves the child elements.
+        </li>
+      </ul>
+      <p>
+        Он также поддерживает методы массива JavaScript, такие как
+        <code>map()</code>, <code>filter()</code>, <code>find()</code>,
+        <code>reduce()</code>, <code>forEach()</code>, <code>some()</code>. и
+        т.д
+      </p>
+
+      <hr />
+
+      <h2>8. @ContentChild, @ContentChildren. В каких хуках исп.</h2>
+      <p>
+        <code>ContentChild</code> и <code>ContentChildren</code> — это
+        декораторы, которые мы используем для запроса и получения ссылки на
+        проецируемое содержимое в DOM. Проецируемое содержимое — это содержимое,
+        которое этот компонент получает от родительского компонента.
+      </p>
+
+      <h3>@ContentChild</h3>
+      <p>
+        Запрос ContentChild возвращает первый соответствующий элемент из модели
+        DOM и обновляет переменную компонента, к которой мы его применяем.
+      </p>
+      <pre>
+        ContentChild(selector: string | Function | Type&lt;any&gt;, opts: { read?: any; static: boolean; }): any
+      </pre>
+
+      <h3>@ContentChildren</h3>
+      <p>
+        Используйте декоратор ContentChildren, чтобы получить список ссылок на
+        элементы из проецируемого контента.
+      </p>
+      <pre>
+        ContentChildren(selector: string | Function | Type&lt;any&gt;, opts: {descendants?:boolean, read?: any; }): any
+      </pre>
+
+      <h3>ViewChild Vs ContentChild</h3>
+      <p>
+        ViewChild или ViewChildren могут получить доступ к любому элементу DOM,
+        компоненту или директиве. Но его нельзя использовать для доступа к
+        проецируемому контенту. В то время как ContentChild или ContentChildren
+        могут получить доступ только к проецируемому контенту, но не могут
+        использоваться для доступа к любому другому контенту.
+      </p>
+      <hr />
+
+      <h2>9. Привязка данных (data binding)</h2>
+      <p>
+        Angular предоставляет три категории привязки данных в зависимости от
+        направления потока данных:
+      </p>
+      <ul>
+        <li>From source to view</li>
+        <li>From view to source</li>
+        <li>In a two-way sequence of view to source to view</li>
+      </ul>
+      <h3>Интерполяция</h3>
+      <pre>
+        Hello, {{ name }}
+        {{ 'Hello,' + name }}
+        {{ printGreeting() }}
+      </pre>
+      <p>
+        В первом случае между {{ и }} находится название свойства класса
+        компонента, которое заменяется его значением.
+      </p>
+      <p>
+        В Angular шаблонах также допускается использование простых
+        арифметических операций, операций со строками (конкатенация), можно
+        вызвать метод класса. Но нельзя использовать операторы ++, --, +=, -=,
+        ключевое слово new.
+      </p>
+      <h3>Одностороннее связывание</h3>
+      <p>
+        Одностороннее связывание характеризуется движением данных в одном
+        направлении, а именно из компонента в элемент DOM.
+      </p>
+      <pre>
+        &lt;a [href]="homePageUrl"&gt;Home Page&lt;/a&gt;
+      </pre>
+      <p>Альтернативный синтаксис:</p>
+      <pre>
+        &lt;a bind-href="homePageUrl"&gt;Home Page&lt;/a&gt;
+      </pre>
+      <h3>Атрибуты</h3>
+      <p>
+        Не все атрибуты HTML-разметки имеют соответствующие им свойства,
+        например, colspan. В этом случае синтаксис будет такой:
+      </p>
+      <pre>
+        &lt;td [attr.colspan]="2 + 1"&gt;Table Cell Content&lt;/td&gt;
+      </pre>
+      <h3>Классы</h3>
+      <p>Есть три способа задать в Angular CSS-класс элементу. Первый:</p>
+      <pre>
+        &lt;p [class]="classes"&gt;Some text.&lt;/p&gt;
+      </pre>
+      <p>
+        Свойство <code>classes</code> - строка с названием классов, разделенных
+        пробелами. В этом случае текущее значение атрибута
+        <code>class</code> будет перезаписано новым.
+      </p>
+      <p>
+        Чтобы добавить класс уже к существующим, используется второй способ:
+      </p>
+      <pre>
+        &lt;p [class.red-text]="isRed"&gt;Some text.&lt;/p&gt;
+      </pre>
+      <h3>Стили</h3>
+      <p>Определения строковых CSS-стилей происходит следующим образом:</p>
+      <pre>
+        &lt;div [style.width.%]="isHalf ? 50 : 100"&gt;Some text.&lt;/div&gt;
+      </pre>
+      <p>
+        После <code>style</code> указывается определенный стиль для элемента
+        Angular template, а затем, если это необходимо, указываются единицы
+        измерения свойства. Выражением справа может быть как свойство
+        компонента, так и условное выражение.
+      </p>
+      <h3>Обработка событий</h3>
+      <p>
+        В Angular все события можно отследить и обработать, привязав к ним вызов
+        метода класса.
+      </p>
+      <pre>
+        &lt;button (click)="showContacts($event)"&gt;Show Contacts&lt;/button&gt;
+      </pre>
+      <p>
+        Название события всегда должно быть заключено в круглые скобки или
+        предваряться префиксом <code>on-</code>.
+      </p>
+      <p>Свойства объекта <code>$event</code>:</p>
+      <ul>
+        <li><code>target</code> - элемент DOM, выступивший инициатором;</li>
+        <li>
+          <code>target.value</code> - значение элемента DOM (справедливо для
+          полей формы);
+        </li>
+        <li><code>keyCode</code> - код клавиши (справедливо для keyup).</li>
+      </ul>
+      <h3>Двустороннее связывание</h3>
+      <p>
+        Механизм двустороннего связывания (angular two way binding)
+        используется, когда необходимо отобразить свойство в шаблоне
+        (одностороннее связывание) и обновить его при изменении значения
+        (возникновение события) без перезагрузки страницы.
+      </p>
+      <p>
+        Для двустороннего связывания в полях формы используется встроенная в
+        Angular директива <code>NgModel</code>.
+      </p>
+      <pre>
+        &lt;input type="text" [(ngModel)]="contactPerson" /&gt;
+      </pre>
+      <p>
+        Синтаксис двустороннего связывания представляет собой слияние
+        <code>[]</code> одностороннего связывания и <code>()</code> привязки
+        события.
+      </p>
+      <p>
+        <code>NgModel</code> находится в <code>FormsModule</code>, поэтому перед
+        тем, как ее использовать, импортируйте
+        <code>FormsModule</code> библиотеки <code>@angular/forms</code>.
+      </p>
+      <hr />
+
+      <h2>10. Change detection: onPush, default</h2>
+      <p>
+        <b>Отслеживание изменений</b> - это механизм в Angular, который отвечает
+        за изменение выражений в шаблонах при их изменении в моделях.
+      </p>
+      <h3>Default cтратегия обнаружения изменений</h3>
+      <p>
+        По умолчанию Angular использует
+        <b>ChangeDetectionStrategy.Default</b> стратегию обнаружения изменений.
+      </p>
+      <p>
+        <b>ChangeDetectionStrategy.Default</b> работает таким образом, что
+        каждый раз, когда что-то меняется в нашем приложении, в результате
+        различных пользовательских событий, таймеров, XHR, промисов и т.д.,
+        обнаружение изменений будет запускаться по всем компонентам.
+      </p>
+      <h3>OnPush стратегия обнаружения изменений</h3>
+      <p>
+        Это означает, что компонент теперь зависит только от @inputs()
+        параметров, и будет проверятся только при таких условиях:
+      </p>
+      <h4>1. Изменилась ссылка input параметра</h4>
+      <p>
+        Установив OnPush стратегию, мы как бы подписываем договор с Angular,
+        который обязывает нас работать с иммутабельными объектами (или
+        наблюдаемыми (observables)).
+      </p>
+      <h4>2. Событие внутри компонента или его потомках</h4>
+      <p>
+        Компонент может иметь внутреннее состояние, которое обновляется когда
+        возникает событие от самого компонента или его потомков.
+      </p>
+      <h4>3. Ручной запуск обнаружения изменений</h4>
+      <p>
+        Angular предоставляет нам три метода для самостоятельного запуска
+        механизма обнаружения изменений и мы можем вызывать их в нужных нам
+        местах.
+      </p>
+      <p>
+        Первый <code>detectChanges()</code> говорит Angular запустить
+        обнаружение изменений в компоненте и его потомках.
+      </p>
+      <p>
+        Второй <code>ApplicationRef.tick()</code> говорит Angular запустить
+        обнаружение изменений во всем приложении.
+      </p>
+      <p>
+        И третий <code>markForCheck()</code>, который не триггерит запуск
+        обнаружения изменений. Вместо этого он помечает компонент и всех его
+        родителей, что они должны быть проверены в текущем или следующем цикле
+        обнаружения изменений
+      </p>
+      <h3>Сервис ChangeDetectorRef</h3>
+      <p>
+        В библиотеке <code>@angular/core</code> есть сервис
+        <b>ChangeDetectorRef</b>. Он позволяет взять управление механизмом
+        отслеживания изменений полностью под свой контроль.
+      </p>
+      <p>Основные методы сервиса:</p>
+      <ul>
+        <li>
+          <code>detach()</code> - полностью отключает механизм ChangeDetection;
+        </li>
+        <li>
+          <code>detectChanges()</code> - принудительно запускает механизм
+          отслеживания изменений;
+        </li>
+        <li>
+          <code>reattach()</code> - используется после вызова
+          <code>detach()</code> для активации механизма ChangeDetection.
+        </li>
+      </ul>
+      <hr />
+
+      <h2>
+        11. What is Pipe. Pure and impure pipes. Async pipe. Как создать свой
+        пайп
+      </h2>
+      <p>
+        Angular pipe - это класс, который предваряется декоратором
+        <a href="https://angular.io/api/core/Pipe">@Pipe()</a> и реализует
+        интерфейс
+        <a href="https://angular.io/api/core/PipeTransform">PipeTransform</a>
+        с одним единственным методом transform().
+      </p>
+      <p>
+        Метод transform() в качестве первого аргумента принимает преобразуемое
+        значение, далее - параметры в порядке их передачи в HTML-шаблоне. Метод
+        обязательно должен возвращать итоговое значение.
+      </p>
+      <pre>
+        @Pipe({ name: 'cutText' })
+
+        export class CutTextPipe implements PipeTransform {
+          transform(value: string, maxLength: number = 200): string {
+            if (value.length > maxLength)
+              return `${value.substring(0, maxLength)}...`
+            else return value
+          }
+        }
+      </pre>
+      <p>
+        В Angular есть ряд встроенных pipes, но также предусмотрена возможность
+        создания собственных.
+      </p>
+      <ul>
+        <li><b>CurrencyPipe</b>: форматирует валюту</li>
+        <li><b>PercentPipe</b>: форматирует проценты</li>
+        <li><b>UpperCasePipe</b>: переводит строку в верхний регистр</li>
+        <li><b>LowerCasePipe</b>: переводит строку в нижний регистр</li>
+        <li><b>DatePipe</b>: форматирует дату</li>
+        <li><b>DecimalPipe</b>: задает формат числа</li>
+        <li><b>SlicePipe</b>: обрезает строку</li>
+      </ul>
+      <p>
+        К одному значению допустимо одновременное применение нескольких pipe.
+      </p>
+      <pre>
+        {{someString | pipe1 | pipe2 | pipe3 | ... }}
+      </pre>
+
+      <h3>AsyncPipe</h3>
+      <p>
+        Одним из встроенных классов, который в отличие от других pipes уже по
+        умолчанию представляет тип impure. AsyncPipe позволяет получить
+        результат асинхронной операции.
+      </p>
+      <pre>
+        &lt;p&gt;Модель: {{ phone | async }}&lt;/p&gt;
+      </pre>
+      <p>
+        AsyncPipe отслеживает объекты Observable и Promise и возвращает
+        полученное из этих объектов значение. При получении значения AsyncPipe
+        сигнализирует компоненту о том, что надо проверить изменения. Если
+        компонент уничтожается, то AsyncPipe автоматически отписывается от
+        объектов Observable и Promise.
+      </p>
+
+      <h3>Pure & Impure Angular pipes</h3>
+      <p>
+        Различают два типа фильтров: <code>pure</code> (по умолчанию) и
+        <code>impure</code>.
+      </p>
+      <p>
+        <b>Pure pipes:</b> обновление выражения происходит только при его прямом
+        изменении или смены ссылки, если речь идет о массивах и объектах.
+      </p>
+      <p>
+        Выражение с примененным к нему <b>Impure pipes</b> будет обновляться при
+        любом изменении данных, а также в ответ на любое фиксирующееся в
+        приложении событие, например, клик мыши.
+      </p>
+      <p>
+        Для создания impure pipe в объекте, передаваемому декоратору, необходимо
+        указать значение свойства pure false.
+      </p>
+      <pre>
+        @Pipe({
+          name: 'cutText',
+          pure: false
+        })
+      </pre>
+      <hr />
+
+      <h2>
+        12. What is Directive. Structural and attribute directives. Создать свою
+        директиву
+      </h2>
+      <p>
+        Директива Angular помогает нам манипулировать DOM. Вы можете изменить
+        внешний вид, поведение или макет элемента DOM с помощью директив. Они
+        помогут вам расширить HTML
+      </p>
+      <p>В Angular есть три вида директив:</p>
+      <h3>Component Directive</h3>
+      <p>
+        Компоненты — это специальные директивы в Angular. Это директива с
+        шаблоном (представление)
+      </p>
+      <h3>Structural Directives</h3>
+      <p>
+        Структурные директивы могут изменять макет DOM, добавляя и удаляя
+        элементы DOM. Всем структурным директивам предшествует символ звездочки.
+      </p>
+      <ol>
+        <li>ngFor</li>
+        <li>ngSwitch</li>
+        <li>ngIf</li>
+      </ol>
+      <h3>Attribute Directives</h3>
+      <ol>
+        <li>ngModel - для двусторонней привязки данных.</li>
+        <li>
+          ngClass - для добавления или удаления классов CSS из элемента HTML.
+        </li>
+        <li>ngStyle - для изменения свойств стиля элементов HTML.</li>
+      </ol>
+      <p>
+        Директива атрибута или стиля может изменить внешний вид или поведение
+        элемента.
+      </p>
+
+      <h3>Creating Custom Attribute Directive</h3>
+      <pre>
+        import { Directive, ElementRef, Input, OnInit } from '@angular/core'
+ 
+        @Directive({
+          selector: '[ttClass]',
+        })
+        export class ttClassDirective implements OnInit {
+        
+          @Input() ttClass: string;
+        
+          constructor(private el: ElementRef) {}
+        
+          ngOnInit() {
+            this.el.nativeElement.classList.add(this.ttClass);
+          }
+        
+        }
+      </pre>
+
+      <h3>Creating Custom Structural Directive</h3>
+      <pre>
+        import { Directive, ViewContainerRef, TemplateRef, Input } from '@angular/core';
+ 
+        @Directive({ 
+          selector: '[ttIf]' 
+        })
+        export class ttIfDirective  {
+          _ttif: boolean;
+          constructor(
+            private _viewContainer: ViewContainerRef,
+            private templateRef: TemplateRef&lt;any&gt;) {}
+        
+          @Input()
+          set ttIf(condition) {
+            this._ttif = condition
+            this._updateView();
+          }
+        
+          _updateView() {
+            if (this._ttif) {
+              this._viewContainer.createEmbeddedView(this.templateRef);
+            }
+            this._viewContainer.clear();
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>13. HostBinding and HostListener</h2>
+      <h3>Host Element</h3>
+      <p>
+        Элемент хоста — это элемент, к которому мы присоединяем нашу директиву
+        или компонент. Помните, что компоненты — это директивы с представлением
+        (шаблоном).
+      </p>
+      <h3>HostBinding</h3>
+      <p>
+        Host Binding привязывает свойство элемента Host к переменной в директиве
+        или компоненте.
+      </p>
+      <pre>
+        import { Directive, HostBinding, OnInit } from '@angular/core'
+ 
+        @Directive({
+          selector: '[appHighLight]',
+        })
+        export class HighLightDirective implements OnInit {
+        
+          @HostBinding('style.border') border: string;
+        
+          ngOnInit() {
+            this.border="5px solid blue"
+          }
+    
+        }
+      </pre>
+      <h3>HostListener</h3>
+      <p>
+        HostListener Decorator прослушивает событие DOM на ведущем элементе. Он
+        также предоставляет метод обработчика для запуска при возникновении
+        этого события.
+      </p>
+      <pre>
+        import { Directive, HostBinding, HostListener } from '@angular/core'
+ 
+        @Directive({
+          selector: '[appHighLight]',
+        })
+        export class HighLightDirective implements OnInit {
+        
+          @HostBinding('style.border') border: string;
+        
+          @HostListener('mouseover') 
+          onMouseOver() {
+            this.border = '5px solid green';
+            console.log("Mouse over")
+          }
+        }
+      </pre>
+      <hr />
+
+      <h2>
+        14. DOM manipulation with ElementRef, TemplateRef, ViewContainerRef.
+      </h2>
+      <h3>ElementRef</h3>
+      <p>Чтобы получить ссылку на элементы DOM в компоненте</p>
+      <ol>
+        <li>
+          Создайте ссылочную переменную шаблона для элемента в
+          компоненте/директиве.
+        </li>
+        <li>
+          Используйте переменную шаблона, чтобы внедрить элемент в класс
+          компонента с помощью ViewChild или ViewChildren.
+        </li>
+      </ol>
+      <pre>
+        &lt;div #hello&gt;Hello Angular&lt;/div&gt;
+
+        @ViewChild('hello', { static: false }) divHello: ElementRef;
+      </pre>
+      <p>
+        Получив ElementRef, мы можем использовать свойство nativeElement для
+        управления DOM.
+      </p>
+      <pre>
+        @ViewChild('hello', { static: false }) divHello: ElementRef;
+ 
+        ngAfterViewInit() {
+          this.divHello.nativeElement.innerHTML = "Hello Angular";
+        }
+      </pre>
+      <h3>TemplateRef</h3>
+      <p>
+        TemplateRef — это класс и способ ссылки на шаблон ng в классе компонента
+        или директивы. Используя TemplateRef, мы можем манипулировать шаблоном
+        из кода компонента.
+      </p>
+      <p>
+        Чтобы получить доступ к ng-template в компоненте или директиве, сначала
+        нам нужно назначить ссылочную переменную шаблона.
+      </p>
+      <p>
+        Теперь мы можем использовать запрос ViewChild для внедрения
+        sayHelloTemplate в наш компонент как экземпляр класса TemplateRef.
+      </p>
+      <pre>
+        @ViewChild('sayHelloTemplate', { read: TemplateRef }) sayHelloTemplate:TemplateRef&lt;any&gt;;
+      </pre>
+      <h3>ViewContainerRef</h3>
+      <p>
+        ViewContainerRef также похож на TemplateRef. Оба содержат ссылку на
+        часть представления.
+      </p>
+      <ul>
+        <li>
+          TemplateRef содержит эталонный шаблон, определенный ng-template.
+        </li>
+        <li>
+          ViewContainerRef при внедрении через DI содержит ссылку на
+          хост-элемент, на котором размещен компонент (или директива)
+        </li>
+      </ul>
+      <p>
+        Когда у нас есть ViewContainerRef, мы можем использовать метод
+        createEmbeddedView, чтобы добавить шаблон к компоненту.
+      </p>
+      <pre>
+        constructor(private vref:ViewContainerRef) {
+        }
+       
+        ngAfterViewInit() {
+          this.vref.createEmbeddedView(this.sayHelloTemplate);
+        }
+      </pre>
+      <h4>Methods</h4>
+      <ol>
+        <li>clear() - Уничтожает все представления в этом контейнере.</li>
+        <li>get() - Извлекает представление из этого контейнера.</li>
+        <li>
+          createEmbeddedView() - Создает встроенное представление и вставляет
+          его в этот контейнер.
+        </li>
+        <li>
+          createComponent() - Создает экземпляр одного компонента и вставляет
+          его основное представление в этот контейнер.
+        </li>
+        <li>insert() - Вставляет представление в этот контейнер.</li>
+        <li>
+          move() - Перемещает представление в новое место в этом контейнере.
+        </li>
+        <li>
+          indexOf() - Возвращает индекс представления в текущем контейнере.
+        </li>
+        <li>remove() - Destroys a view attached to this container</li>
+        <li>
+          detach() - Отсоединяет представление от этого контейнера, не уничтожая
+          его. Используйте вместе с insert() для перемещения представления в
+          текущем контейнере.
+        </li>
+      </ol>
+      <hr />
+
+      <h2>15. Способы добавления стилей, классов на элемент</h2>
+      <h3>Style binding in Angular</h3>
+      <pre>
+        [style.style-property] = "style-value"
+      </pre>
+      <h4>Conditionally setting the styles</h4>
+      <pre>
+        [style.color]="status=='error' ? 'red': 'blue'"
+      </pre>
+      <h4>Setting the units</h4>
+      <pre>
+        [style.font-size.px]="'20'"
+      </pre>
+      <p>
+        Чтобы изменить несколько стилей, нам нужно добавить каждый из них
+        отдельно
+      </p>
+      <h3>ngStyle</h3>
+      <pre>
+        [ngStyle]="{'styleNames': styleExp}"
+      </pre>
+      <h4>Change Style Dynamically</h4>
+      <pre>
+        color: string= 'red';
+
+        &lt;input [(ngModel)]="color" /&gt; 
+        &lt;div [ngStyle]="{'color': color}"&gt;Change my color&lt;/div&gt;
+      </pre>
+      <pre>
+        [ngStyle]="{'background-color':status === 'error' ? 'red' : 'blue' }"
+      </pre>
+      <h4>ngStyle multiple attributes</h4>
+      <pre>
+        [ngStyle]="{'color': 'purple', 'font-size': '20px', 'font-weight': 'bold'}"
+      </pre>
+      <h4>Specifying CSS Units in ngStyle</h4>
+      <pre>
+        [ngStyle]="{'font-size.px': size}"
+      </pre>
+      <h3>Class Binding</h3>
+      <pre>[className]="'red'"</pre>
+      <h4>Conditionally apply Classes</h4>
+      <pre>
+        cssStringVar: string= 'red size20';
+
+        [className]="cssStringVar"
+
+        [className]="hasError() ? 'red' : 'size20'"
+      </pre>
+      <h4>Conditionally binding class</h4>
+      <pre>
+        [class.className]="condition"
+
+        [class.red]="hasError()"
+      </pre>
+      <h3>NgClass Directive</h3>
+      <pre>
+        [ngClass]="expression"
+      </pre>
+      <h4>NgClass with a String</h4>
+      <pre>
+        [ngClass]="'cssClass1 cssClass2'"
+      </pre>
+      <h4>NgClass with Array</h4>
+      <pre>
+        [ngClass]="['cssClass1', 'cssClass2']"
+      </pre>
+      <h4>NgClass with Object</h4>
+      <pre>
+        [ngClass]="{'cssClass1': true, 'cssClass2': true}"
+      </pre>
+      <hr />
+
+      <h2>
+        16. ng-template, ng-content, ng-container element, *ngTemplateOutlet.
+      </h2>
+      <a
+        href="https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/"
+        >Everything you need to know about ng-template, ng-content,
+        ng-container, and *ngTemplateOutlet in Angular
+      </a>
+      <h3>ng-Template</h3>
+      <p>
+        ng-template – это элемент Angular, содержащий шаблон. Шаблон – это
+        фрагмент кода HTML. Шаблон не отображается в DOM.
+      </p>
+      <p>Существует несколько способов отображения шаблона.</p>
+      <ol>
+        <li>Using the <code>ngTemplateOutlet</code> directive.</li>
+        <li>
+          Using the <code>TemplateRef</code> &amp; <code>ViewContainerRef</code>
+        </li>
+      </ol>
+      <h3>ng-container</h3>
+      <p>
+        ng-container позволяет нам создать раздел или раздел в шаблоне, не вводя
+        новый элемент HTML. ng-container не отображается в DOM, но содержимое
+        внутри него отображается. ng-container — это не директива, компонент,
+        класс или интерфейс, а просто элемент синтаксиса.
+      </p>
+      <p>
+        ng-container также используется в качестве заполнителя для внедрения
+        динамического шаблона с помощью ngTemplateOutlet.
+      </p>
+      <h3>ng-content</h3>
+      <p>
+        Тег ng-content выступает в качестве заполнителя для вставки внешнего или
+        динамического контента. Родительский компонент передает внешнее
+        содержимое дочернему компоненту. Когда Angular анализирует шаблон, он
+        вставляет внешний контент там, где ng-контент появляется в шаблоне
+        дочернего компонента.
+      </p>
+      <h3>Select attribute is a CSS selector</h3>
+      <pre>
+        &lt;ng-content select="custom-element"&gt;&lt;/ng-content&gt;
+        &lt;ng-content select=".custom-class"&gt;&lt;/ng-content&gt;
+        &lt;ng-content select="[custom-attribute]"&gt;&lt;/ng-content&gt;
+      </pre>
+      <h3>*ngTemplateOutlet</h3>
+      <p>
+        ngTemplateOutlet — это структурная директива. Мы используем его для
+        вставки шаблона (созданного ngTemplate) в различные разделы нашего DOM.
+        Например, вы можете определить несколько шаблонов для отображения
+        элемента и использовать их для отображения в нескольких местах
+        представления, а также менять местами этот шаблон по выбору
+        пользователя.
+      </p>
+      <pre>
+        &lt;ng-template #template1&gt;  
+          &lt;p&gt;This is our template. It will be displayed on the div *ngTemplateOutlet="myTemplateRef"&lt;/p&gt;
+        &lt;/ng-template&gt;
+
+        &lt;ng-container *ngTemplateOutlet="template1"&gt;
+          This text is not displayed
+        &lt;/ng-container&gt; 
+      </pre>
+
+      <hr />
+
+      <h2>17. HttpClient. HttpInterceptor. Как обрабатываются ошибки</h2>
+      <p>
+        HttpClient — это отдельная модель в Angular, доступная в пакете
+        @angular/common/http.
+      </p>
+      <h3>Import HttpClient Module in Root Module</h3>
+      <p>
+        Нам нужно импортировать его в наш корневой модуль app.module. Кроме
+        того, нам нужно добавить его в массив <code>import</code> метаданных
+        импорта.
+      </p>
+      <h3>Import Required Module in Component/Service</h3>
+      <p>
+        Затем вы должны импортировать HttpClient @angular/common/http в
+        компонент или службу.
+      </p>
+      <pre>import { HttpClient } from '@angular/common/http';</pre>
+      <h3>Inject HttpClient service</h3>
+      <p>Вставьте службу HttpClient в конструктор.</p>
+      <pre>constructor(public http: HttpClient) {}</pre>
+      <h3>Call the HttpClient.Get method</h3>
+      <p>
+        Используйте метод HttpClient.Get для отправки HTTP-запроса. Запрос
+        отправляется, когда мы подписываемся на метод get(). Когда придет ответ,
+        сопоставьте его с нужным объектом и отобразите результат.
+      </p>
+      <pre>
+        public getData() {
+          this.HttpClient.get&lt;any[]&gt;(this.baseUrl+'users/'+this.userName+'/repos')
+            .subscribe(
+              data => this.repos = data,
+              error => console.log(error)
+            );
+        }
+      </pre>
+      <h3>HTTP GET</h3>
+      <pre>
+        get(
+          url: string, 
+          options: {
+              headers?: HttpHeaders | { [header: string]: string | string[]; };
+              params?: HttpParams | { [param: string]: string | string[]; };
+              observe?: "body|events|response|";
+              responseType: "arraybuffer|json|blob|text";
+              reportProgress?: boolean; 
+              withCredentials?: boolean;}
+        ): Observable&lt;&gt;
+      </pre>
+      <h3>HTTP Post</h3>
+      <pre>
+        post(url: string, 
+            body: any, 
+            options: { 
+                headers?: HttpHeaders | { [header: string]: string | string[]; }; 
+                observe?: "body|events|response|"; 
+                params?: HttpParams | { [param: string]: string | string[]; }; 
+                reportProgress?: boolean; 
+                responseType: "arraybuffer|json|blob|text"; 
+                withCredentials?: boolean; 
+            }
+        ): Observable
+      </pre>
+      <h3>Http interceptor</h3>
+      <p>
+        Перехватчики Angular HTTP находятся между нашим приложением и серверной
+        частью. Когда приложение делает запрос, перехватчик перехватывает запрос
+        до того, как он будет отправлен серверу. Перехватив запросы, мы получим
+        доступ к заголовкам и телу запроса. Это позволяет нам преобразовать
+        запрос перед его отправкой на сервер.
+      </p>
+      <p>
+        Когда ответ поступает из серверной части, перехватчики могут
+        преобразовать его перед передачей в наше приложение.
+      </p>
+      <p>
+        Одним из основных преимуществ Http Interceptors является добавление
+        заголовка авторизации к каждому запросу. Мы могли бы сделать это
+        вручную, но это требует много работы и чревато ошибками. Еще одно
+        преимущество заключается в том, чтобы перехватывать ошибки,
+        сгенерированные запросом, и регистрировать их.
+      </p>
+      <h3>How to Create Http Interceptor</h3>
+      <p>
+        Чтобы реализовать Interceptor, вам необходимо создать внедряемую службу,
+        которая реализует интерфейс HttpInterceptor.
+      </p>
+      <pre>
+        @Injectable() export class AppHttpInterceptor implements HttpInterceptor {
+      </pre>
+      <p>Этот класс должен реализовать метод Intercept.</p>
+      <pre>
+        intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
+          //do whatever you want with the HttpRequest
+          return next.handle(req);
+        }
+      </pre>
+      <p>
+        Затем этот класс предоставляется в корневом модуле с использованием
+        токена HTTP_INTERCEPTORS:
+      </p>
+      <pre>
+        providers: [
+            {
+                provide: HTTP_INTERCEPTORS,
+                useClass: AppHttpInterceptor,
+                multi: true
+            }
+        ],
+      </pre>
+      <h3>HttpRequest</h3>
+      <p>
+        HttpRequest — это неизменяемый класс. Это означает, что мы не можем
+        изменить исходный запрос. Чтобы внести изменения, нам нужно клонировать
+        исходный запрос с помощью метода HttpRequest.clone.
+      </p>
+      <h3>HttpHandler</h3>
+      <p>
+        HttpHandler отправляет HttpRequest следующему обработчику, используя
+        метод HttpHandler.handle. Следующим обработчиком может быть другой
+        перехватчик в цепочке или Http Backend.
+      </p>
+
+      <hr />
+
+      <h2>18. Why we should use HttpClient instead of fetch?</h2>
+      <ul>
+        <li>
+          It allows easy mixing and matching of two observables (e.g. let's say
+          you have one observable which returns multiple times and an API
+          request which returns once and you want to zip the two together it's
+          trivially easy to do). Of course, turning a promise into an observable
+          only requires importing from from rxjs
+        </li>
+        <li>
+          If you forget adding an abstraction - having all requests going
+          through an apiService layer - you can still use an interceptor to
+          achieve similar results magically.
+        </li>
+        <li>
+          It will increase the learning curve for new Angular developers, thus
+          making your job more special.
+        </li>
+        <li>
+          HttpClient does some magic for you such as automatic retrying of
+          requests.
+        </li>
+        <li>
+          It's already included in Angular, so if you need to support 7 year old
+          browsers like IE11 you don't need to load a polyfill like with fetch.
+        </li>
+      </ul>
+      <hr />
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

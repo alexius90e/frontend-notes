@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Git <a href="./index.html">back ></a></h1>
+
+      <h2>Что такое Git</h2>
+      <p>Git — система управления версиями с распределенной архитектурой.</p>
+
+      <ul>
+        <li>Снимки, а не различия</li>
+        <li>Почти все операции выполняются локально</li>
+        <li>Целостность Git</li>
+        <li>Git обычно только добавляет данные</li>
+      </ul>
+
+      <hr />
+
+      <h2>3 состояния отслеживаемого файла</h2>
+
+      <ol>
+        <li>
+          <h3>modified</h3>
+          <p>
+            К изменённым относятся файлы, которые поменялись, но ещё не были
+            зафиксированы.
+          </p>
+        </li>
+        <li>
+          <h3>staged</h3>
+          <p>
+            Индексированный — это изменённый файл в его текущей версии,
+            отмеченный для включения в следующий коммит.
+          </p>
+        </li>
+        <li>
+          <h3>committed</h3>
+          <p>
+            Зафиксированный значит, что файл уже сохранён в вашей локальной
+            базе.
+          </p>
+        </li>
+      </ol>
+
+      <hr />
+
+      <h2>Коммит</h2>
+      <p>
+        Команда git commit делает для проекта снимок текущего состояния
+        изменений, добавленных в раздел проиндексированных файлов.
+      </p>
+
+      <p>Простейший способ зафиксировать изменения — это набрать git commit:</p>
+      <pre>
+        <code>$ git commit</code>
+      </pre>
+
+      <p>Быстрая команда, которая создает коммит с указанным комментарием.</p>
+      <pre>
+        <code>$ git commit -m "commit message"</code>
+      </pre>
+
+      <p>При передаче этого параметра будет изменен последний коммит.</p>
+      <pre>
+        <code>$ git commit --amend</code>
+      </pre>
+
+      <hr />
+
+      <h2>Push и pull</h2>
+      <h3>Push</h3>
+      <p>
+        Sends local commits to the remote repository. git push requires two
+        parameters: the remote repository and the branch that the push is for.
+      </p>
+
+      <p>
+        Команда git push используется для выгрузки содержимого локального
+        репозитория в удаленный репозиторий. Она позволяет передать коммиты из
+        локального репозитория в удаленный.
+      </p>
+      <pre>
+        <code>$ git push &lt;remote&gt; &lt;branch&gt;</code>
+      </pre>
+
+      <h3>Pull</h3>
+      <p>
+        To get the latest version of a repository run git pull. This pulls the
+        changes from the remote repository to the local computer.
+      </p>
+      <p>
+        Команда git pull используется для извлечения и загрузки содержимого из
+        удаленного репозитория и немедленного обновления локального репозитория
+        этим содержимым.
+      </p>
+      <p>
+        Команда git pull на самом деле представляет собой комбинацию двух других
+        команд: git fetch и git merge
+      </p>
+      <pre>
+        <code>$ git pull</code>
+      </pre>
+
+      <hr />
+
+      <h2>
+        Первоначальная настройка гита (конфиг) Указание неослеживаемых файлов
+      </h2>
+
+      <p>
+        В состав Git входит утилита git config, которая позволяет просматривать
+        и настраивать параметры, контролирующие все аспекты работы Git
+      </p>
+      <p>
+        Первое, что вам следует сделать после установки Git — указать ваше имя и
+        адрес электронной почты.
+      </p>
+      <pre>
+        <code>$ git config --global user.name "John Doe"</code>
+        <code>$ git config --global user.email johndoe@example.com</code>
+      </pre>
+      <h3>Выбор редактора</h3>
+      <pre>
+        <code>$ git config --global core.editor emacs</code>
+      </pre>
+      <h3>Проверка настроек</h3>
+      <pre>
+        <code>$ git config --list</code>
+      </pre>
+
+      <h2>Цикл работы с гитом</h2>
+
+      <ul>
+        <li>
+          Создание локальной копии удалённого репозитория (операция
+          <strong>Clone</strong>)
+        </li>
+        <li>
+          Изменение локальной копии проекта (добавление/изменение/удаление
+          файлов)
+        </li>
+        <li>
+          Обновление локальной копии при необходимости (операция
+          <strong>Pull</strong>)
+        </li>
+        <li>
+          Подтверждение изменений в локальном репозитории (операция
+          <strong>C</strong><strong>ommit</strong>)
+        </li>
+        <li>
+          Добавление изменение из локального репозитория в центральный (операция
+          <strong>Push</strong>)
+        </li>
+      </ul>
+
+      <hr />
+
+      <h2>Указание неослеживаемых файлов</h2>
+      <p>
+        Игнорируемый файл — файл, явным образом помеченный для Git как файл,
+        который необходимо игнорировать.
+      </p>
+      <ul>
+        <li>
+          кэши зависимостей, например содержимое <code>/node_modules</code> или
+          <code>/packages</code>;
+        </li>
+        <li>
+          скомпилированный код, например файлы <code>.o</code>,
+          <code>.pyc</code> и <code>.class</code> ;
+        </li>
+        <li>
+          каталоги для выходных данных сборки, например <code>/bin</code>,
+          <code>/out</code> или <code>/target</code>;
+        </li>
+        <li>
+          файлы, сгенерированные во время выполнения, например
+          <code>.log</code>, <code>.lock</code> или <code>.tmp</code>;
+        </li>
+        <li>
+          скрытые системные файлы, например <code>.DS_Store</code> или
+          <code>Thumbs.db</code>;
+        </li>
+        <li>
+          личные файлы конфигурации IDE, например
+          <code>.idea/workspace.xml</code>.
+        </li>
+      </ul>
+      <p>
+        Игнорируемые файлы отслеживаются в специальном файле .gitignore, который
+        регистрируется в корневом каталоге репозитория.
+      </p>
+      <pre>
+        <code>
+          # no .log files
+          *.log
+
+          # but do track error.log, even though you're
+          ignoring .log files above
+          !error.log
+
+          # only ignore the TODO file in the current
+          directory, not subdir/TODO
+          /TODO
+
+          # ignore all files in the build/ directory
+          build/
+
+          # ignore doc/notes.txt, but not doc/server/arch.txt
+          doc/*.txt
+
+          # ignore all .pdf files in the doc/ directory
+          doc/**/*.pdf
+        </code>
+      </pre>
+
+      <hr />
+
+      <h2>Команды</h2>
+
+      <h3>git init (Создать новый репозиторий)</h3>
+      <p>
+        This command turns a directory into an empty Git repository. This is the
+        first step in creating a repository. After running git init, adding and
+        committing files/directories is possible.
+      </p>
+      <pre>
+        <code>$ git init</code>
+      </pre>
+      <h3>git clone (Клонирование репозиториz)</h3>
+      <p>
+        To create a local working copy of an existing remote repository, use git
+        clone to copy and download the repository to a computer. Git will create
+        a directory locally with all files and repository history.
+      </p>
+      <pre>
+        <code>$ git clone <i>remote_URL</i></code>
+      </pre>
+      <h3>git log (Просмотр изменений)</h3>
+      <p>
+        To show the chronological commit history for a repository. This helps
+        give context and history for a repository. git log is available
+        immediately on a recently cloned repository to see history.
+      </p>
+      <pre>
+        <code>$ git log</code>
+      </pre>
+      <h3>git add (Добавление изменений в индекс)</h3>
+      <p>
+        Adds files in the to the staging area for Git. Before a file is
+        available to commit to a repository, the file needs to be added to the
+        Git index (staging area).
+      </p>
+      <pre>
+        <code>$ git add file or directory name</code>
+      </pre>
+      <h3>git reset (Удаление изменений из индекса)</h3>
+      <p>используйте git reset HEAD file для исключения из индекса.</p>
+      <p>
+        Git версии 2.23.0 представил новую команду: git restore. По сути, это
+        альтернатива git reset
+      </p>
+      <pre>
+        <code>$ git reset HEAD index.html</code>
+        <code>$ git restore --staged file</code>
+      </pre>
+      <h3>git checkout (Отмена изменений)</h3>
+      <pre>
+        <code>$ git checkout -- CONTRIBUTING.md</code>
+        <code>$ git restore CONTRIBUTING.md</code>
+      </pre>
+      <h3>Коммиты</h3>
+      <p>
+        Команда git commit берёт все данные, добавленные в индекс с помощью git
+        add, и сохраняет их слепок во внутренней базе данных, а затем сдвигает
+        указатель текущей ветки на этот слепок.
+      </p>
+      <pre>
+        <code>$ git commit -m "commit message"</code>
+      </pre>
+      <h3>Отмена коммитов и перемещение по истории</h3>
+      <p>
+        Самая простая ситуация — отмена изменений. Фактически она сводится к
+        созданию ещё одного коммита, который выполняет изменения противоположные
+        тому коммиту, который отменяется.
+      </p>
+      <pre>
+        <code>$ git revert <хеш коммита></code>
+      </pre>
+      <p>
+        Git позволяет удалять коммиты. Это опасная операция, которую нужно
+        делать только в том случае, если речь идет про новые коммиты, которых
+        нет ни у кого, кроме вас.
+      </p>
+      <pre>
+        <code>$ git reset --hard HEAD~</code>
+      </pre>
+      <p>
+        Git позволяет не только просматривать историю, но и перемещаться по ней,
+        загружая в рабочую директорию состояние кода на момент выполнения любого
+        коммита.
+      </p>
+      <pre>
+        <code>$ git checkout <хеш коммита></code>
+      </pre>
+      <h3>Временно переключиться на другой коммит</h3>
+      <p>
+        Git позволяет не только просматривать историю, но и перемещаться по ней,
+        загружая в рабочую директорию состояние кода на момент выполнения любого
+        коммита.
+      </p>
+      <pre>
+        <code>$ git checkout <хеш коммита></code>
+      </pre>
+      <h3>Переключиться на другой коммит и продолжить работу с него</h3>
+      <pre>
+        <code>$ git revert /sha1/</code>
+      </pre>
+      <h3>Копирование коммита (перенос коммитов)</h3>
+      <pre>
+        <code>git cherry-pick /commitSha/</code>
+      </pre>
+      <h3>Удаление файла</h3>
+      <p>
+        Для того чтобы удалить файл из Git, вам необходимо удалить его из
+        отслеживаемых файлов (точнее, удалить его из вашего индекса) а затем
+        выполнить коммит. Это позволяет сделать команда git rm, которая также
+        удаляет файл из вашего рабочего каталога, так что в следующий раз вы не
+        увидите его как «неотслеживаемый».
+      </p>
+      <pre>
+        <code>
+          # To remove a file from the working index (cached):
+          $ git rm --cached file name
+
+          # To delete a file (force):
+          $ git rm -f file name
+
+          # To remove an entire directory from the working index (cached):
+          $ git rm -r --cached directory name
+
+          # To delete an entire directory (force):
+          $ git rm -r -f file name
+        </code>
+      </pre>
+      <h3>Перемещение/переименование файлов</h3>
+      <pre>
+        <code>$ git mv hello.html lib</code>
+      </pre>
+      <h3>Ветки</h3>
+      <h4>Создание новой ветки</h4>
+      <pre>
+        <code>$ git branch testing</code>
+        <code>$ git checkout -b testing</code>
+      </pre>
+      <h4>Переключение веток</h4>
+      <pre>
+        <code>$ git checkout testing</code>
+      </pre>
+      <h3>Теги</h3>
+      <p>
+        Команда git tag используется для задания постоянной метки на какой-либо
+        момент в истории проекта. Обычно она используется для релизов.
+      </p>
+      <pre>
+        <code>
+          Mark commit with tag
+            $ git tag ver1
+          View tags
+            $ git tag
+          –list
+          Push
+            $ git push --tags
+          Check it out
+            $ git checkout ver1
+        </code>
+      </pre>
+      <h3>Временное сохранение изменений без коммита</h3>
+      <p>
+        Команда git stash используется для временного сохранения всех
+        незафиксированных изменений с целью очистки рабочего каталога без
+        необходимости фиксировать незавершённую работу в текущей ветке.
+      </p>
+      <pre>
+        <code>
+          Save working directory
+            $ git stash save “description”
+          View stashes
+            $ git stash list
+          Bring them back
+            $ git stash pop (and remove from stash)
+            $ git stash apply (leave in stash)
+          Remove
+            $ git stash drop (clear)
+          </code>
+      </pre>
+      <h3>Удалённые репозитории</h3>
+      <pre>
+        <code>
+          Add
+          $ git remote add /name/ /url/
+          $ git remote add origin git@github.com:user/repo.git
+          View
+          $ git remote –v
+          $ git remote show /name/
+        </code>
+      </pre>
+      <h3>«Перенос» ветки</h3>
+      <p>
+        Перебазирование — это процесс перемещения последовательности коммитов к
+        новому базовому коммиту или их объединение. Операцию перебазирования
+        удобнее всего применить и отобразить в контексте создания функциональных
+        веток.
+      </p>
+      <pre>
+        <code>$ git rebase /base/</code>
+      </pre>
+      <figure>
+        <img src="https://wac-cdn.atlassian.com/dam/jcr:4e576671-1b7f-43db-afb5-cf8db8df8e4a/01%20What%20is%20git%20rebase.svg?cdnVersion=269" alt="">
+      </figure>
+
+      <hr>
+
+      <h2>Conflicts solving</h2>
+        <p>Abort merge</p>
+        <pre><code>$ git merge --abort</code></pre>
+        <p>Resolve by selecting version</p>
+        <pre><code>$ git checkout --Xours --Xtheirs</code></pre>
+        <p>Resolve manually</p>
+        <pre><code>$ git diff</code></pre>
+        <p>Undo merge</p>
+        <pre><code>$ git revert 09fe472</code></pre>
+      <hr>
+
+      <h2>Стратегии гита</h2>
+      <ul>
+        <li>Centralized strategy
+        </li>
+        <li>Feature-branch workflow</li>
+        <li>Gitflow</li>
+        <li>Integration manager workflow</li>
+        <li>Dictator and Lieutenants workflow</li>
+        <li>Forking workflow</li>
+      </ul>
+    </main>
+  </body>
+</html>
