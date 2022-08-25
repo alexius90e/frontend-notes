@@ -1,3 +1,28 @@
+:root {
+  --animation-duration: 0.25s;
+  --animation-scale: scale(1.3);
+}
+
+@keyframes scale {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: var(--animation-scale);
+  }
+}
+
+@keyframes scaleback {
+  from {
+    transform:  var(--animation-scale);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
 body {
   display: flex;
   align-items: center;
@@ -28,11 +53,12 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   box-shadow: 0 0 1rem -0.5rem #000000;
-  transition: all linear 0.15s;
+  animation: var(--animation-duration) ease-in scaleback;
 }
 
 .main-menu__item:hover {
-  transform: scale(1.1);
+  animation: var(--animation-duration) ease-out scale;
+  transform:  var(--animation-scale);
 }
 
 .main-menu__item:active {
