@@ -1,15 +1,13 @@
 body {
   display: flex;
   align-items: center;
-  height: 97vh;
+  min-height: 97vh;
   background-color: #222222;
 }
 
 .main-heading {
   display: block;
   margin: 0 0 2rem;
-  font-size: 2rem;
-  line-height: 2.5rem;
   text-align: center;
   color: #ffdf00;
 }
