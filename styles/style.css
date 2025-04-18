@@ -32,6 +32,9 @@ main {
   }
 }
 
+code {
+  padding: 0.1em 0.25em !important;
+}
 
 img {
   max-width: 100%;

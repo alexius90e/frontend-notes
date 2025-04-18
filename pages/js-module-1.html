@@ -312,22 +312,22 @@
         <li>Функции, которые находятся в объекте в качестве его свойств, называются «методами».</li>
         <li>
           Методы позволяют объектам «действовать»:
-          <code>object.doSomething()</code>.
+          <code class="lang-js">object.doSomething()</code>.
         </li>
-        <li>Методы могут ссылаться на объект через <code>this</code>.</li>
+        <li>Методы могут ссылаться на объект через <code class="lang-js">this</code>.</li>
       </ul>
-      <p>Значение <code>this</code> определяется во время исполнения кода.</p>
+      <p>Значение <code class="lang-js">this</code> определяется во время исполнения кода.</p>
       <ul>
         <li>
           При объявлении любой функции в ней можно использовать
-          <code>this</code>, но этот <code>this</code> не имеет значения до тех пор, пока функция не
-          будет вызвана.
+          <code class="lang-js">this</code>, но этот <code class="lang-js">this</code> не имеет
+          значения до тех пор, пока функция не будет вызвана.
         </li>
         <li>Эта функция может быть скопирована между объектами (из одного объекта в другой).</li>
         <li>
           Когда функция вызывается синтаксисом «метода» –
-          <code>object.method()</code>, значением <code>this</code> во время вызова является объект
-          перед точкой.
+          <code class="lang-js">object.method()</code>, значением
+          <code class="lang-js">this</code> во время вызова является объект перед точкой.
         </li>
       </ul>
       <hr />
@@ -335,31 +335,33 @@
       <h2>8. Потеря this + call/bind/apply</h2>
       <p>Некоторые способы вызова метода приводят к потере значения this, например:</p>
       <pre>
-        let user = {
-          name: "Джон",
-          hi() { alert(this.name); },
-          bye() { alert("Пока"); }
-        };
-        
-        user.hi(); // Джон (простой вызов метода работает хорошо)
-        
-        // теперь давайте попробуем вызывать user.hi или user.bye
-        // в зависимости от имени пользователя user.name
-        (user.name == "Джон" ? user.hi : user.bye)(); // Ошибка!
+        <code class="lang-js">
+          let user = {
+            name: "Джон",
+            hi() { alert(this.name); },
+            bye() { alert("Пока"); }
+          };
+          
+          user.hi(); // Джон (простой вызов метода работает хорошо)
+          
+          // теперь давайте попробуем вызывать user.hi или user.bye
+          // в зависимости от имени пользователя user.name
+          (user.name == "Джон" ? user.hi : user.bye)(); // Ошибка!
+        </code>
       </pre>
       <p>Присмотревшись поближе, в выражении obj.method() можно заметить две операции:</p>
       <ol>
         <li>
-          Сначала оператор точка <code>' . '</code> возвращает свойство объекта – его метод
-          <code>(obj.method)</code>.
+          Сначала оператор точка <code class="lang-js">' . '</code> возвращает свойство объекта –
+          его метод <code class="lang-js">(obj.method)</code>.
         </li>
         <li>Затем скобки () вызывают этот метод (исполняется код метода).</li>
       </ol>
       <p>
         <b
-          >Для работы вызовов типа <code>user.hi()</code>, JavaScript использует трюк – точка
-          <code>'.'</code> возвращает не саму функцию, а специальное значение «ссылочного типа»,
-          называемого Reference Type.</b
+          >Для работы вызовов типа <code class="lang-js">user.hi()</code>, JavaScript использует
+          трюк – точка <code class="lang-js">'.'</code> возвращает не саму функцию, а специальное
+          значение «ссылочного типа», называемого Reference Type.</b
         >
       </p>
       <p>
@@ -367,61 +369,74 @@
         где:
       </p>
       <ol>
-        <li><code>base</code> – это объект.</li>
-        <li><code>name</code> – это имя свойства объекта.</li>
+        <li><code class="lang-js">base</code> – это объект.</li>
+        <li><code class="lang-js">name</code> – это имя свойства объекта.</li>
         <li>
-          <code>strict</code> – это режим исполнения. Является true, если действует строгий режим
-          <code>(use strict)</code>.
+          <code class="lang-js">strict</code> – это режим исполнения. Является true, если действует
+          строгий режим <code class="lang-js">(use strict)</code>.
         </li>
       </ol>
       <h3>Bind</h3>
       <p>
-        Метод <code>bind</code> возвращает «привязанный вариант» функции <code>func</code>, фиксируя
-        контекст <code>this</code> и первые аргументы <code>arg1</code>, <code>arg2</code>…, если
+        Метод <code class="lang-js">bind</code> возвращает «привязанный вариант» функции
+        <code class="lang-js">func</code>, фиксируя контекст <code class="lang-js">this</code> и
+        первые аргументы <code class="lang-js">arg1</code>, <code class="lang-js">arg2</code>…, если
         они заданы.
       </p>
       <pre>
-        let bound = func.bind(context);
+        <code class="lang-js">
+          let bound = func.bind(context);
+        </code>
+        
       </pre>
       <p>
-        Обычно <code>bind</code> применяется для фиксации <code>this</code> в методе объекта, чтобы
-        передать его в качестве колбэка. Например, для <code>setTimeout</code>.
+        Обычно <code class="lang-js">bind</code> применяется для фиксации
+        <code class="lang-js">this</code> в методе объекта, чтобы передать его в качестве колбэка.
+        Например, для <code class="lang-js">setTimeout</code>.
       </p>
       <p>
         Когда мы привязываем аргументы, такая функция называется «частично применённой» или
         «частичной».
       </p>
       <pre>
-        let bound = func.bind(context, [arg1], [arg2], ...);
+        <code class="lang-js">
+          let bound = func.bind(context, [arg1], [arg2], ...);
+        </code>
       </pre>
       <p>
         Частичное применение удобно, когда мы не хотим повторять один и тот же аргумент много раз.
       </p>
       <h3>Call</h3>
       <p>
-        Метод <code><strong>call()</strong></code> вызывает функцию с указанным значением
-        <code>this</code> и индивидуально предоставленными аргументами.
+        Метод <code class="lang-js"><strong>call()</strong></code> вызывает функцию с указанным
+        значением <code class="lang-js">this</code> и индивидуально предоставленными аргументами.
       </p>
       <pre>
-        fun.call(thisArg[, arg1[, arg2[, ...]]])
+        <code class="lang-js">
+          fun.call(thisArg[, arg1[, arg2[, ...]]])
+        </code>
+
       </pre>
       <p>
-        <code>thisArg</code> Значение <code>this</code>, предоставляемое для вызова функции
-        <code>fun</code>.
+        <code class="lang-js">thisArg</code> Значение <code class="lang-js">this</code>,
+        предоставляемое для вызова функции <code class="lang-js">fun</code>.
       </p>
-      <p><code>arg1, arg2, ...</code> Аргументы для объекта.</p>
+      <p><code class="lang-js">arg1, arg2, ...</code> Аргументы для объекта.</p>
       <h3>Apply</h3>
       <p>
-        Метод <code><strong>apply()</strong></code> вызывает функцию с указанным значением
-        <code>this</code> и аргументами, предоставленными в виде массива (либо массивоподобного
-        объекта).
+        Метод <code class="lang-js"><strong>apply()</strong></code> вызывает функцию с указанным
+        значением <code class="lang-js">this</code> и аргументами, предоставленными в виде массива
+        (либо массивоподобного объекта).
       </p>
       <pre>
-        fun.apply(thisArg, [argsArray])
+        <code class="lang-js">
+          fun.apply(thisArg, [argsArray])
+        </code>
       </pre>
       <p>
-        <strong>Примечание:</strong> что функция <code>call()</code> принимает список аргументов,
-        функция <code>apply()</code> принимает единичный массив аргументов.
+        <strong>Примечание:</strong> что функция <code class="lang-js">call()</code> принимает
+        список аргументов, функция <code class="lang-js">apply()</code> принимает единичный массив
+        аргументов.
       </p>
       <hr />
 
@@ -445,15 +460,17 @@
         <li>Возвращается значение this.</li>
       </ol>
       <pre>
-        function User(name) {
-          // this = {};  (неявно)
-        
-          // добавляет свойства к this
-          this.name = name;
-          this.isAdmin = false;
-        
-          // return this;  (неявно)
-        }
+        <code class="lang-js">
+          function User(name) {
+            // this = {};  (неявно)
+          
+            // добавляет свойства к this
+            this.name = name;
+            this.isAdmin = false;
+          
+            // return this;  (неявно)
+          }
+        </code>
       </pre>
       <p>
         JavaScript предоставляет функции-конструкторы для множества встроенных объектов языка:
@@ -472,37 +489,39 @@
           помощью операторов строгого равенства/неравенства.
         </li>
         <li>
-          Значения <code>null</code> и <code>undefined</code> равны <code>==</code> друг другу и не
-          равны любому другому значению.
+          Значения <code class="lang-js">null</code> и <code class="lang-js">undefined</code> равны
+          <code class="lang-js">==</code> друг другу и не равны любому другому значению.
         </li>
         <li>
           Будьте осторожны при использовании операторов сравнений вроде
-          <code>&gt;</code> и <code>&lt;</code> с переменными, которые могут принимать значения
-          <code>null/undefined</code>. Хорошей идеей будет сделать отдельную проверку на
-          <code>null/undefined</code>.
+          <code class="lang-js">&gt;</code> и <code class="lang-js">&lt;</code> с переменными,
+          которые могут принимать значения <code class="lang-js">null/undefined</code>. Хорошей
+          идеей будет сделать отдельную проверку на <code class="lang-js">null/undefined</code>.
         </li>
       </ul>
       <hr />
 
       <h2>11. SetTimeout , как отменить</h2>
       <p>
-        <code>SetTimeout</code> позволяет вызвать функцию один раз через определённый интервал
-        времени.
+        <code class="lang-js">SetTimeout</code> позволяет вызвать функцию один раз через
+        определённый интервал времени.
       </p>
       <p>Синтаксис:</p>
       <pre>
-        let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
+        <code class="lang-js">
+          let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
+        </code>
       </pre>
       <p>Параметры:</p>
       <dl>
-        <dt><code>func|code</code></dt>
+        <dt><code class="lang-js">func|code</code></dt>
         <dd>
           Функция или строка кода для выполнения. Обычно это функция. По историческим причинам можно
           передать и строку кода, но это не рекомендуется.
         </dd>
-        <dt><code>delay</code></dt>
+        <dt><code class="lang-js">delay</code></dt>
         <dd>Задержка перед запуском в миллисекундах (1000 мс = 1 с). Значение по умолчанию – 0.</dd>
-        <dt><code>arg1</code>, <code>arg2</code>…</dt>
+        <dt><code class="lang-js">arg1</code>, <code class="lang-js">arg2</code>…</dt>
         <dd>Аргументы, передаваемые в функцию (не поддерживается в IE9-)</dd>
       </dl>
       <h3>Отмена через clearTimeout</h3>
@@ -512,8 +531,11 @@
       </p>
       <p>Синтаксис для отмены:</p>
       <pre>
+        <code class="lang-js">
           let timerId = setTimeout(...);
           clearTimeout(timerId);
+        </code>
+
       </pre>
       <hr />
 
@@ -521,7 +543,9 @@
       <p>Деструктуризация позволяет разбивать объект или массив на переменные при присвоении.</p>
       <p>Полный синтаксис для массива:</p>
       <pre>
-        let [item1 = default, item2, ...rest] = array
+        <code class="lang-js">
+          let [item1 = default, item2, ...rest] = array
+        </code>
       </pre>
       <p>
         Первый элемент отправляется в item1; второй отправляется в item2, все остальные элементы
@@ -541,109 +565,109 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>++</code></td>
+            <td><code class="lang-js">++</code></td>
             <td>Increment</td>
             <td>First</td>
             <td>R -&gt; L</td>
           </tr>
           <tr>
-            <td><code>--</code></td>
+            <td><code class="lang-js">--</code></td>
             <td>Decrement</td>
             <td>First</td>
             <td>R -&gt; L</td>
           </tr>
           <tr>
-            <td><code>—</code></td>
+            <td><code class="lang-js">—</code></td>
             <td>Negation</td>
             <td>First</td>
             <td>R -&gt; L</td>
           </tr>
           <tr>
-            <td><code>!</code></td>
+            <td><code class="lang-js">!</code></td>
             <td>NOT</td>
             <td>First</td>
             <td>R -&gt; L</td>
           </tr>
           <tr>
-            <td><code>*, /, %</code></td>
+            <td><code class="lang-js">*, /, %</code></td>
             <td>Multiplication, division, modulus</td>
             <td>Second</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>+, —</code></td>
+            <td><code class="lang-js">+, —</code></td>
             <td>Addition, subtraction</td>
             <td>Third</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>+</code></td>
+            <td><code class="lang-js">+</code></td>
             <td>Concatenation</td>
             <td>Third</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>&lt;, &lt;=</code></td>
+            <td><code class="lang-js">&lt;, &lt;=</code></td>
             <td>Less than, less than, or equal</td>
             <td>Fourth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>&gt;, &gt;=</code></td>
+            <td><code class="lang-js">&gt;, &gt;=</code></td>
             <td>Greater than, greater than, or equal</td>
             <td>Fourth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>==</code></td>
+            <td><code class="lang-js">==</code></td>
             <td>Equal</td>
             <td>Fifth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>!=</code></td>
+            <td><code class="lang-js">!=</code></td>
             <td>Not equal</td>
             <td>Fifth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>===</code></td>
+            <td><code class="lang-js">===</code></td>
             <td>Identity</td>
             <td>Fifth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>!==</code></td>
+            <td><code class="lang-js">!==</code></td>
             <td>Non-identity</td>
             <td>Fifth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>&amp;&amp;</code></td>
+            <td><code class="lang-js">&amp;&amp;</code></td>
             <td>AND</td>
             <td>Sixth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>||</code></td>
+            <td><code class="lang-js">||</code></td>
             <td>OR</td>
             <td>Sixth</td>
             <td>L -&gt; R</td>
           </tr>
           <tr>
-            <td><code>?:</code></td>
+            <td><code class="lang-js">?:</code></td>
             <td>Ternary</td>
             <td>Seventh</td>
             <td>R -&gt; L</td>
           </tr>
           <tr>
-            <td><code>=</code></td>
+            <td><code class="lang-js">=</code></td>
             <td>Assignment</td>
             <td>Eighth</td>
             <td>R -&gt; L</td>
           </tr>
           <tr>
-            <td><code>+=</code>, <code>-=</code>, and so on.</td>
+            <td><code class="lang-js">+=</code>, <code class="lang-js">-=</code>, and so on.</td>
             <td>Arithmetic assignment</td>
             <td>Eighth</td>
             <td>R -&gt; L</td>
@@ -659,21 +683,23 @@
       <h3>Строковое</h3>
       <p>
         Происходит, когда нам нужно что-то вывести. Может быть вызвано с помощью
-        <code>String(value)</code>. Для примитивных значений работает очевидным образом.
+        <code class="lang-js">String(value)</code>. Для примитивных значений работает очевидным
+        образом.
       </p>
       <h3>Численное</h3>
       <p>
         Численное – Происходит в математических операциях. Может быть вызвано с помощью
-        <code>Number(value)</code>. Преобразование подчиняется правилам:
+        <code class="lang-js">Number(value)</code>. Преобразование подчиняется правилам:
       </p>
       <ol>
-        <li><code>undefined</code> => <code>NaN</code></li>
-        <li><code>null</code> => <code>0</code></li>
-        <li><code>true / false</code> => <code>1 / 0</code></li>
+        <li><code class="lang-js">undefined</code> => <code class="lang-js">NaN</code></li>
+        <li><code class="lang-js">null</code> => <code class="lang-js">0</code></li>
+        <li><code class="lang-js">true / false</code> => <code class="lang-js">1 / 0</code></li>
         <li>
           string => Пробелы по краям обрезаются. Далее, если остаётся
-          <code>' '</code>, то получаем <code>0</code>, иначе из <code>'213'</code> «считывается»
-          число. При ошибке результат <code>NaN</code>.
+          <code class="lang-js">' '</code>, то получаем <code class="lang-js">0</code>, иначе из
+          <code class="lang-js">'213'</code> «считывается» число. При ошибке результат
+          <code class="lang-js">NaN</code>.
         </li>
       </ol>
       <h3>Логическое</h3>
@@ -682,42 +708,58 @@
       </p>
       <ol>
         <li>
-          <code>0</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>,
-          <code>""</code> => <code>false</code>
+          <code class="lang-js">0</code>, <code class="lang-js">null</code>,
+          <code class="lang-js">undefined</code>, <code class="lang-js">NaN</code>,
+          <code class="lang-js">""</code> => <code class="lang-js">false</code>
         </li>
-        <li><code>любое другое значение</code> => <code>true</code></li>
+        <li>
+          <code class="lang-js">любое другое значение</code> => <code class="lang-js">true</code>
+        </li>
       </ol>
-      <p><code>Унарным</code> называется оператор, который применяется к одному операнду.</p>
-      <p><code>Бинарным</code> называется оператор, который применяется к двум операндам.</p>
+      <p>
+        <code class="lang-js">Унарным</code> называется оператор, который применяется к одному
+        операнду.
+      </p>
+      <p>
+        <code class="lang-js">Бинарным</code> называется оператор, который применяется к двум
+        операндам.
+      </p>
       <hr />
 
       <h2>15. Type of vs instance of show difference in examples.</h2>
       <p>
-        <code>typeof</code> работает для <code>примитивов</code> возвращает
-        <code>строка</code>
+        <code class="lang-js">typeof</code> работает для
+        <code class="lang-js">примитивов</code> возвращает
+        <code class="lang-js">строка</code>
       </p>
       <p>
-        <code>instanceof</code> работает для <code>объектов</code> возвращает
-        <code>true/false</code>
+        <code class="lang-js">instanceof</code> работает для
+        <code class="lang-js">объектов</code> возвращает
+        <code class="lang-js">true/false</code>
       </p>
 
       <p>
-        The <code>typeof</code> operator checks if a value has type of primitive type which can be
-        one of <code>boolean</code>, <code>function</code>, <code>object</code>,
-        <code>number</code>, <code>string</code>, <code>undefined</code> and
-        <code>symbol</code> (ES6).
+        The <code class="lang-js">typeof</code> operator checks if a value has type of primitive
+        type which can be one of <code class="lang-js">boolean</code>,
+        <code class="lang-js">function</code>, <code class="lang-js">object</code>,
+        <code class="lang-js">number</code>, <code class="lang-js">string</code>,
+        <code class="lang-js">undefined</code> and <code class="lang-js">symbol</code> (ES6).
       </p>
       <pre>
-        typeof 'helloworld'; // 'string'
-        typeof new String('helloworld'); // 'object'
+        <code class="lang-js">
+          typeof 'helloworld'; // 'string'
+          typeof new String('helloworld'); // 'object'
+        </code>
       </pre>
       <p>
-        The <code>instanceof</code> operator checks if a value is an instance of a class or
-        constructor function.
+        The <code class="lang-js">instanceof</code> operator checks if a value is an instance of a
+        class or constructor function.
       </p>
       <pre>
-        'helloworld' instanceof String; // false
-        new String('helloworld') instanceof String; // true
+        <code class="lang-js">
+          'helloworld' instanceof String; // false
+          new String('helloworld') instanceof String; // true
+        </code>
       </pre>
       <hr />
 
@@ -725,45 +767,55 @@
       <ul>
         <li>
           В JavaScript все объекты имеют скрытое свойство
-          <code>[[Prototype]]</code>, которое является либо другим объектом, либо <code>null</code>.
+          <code class="lang-js">[[Prototype]]</code>, которое является либо другим объектом, либо
+          <code class="lang-js">null</code>.
         </li>
         <li>
-          Мы можем использовать <code>obj.__proto__</code> для доступа к нему (исторически
-          обусловленный геттер/сеттер.
+          Мы можем использовать <code class="lang-js">obj.__proto__</code> для доступа к нему
+          (исторически обусловленный геттер/сеттер.
         </li>
-        <li>Объект, на который ссылается <code>[[Prototype]]</code>, называется «прототипом».</li>
         <li>
-          Если мы хотим прочитать свойство <code>obj</code> или вызвать метод, которого не
-          существует у <code>obj</code>, тогда JavaScript попытается найти его в прототипе.
+          Объект, на который ссылается <code class="lang-js">[[Prototype]]</code>, называется
+          «прототипом».
+        </li>
+        <li>
+          Если мы хотим прочитать свойство <code class="lang-js">obj</code> или вызвать метод,
+          которого не существует у <code class="lang-js">obj</code>, тогда JavaScript попытается
+          найти его в прототипе.
         </li>
         <li>
           Операции записи/удаления работают непосредственно с объектом, они не используют прототип
           (если это обычное свойство, а не сеттер).
         </li>
         <li>
-          Если мы вызываем <code>obj.method()</code>, а метод при этом взят из прототипа, то
-          <code>this</code> всё равно ссылается на <code>obj</code>. Таким образом, методы всегда
-          работают с текущим объектом, даже если они наследуются.
+          Если мы вызываем <code class="lang-js">obj.method()</code>, а метод при этом взят из
+          прототипа, то <code class="lang-js">this</code> всё равно ссылается на
+          <code class="lang-js">obj</code>. Таким образом, методы всегда работают с текущим
+          объектом, даже если они наследуются.
         </li>
         <li>
-          Цикл <code>for..in</code> перебирает как свои, так и унаследованные свойства. Остальные
-          методы получения ключей/значений работают только с собственными свойствами объекта.
+          Цикл <code class="lang-js">for..in</code> перебирает как свои, так и унаследованные
+          свойства. Остальные методы получения ключей/значений работают только с собственными
+          свойствами объекта.
         </li>
       </ul>
       <h3>F.prototype</h3>
       <ul>
         <li>
-          Свойство <code>F.prototype</code> (не путать с <code>[[Prototype]]</code>)
-          устанавливает<code>[[Prototype]]</code> для новых объектов при вызове
-          <code>new F()</code>.
+          Свойство <code class="lang-js">F.prototype</code> (не путать с
+          <code class="lang-js">[[Prototype]]</code>) устанавливает<code class="lang-js"
+            >[[Prototype]]</code
+          >
+          для новых объектов при вызове <code class="lang-js">new F()</code>.
         </li>
         <li>
-          Значение <code>F.prototype</code> должно быть либо объектом, либо <code>null</code>.
-          Другие значения не будут работать.
+          Значение <code class="lang-js">F.prototype</code> должно быть либо объектом, либо
+          <code class="lang-js">null</code>. Другие значения не будут работать.
         </li>
         <li>
-          Свойство <code>"prototype"</code> является особым, только когда оно назначено
-          функции-конструктору, которая вызывается оператором <code>new</code>.
+          Свойство <code class="lang-js">"prototype"</code> является особым, только когда оно
+          назначено функции-конструктору, которая вызывается оператором
+          <code class="lang-js">new</code>.
         </li>
       </ul>
       <h3>Встроенные прототипы</h3>
@@ -772,17 +824,20 @@
           Все встроенные объекты следуют одному шаблону:
           <ul>
             <li>
-              Методы хранятся в прототипах (<code>Array.prototype</code>,
-              <code>Object.prototype</code>, <code>Date.prototype</code> и т.д.).
+              Методы хранятся в прототипах (<code class="lang-js">Array.prototype</code>,
+              <code class="lang-js">Object.prototype</code>,
+              <code class="lang-js">Date.prototype</code> и т.д.).
             </li>
             <li>Сами объекты хранят только данные (элементы массивов, свойства объектов, даты).</li>
           </ul>
         </li>
         <li>
           Примитивы также хранят свои методы в прототипах объектов-обёрток:
-          <code>Number.prototype</code>, <code>String.prototype</code>,
-          <code>Boolean.prototype</code>. Только у значений <code>undefined</code> и
-          <code>null</code> нет объектов-обёрток.
+          <code class="lang-js">Number.prototype</code>,
+          <code class="lang-js">String.prototype</code>,
+          <code class="lang-js">Boolean.prototype</code>. Только у значений
+          <code class="lang-js">undefined</code> и <code class="lang-js">null</code> нет
+          объектов-обёрток.
         </li>
         <li>
           Встроенные прототипы могут быть изменены или дополнены новыми методами. Но не
@@ -797,25 +852,27 @@
             href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/create"
             >Object.create(proto[, descriptors])</a
           >
-          – создаёт пустой объект со свойством <code>[[Prototype]]</code>, указанным как
-          <code>proto</code> (может быть <code>null</code>), и необязательными дескрипторами
-          свойств.
+          – создаёт пустой объект со свойством <code class="lang-js">[[Prototype]]</code>, указанным
+          как <code class="lang-js">proto</code> (может быть <code class="lang-js">null</code>), и
+          необязательными дескрипторами свойств.
         </li>
         <li>
           <a
             href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object.getPrototypeOf"
             >Object.getPrototypeOf(obj)</a
           >
-          – возвращает свойство <code>[[Prototype]]</code> объекта <code>obj</code> (то же самое,
-          что и геттер <code>__proto__</code>).
+          – возвращает свойство <code class="lang-js">[[Prototype]]</code> объекта
+          <code class="lang-js">obj</code> (то же самое, что и геттер
+          <code class="lang-js">__proto__</code>).
         </li>
         <li>
           <a
             href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object.setPrototypeOf"
             >Object.setPrototypeOf(obj, proto)</a
           >
-          – устанавливает свойство <code>[[Prototype]]</code> объекта <code>obj</code> как
-          <code>proto</code> (то же самое, что и сеттер <code>__proto__</code>).
+          – устанавливает свойство <code class="lang-js">[[Prototype]]</code> объекта
+          <code class="lang-js">obj</code> как <code class="lang-js">proto</code> (то же самое, что
+          и сеттер <code class="lang-js">__proto__</code>).
         </li>
       </ul>
       <hr />
@@ -823,17 +880,19 @@
       <h2>17. Про Классы (особенности, супер)</h2>
       <p>Базовый синтаксис для классов выглядит так:</p>
       <pre>
-        class MyClass {
-          prop = value; // свойство
-          constructor(...) { // конструктор
+        <code class="lang-js">
+          class MyClass {
+            prop = value; // свойство
+            constructor(...) { // конструктор
+              // ...
+            }
+            method(...) {} // метод
+            get something(...) {} // геттер
+            set something(...) {} // сеттер
+            [Symbol.iterator]() {} // метод с вычисляемым именем (здесь - символом)
             // ...
           }
-          method(...) {} // метод
-          get something(...) {} // геттер
-          set something(...) {} // сеттер
-          [Symbol.iterator]() {} // метод с вычисляемым именем (здесь - символом)
-          // ...
-        }
+        </code>
       </pre>
       <p>Вот что на самом деле делает конструкция class User {...}:</p>
       <ol>
@@ -844,24 +903,27 @@
         <li>Сохраняет все методы, такие как sayHi, в User.prototype.</li>
       </ol>
       <p>
-        Чтобы унаследовать от класса: <code>class Child extends Parent</code>: При этом
-        <code>Child.prototype.__proto__</code> будет равен <code>Parent.prototype</code>, так что
-        методы будут унаследованы.
+        Чтобы унаследовать от класса: <code class="lang-js">class Child extends Parent</code>: При
+        этом <code class="lang-js">Child.prototype.__proto__</code> будет равен
+        <code class="lang-js">Parent.prototype</code>, так что методы будут унаследованы.
       </p>
       <p>
         При переопределении конструктора: Обязателен вызов конструктора родителя
-        <code>super()</code> в конструкторе <code>Child</code> до обращения к this.
+        <code class="lang-js">super()</code> в конструкторе <code class="lang-js">Child</code> до
+        обращения к this.
       </p>
       <p>
         При переопределении другого метода: Мы можем вызвать
-        <code>super.method()</code> в методе <code>Child</code> для обращения к методу родителя
-        Parent.
+        <code class="lang-js">super.method()</code> в методе <code class="lang-js">Child</code> для
+        обращения к методу родителя Parent.
       </p>
       <pre>
-        stop() {
-          super.stop(); // вызываем родительский метод stop
-          this.hide(); // и затем hide
-        }
+        <code class="lang-js">
+          stop() {
+            super.stop(); // вызываем родительский метод stop
+            this.hide(); // и затем hide
+          }
+        </code>
       </pre>
       <hr />
 
@@ -896,106 +958,125 @@
         свойства и копируя их.
       </p>
       <pre>
-        let user = {
-          name: "Иван",
-          age: 30
-        };
-        
-        let clone = {}; // новый пустой объект
-        
-        for (let key in user) {  // скопируем все свойства user в него
-          clone[key] = user[key];
-        }
+        <code class="lang-js">
+          let user = {
+            name: "Иван",
+            age: 30
+          };
+          
+          let clone = {}; // новый пустой объект
+          
+          for (let key in user) {  // скопируем все свойства user в него
+            clone[key] = user[key];
+          }
+        </code>
       </pre>
       <p>
         Кроме того, для этих целей мы можем использовать метод
-        <code>Object.assign</code>.
+        <code class="lang-js">Object.assign</code>.
       </p>
       <pre>
-        Object.assign(dest, [src1, src2, src3...])
+        <code class="lang-js">
+          Object.assign(dest, [src1, src2, src3...])
+        </code>
       </pre>
       <ul>
-        <li>Первый аргумент <code>dest</code> — целевой объект.</li>
+        <li>Первый аргумент <code class="lang-js">dest</code> — целевой объект.</li>
         <li>
-          Остальные аргументы <code>src1, ..., srcN</code> (может быть столько, сколько нужно)
-          являются исходными объектами
+          Остальные аргументы <code class="lang-js">src1, ..., srcN</code> (может быть столько,
+          сколько нужно) являются исходными объектами
         </li>
         <li>
           Метод копирует свойства всех исходных объектов
-          <code>src1, ..., srcN</code> в целевой объект <code>dest</code>. То есть, свойства всех
-          перечисленных объектов, начиная со второго, копируются в первый объект.
+          <code class="lang-js">src1, ..., srcN</code> в целевой объект
+          <code class="lang-js">dest</code>. То есть, свойства всех перечисленных объектов, начиная
+          со второго, копируются в первый объект.
         </li>
-        <li>Возвращает объект <code>dest</code>.</li>
+        <li>Возвращает объект <code class="lang-js">dest</code>.</li>
       </ul>
       <hr />
 
       <h2>20. Set, Map, WeakMap, WeakSet</h2>
       <h3>Map</h3>
-      <p><code>Map</code> – коллекция пар ключ-значение.</p>
+      <p><code class="lang-js">Map</code> – коллекция пар ключ-значение.</p>
       <p>Методы и свойства:</p>
       <ul>
         <li>
-          <code>new Map([iterable])</code> – создаёт коллекцию, можно указать перебираемый объект
-          (обычно массив) из пар <code>[ключ,значение]</code> для инициализации.
+          <code class="lang-js">new Map([iterable])</code> – создаёт коллекцию, можно указать
+          перебираемый объект (обычно массив) из пар
+          <code class="lang-js">[ключ,значение]</code> для инициализации.
         </li>
         <li>
-          <code>map.set(key, value)</code> – записывает по ключу <code>key</code> значение
-          <code>value</code>.
+          <code class="lang-js">map.set(key, value)</code> – записывает по ключу
+          <code class="lang-js">key</code> значение <code class="lang-js">value</code>.
         </li>
         <li>
-          <code>map.get(key)</code> – возвращает значение по ключу или <code>undefined</code>, если
-          ключ <code>key</code> отсутствует.
+          <code class="lang-js">map.get(key)</code> – возвращает значение по ключу или
+          <code class="lang-js">undefined</code>, если ключ
+          <code class="lang-js">key</code> отсутствует.
         </li>
         <li>
-          <code>map.has(key)</code> – возвращает <code>true</code>, если ключ
-          <code>key</code> присутствует в коллекции, иначе <code>false</code>.
+          <code class="lang-js">map.has(key)</code> – возвращает <code class="lang-js">true</code>,
+          если ключ <code class="lang-js">key</code> присутствует в коллекции, иначе
+          <code class="lang-js">false</code>.
         </li>
-        <li><code>map.delete(key)</code> – удаляет элемент по ключу <code>key</code>.</li>
-        <li><code>map.clear()</code> – очищает коллекцию от всех элементов.</li>
-        <li><code>map.size</code> – возвращает текущее количество элементов.</li>
+        <li>
+          <code class="lang-js">map.delete(key)</code> – удаляет элемент по ключу
+          <code class="lang-js">key</code>.
+        </li>
+        <li><code class="lang-js">map.clear()</code> – очищает коллекцию от всех элементов.</li>
+        <li><code class="lang-js">map.size</code> – возвращает текущее количество элементов.</li>
       </ul>
-      <p>Отличия от обычного объекта <code>Object</code>:</p>
+      <p>Отличия от обычного объекта <code class="lang-js">Object</code>:</p>
       <ul>
         <li>Что угодно может быть ключом, в том числе и объекты.</li>
-        <li>Есть дополнительные методы, свойство <code>size</code>.</li>
+        <li>Есть дополнительные методы, свойство <code class="lang-js">size</code>.</li>
       </ul>
       <h3>Set</h3>
       <p>Методы и свойства:</p>
       <ul>
         <li>
-          <code>new Set([iterable])</code> – создаёт <code>Set</code>, можно указать перебираемый
-          объект со значениями для инициализации.
+          <code class="lang-js">new Set([iterable])</code> – создаёт
+          <code class="lang-js">Set</code>, можно указать перебираемый объект со значениями для
+          инициализации.
         </li>
         <li>
-          <code>set.add(value)</code> – добавляет значение (если оно уже есть, то ничего не делает),
-          возвращает тот же объект <code>set</code>.
+          <code class="lang-js">set.add(value)</code> – добавляет значение (если оно уже есть, то
+          ничего не делает), возвращает тот же объект <code class="lang-js">set</code>.
         </li>
         <li>
-          <code>set.delete(value)</code> – удаляет значение, возвращает <code>true</code> если
-          <code>value</code> было в множестве на момент вызова, иначе <code>false</code>.
+          <code class="lang-js">set.delete(value)</code> – удаляет значение, возвращает
+          <code class="lang-js">true</code> если <code class="lang-js">value</code> было в множестве
+          на момент вызова, иначе <code class="lang-js">false</code>.
         </li>
         <li>
-          <code>set.has(value)</code> – возвращает <code>true</code>, если значение присутствует в
-          множестве, иначе <code>false</code>.
+          <code class="lang-js">set.has(value)</code> – возвращает
+          <code class="lang-js">true</code>, если значение присутствует в множестве, иначе
+          <code class="lang-js">false</code>.
         </li>
-        <li><code>set.clear()</code> – удаляет все имеющиеся значения.</li>
-        <li><code>set.size</code> – возвращает количество элементов в множестве.</li>
+        <li><code class="lang-js">set.clear()</code> – удаляет все имеющиеся значения.</li>
+        <li>
+          <code class="lang-js">set.size</code> – возвращает количество элементов в множестве.
+        </li>
       </ul>
       <p>
-        Перебор <code>Map</code> и <code>Set</code> всегда осуществляется в порядке добавления
-        элементов, так что нельзя сказать, что это – неупорядоченные коллекции, но поменять порядок
-        элементов или получить элемент напрямую по его номеру нельзя.
+        Перебор <code class="lang-js">Map</code> и <code class="lang-js">Set</code> всегда
+        осуществляется в порядке добавления элементов, так что нельзя сказать, что это –
+        неупорядоченные коллекции, но поменять порядок элементов или получить элемент напрямую по
+        его номеру нельзя.
       </p>
       <h3>WeakMap</h3>
       <p>
-        <code>WeakMap</code> – это <code>Map</code>-подобная коллекция, позволяющая использовать в
-        качестве ключей только объекты, и автоматически удаляющая их вместе с соответствующими
-        значениями, как только они становятся недостижимыми иными путями.
+        <code class="lang-js">WeakMap</code> – это <code class="lang-js">Map</code>-подобная
+        коллекция, позволяющая использовать в качестве ключей только объекты, и автоматически
+        удаляющая их вместе с соответствующими значениями, как только они становятся недостижимыми
+        иными путями.
       </p>
       <h3>WeakSet</h3>
       <p>
-        <code>WeakSet</code> – это <code>Set</code>-подобная коллекция, которая хранит только
-        объекты и удаляет их, как только они становятся недостижимыми иными путями.
+        <code class="lang-js">WeakSet</code> – это <code class="lang-js">Set</code>-подобная
+        коллекция, которая хранит только объекты и удаляет их, как только они становятся
+        недостижимыми иными путями.
       </p>
       <p>
         Обе этих структуры данных не поддерживают методы и свойства, работающие со всем содержимым
@@ -1003,35 +1084,36 @@
         элементе коллекции.
       </p>
       <p>
-        <code>WeakMap</code> и <code>WeakSet</code> используются как вспомогательные структуры
-        данных в дополнение к «основному» месту хранения объекта. Если объект удаляется из основного
-        хранилища и нигде не используется, кроме как в качестве ключа в <code>WeakMap</code> или в
-        <code>WeakSet</code>, то он будет удалён автоматически.
+        <code class="lang-js">WeakMap</code> и <code class="lang-js">WeakSet</code> используются как
+        вспомогательные структуры данных в дополнение к «основному» месту хранения объекта. Если
+        объект удаляется из основного хранилища и нигде не используется, кроме как в качестве ключа
+        в <code class="lang-js">WeakMap</code> или в <code class="lang-js">WeakSet</code>, то он
+        будет удалён автоматически.
       </p>
       <hr />
 
       <h2>21. Циклы, ветвления</h2>
       <ul>
-        <li><code>while</code> – Проверяет условие перед каждой итерацией.</li>
-        <li><code>do..while</code> – Проверяет условие после каждой итерации.</li>
+        <li><code class="lang-js">while</code> – Проверяет условие перед каждой итерацией.</li>
+        <li><code class="lang-js">do..while</code> – Проверяет условие после каждой итерации.</li>
         <li>
-          <code>for (;;)</code> – Проверяет условие перед каждой итерацией, есть возможность задать
-          дополнительные настройки.
+          <code class="lang-js">for (;;)</code> – Проверяет условие перед каждой итерацией, есть
+          возможность задать дополнительные настройки.
         </li>
       </ul>
       <p>
         Чтобы организовать бесконечный цикл, используют конструкцию
-        <code>while (true)</code>. При этом он, как и любой другой цикл, может быть прерван
-        директивой <code>break</code>.
+        <code class="lang-js">while (true)</code>. При этом он, как и любой другой цикл, может быть
+        прерван директивой <code class="lang-js">break</code>.
       </p>
       <p>
         Если на данной итерации цикла делать больше ничего не надо, но полностью прекращать цикл не
-        следует – используют директиву <code>continue</code>.
+        следует – используют директиву <code class="lang-js">continue</code>.
       </p>
       <p>
         Обе этих директивы поддерживают <em>метки</em>, которые ставятся перед циклом. Метки –
-        единственный способ для <code>break/continue</code> выйти за пределы текущего цикла,
-        повлиять на выполнение внешнего.
+        единственный способ для <code class="lang-js">break/continue</code> выйти за пределы
+        текущего цикла, повлиять на выполнение внешнего.
       </p>
       <p>
         Заметим, что метки не позволяют прыгнуть в произвольное место кода, в JavaScript нет такой
@@ -1039,6 +1121,7 @@
       </p>
       <p>Конструкция switch заменяет собой сразу несколько if</p>
       <pre>
+        <code class="lang-js">
           switch(x) {
             case 'value1':  // if (x === 'value1')
               ...
@@ -1052,22 +1135,26 @@
               ...
               [break]
           }
-        </pre
-      >
+        </code>
+      </pre>
       <hr />
 
       <h2>22. Методы массивов строк (будут простые задачи)</h2>
       <h3>String</h3>
       <ul>
-        <li>Для получения символа используйте <code>[]</code>.</li>
-        <li>Для получения подстроки используйте <code>slice</code> или <code>substring</code>.</li>
+        <li>Для получения символа используйте <code class="lang-js">[]</code>.</li>
         <li>
-          Для того, чтобы перевести строку в нижний или верхний регистр, используйте
-          <code>toLowerCase/toUpperCase</code>.
+          Для получения подстроки используйте <code class="lang-js">slice</code> или
+          <code class="lang-js">substring</code>.
         </li>
         <li>
-          Для поиска подстроки используйте <code>indexOf</code> или
-          <code>includes/startsWith/endsWith</code>, когда надо только проверить, есть ли вхождение.
+          Для того, чтобы перевести строку в нижний или верхний регистр, используйте
+          <code class="lang-js">toLowerCase/toUpperCase</code>.
+        </li>
+        <li>
+          Для поиска подстроки используйте <code class="lang-js">indexOf</code> или
+          <code class="lang-js">includes/startsWith/endsWith</code>, когда надо только проверить,
+          есть ли вхождение.
         </li>
       </ul>
       <h3>Array</h3>
@@ -1075,22 +1162,26 @@
         <li>
           <p>Для добавления/удаления элементов:</p>
           <ul>
-            <li><code>push (...items)</code> – добавляет элементы в конец,</li>
-            <li><code>pop()</code> – извлекает элемент с конца,</li>
-            <li><code>shift()</code> – извлекает элемент с начала,</li>
-            <li><code>unshift(...items)</code> – добавляет элементы в начало.</li>
+            <li><code class="lang-js">push (...items)</code> – добавляет элементы в конец,</li>
+            <li><code class="lang-js">pop()</code> – извлекает элемент с конца,</li>
+            <li><code class="lang-js">shift()</code> – извлекает элемент с начала,</li>
+            <li><code class="lang-js">unshift(...items)</code> – добавляет элементы в начало.</li>
             <li>
-              <code>splice(pos, deleteCount, ...items)</code> – начиная с индекса <code>pos</code>,
-              удаляет <code>deleteCount</code> элементов и вставляет <code>items</code>.
+              <code class="lang-js">splice(pos, deleteCount, ...items)</code> – начиная с индекса
+              <code class="lang-js">pos</code>, удаляет
+              <code class="lang-js">deleteCount</code> элементов и вставляет
+              <code class="lang-js">items</code>.
             </li>
             <li>
-              <code>slice(start, end)</code> – создаёт новый массив, копируя в него элементы с
-              позиции <code>start</code> до <code>end</code> (не включая <code>end</code>).
+              <code class="lang-js">slice(start, end)</code> – создаёт новый массив, копируя в него
+              элементы с позиции <code class="lang-js">start</code> до
+              <code class="lang-js">end</code> (не включая <code class="lang-js">end</code>).
             </li>
             <li>
-              <code>concat(...items)</code> – возвращает новый массив: копирует все члены текущего
-              массива и добавляет к нему <code>items</code>. Если какой-то из
-              <code>items</code> является массивом, тогда берутся его элементы.
+              <code class="lang-js">concat(...items)</code> – возвращает новый массив: копирует все
+              члены текущего массива и добавляет к нему <code class="lang-js">items</code>. Если
+              какой-то из <code class="lang-js">items</code> является массивом, тогда берутся его
+              элементы.
             </li>
           </ul>
         </li>
@@ -1098,21 +1189,24 @@
           <p>Для поиска среди элементов:</p>
           <ul>
             <li>
-              <code>indexOf/lastIndexOf(item, pos)</code> – ищет <code>item</code>, начиная с
-              позиции <code>pos</code>, и возвращает его индекс или <code>-1</code>, если ничего не
-              найдено.
+              <code class="lang-js">indexOf/lastIndexOf(item, pos)</code> – ищет
+              <code class="lang-js">item</code>, начиная с позиции <code class="lang-js">pos</code>,
+              и возвращает его индекс или <code class="lang-js">-1</code>, если ничего не найдено.
             </li>
             <li>
-              <code>includes(value)</code> – возвращает <code>true</code>, если в массиве имеется
-              элемент <code>value</code>, в противном случае <code>false</code>.
+              <code class="lang-js">includes(value)</code> – возвращает
+              <code class="lang-js">true</code>, если в массиве имеется элемент
+              <code class="lang-js">value</code>, в противном случае
+              <code class="lang-js">false</code>.
             </li>
             <li>
-              <code>find/filter(func)</code> – фильтрует элементы через функцию и отдаёт первое/все
-              значения, при прохождении которых через функцию возвращается <code>true</code>.
+              <code class="lang-js">find/filter(func)</code> – фильтрует элементы через функцию и
+              отдаёт первое/все значения, при прохождении которых через функцию возвращается
+              <code class="lang-js">true</code>.
             </li>
             <li>
-              <code>findIndex</code> похож на <code>find</code>, но возвращает индекс вместо
-              значения.
+              <code class="lang-js">findIndex</code> похож на <code class="lang-js">find</code>, но
+              возвращает индекс вместо значения.
             </li>
           </ul>
         </li>
@@ -1120,8 +1214,8 @@
           <p>Для перебора элементов:</p>
           <ul>
             <li>
-              <code>forEach(func)</code> – вызывает <code>func</code> для каждого элемента. Ничего
-              не возвращает.
+              <code class="lang-js">forEach(func)</code> – вызывает
+              <code class="lang-js">func</code> для каждого элемента. Ничего не возвращает.
             </li>
           </ul>
         </li>
@@ -1129,19 +1223,24 @@
           <p>Для преобразования массива:</p>
           <ul>
             <li>
-              <code>map(func)</code> – создаёт новый массив из результатов вызова
-              <code>func</code> для каждого элемента.
+              <code class="lang-js">map(func)</code> – создаёт новый массив из результатов вызова
+              <code class="lang-js">func</code> для каждого элемента.
             </li>
-            <li><code>sort(func)</code> – сортирует массив «на месте», а потом возвращает его.</li>
             <li>
-              <code>reverse()</code> – «на месте» меняет порядок следования элементов на
-              противоположный и возвращает изменённый массив.
+              <code class="lang-js">sort(func)</code> – сортирует массив «на месте», а потом
+              возвращает его.
             </li>
-            <li><code>split/join</code> – преобразует строку в массив и обратно.</li>
             <li>
-              <code>reduce(func, initial)</code> – вычисляет одно значение на основе всего массива,
-              вызывая <code>func</code> для каждого элемента и передавая промежуточный результат
-              между вызовами.
+              <code class="lang-js">reverse()</code> – «на месте» меняет порядок следования
+              элементов на противоположный и возвращает изменённый массив.
+            </li>
+            <li>
+              <code class="lang-js">split/join</code> – преобразует строку в массив и обратно.
+            </li>
+            <li>
+              <code class="lang-js">reduce(func, initial)</code> – вычисляет одно значение на основе
+              всего массива, вызывая <code class="lang-js">func</code> для каждого элемента и
+              передавая промежуточный результат между вызовами.
             </li>
           </ul>
         </li>
@@ -1149,7 +1248,8 @@
           <p>Дополнительно:</p>
           <ul>
             <li>
-              <code>Array.isArray(arr)</code> проверяет, является ли <code>arr</code> массивом.
+              <code class="lang-js">Array.isArray(arr)</code> проверяет, является ли
+              <code class="lang-js">arr</code> массивом.
             </li>
           </ul>
         </li>
